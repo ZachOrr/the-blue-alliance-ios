@@ -1,7 +1,5 @@
 import CoreData
-import Crashlytics
 import Foundation
-import React
 import TBAKit
 import UIKit
 
@@ -17,7 +15,7 @@ class TBAReactNativeViewController: TBAViewController {
 
     // MARK: - TBAReactNativeVC
 
-    private var rootView: RCTRootView?
+    private var rootView: UIView?
     weak var delegate: TBAReactNativeViewControllerDelegate?
 
     // MARK: - Init
@@ -27,7 +25,7 @@ class TBAReactNativeViewController: TBAViewController {
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(handleReactNativeErrorNotification(_:)), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
+        // NotificationCenter.default.addObserver(self, selector: #selector(handleReactNativeErrorNotification(_:)), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -49,7 +47,7 @@ class TBAReactNativeViewController: TBAViewController {
             // View is loaded - we need to update our info now
             if let appProperties = delegate?.appProperties {
                 // Update our data with new data
-                rootView.appProperties = appProperties
+                // rootView.appProperties = appProperties
             } else if hasNoDataAfterRefresh {
                 // Existing data is gone - show no data
                 showNoDataView()
@@ -91,7 +89,9 @@ class TBAReactNativeViewController: TBAViewController {
      Create a React Native root view for the supplied module/data.
      Will fail if we don't have any data or can't create the view.
      */
-    private func createRootView() -> RCTRootView? {
+    private func createRootView() -> UIView? {
+        return UIView(frame: .zero)
+        /*
         guard let initialProperties = delegate?.appProperties else {
             return nil
         }
@@ -104,9 +104,10 @@ class TBAReactNativeViewController: TBAViewController {
         rootView.delegate = self
         rootView.sizeFlexibility = .height
         return rootView
+        */
     }
 
-    private func addRootViewToHiearchy(_ rootView: RCTRootView) {
+    private func addRootViewToHiearchy(_ rootView: UIView) {
         scrollView.addSubview(rootView)
         rootView.autoMatch(.width, to: .width, of: scrollView)
         rootView.autoPinEdgesToSuperviewEdges()
@@ -128,9 +129,6 @@ class TBAReactNativeViewController: TBAViewController {
     // MARK: - Notifications
 
     @objc func handleReactNativeErrorNotification(_ sender: NSNotification) {
-        if let error = sender.userInfo?["error"] as? Error {
-            Crashlytics.sharedInstance().recordError(error)
-        }
         showNoDataView(disableRefreshing: true)
     }
 
@@ -163,13 +161,12 @@ class TBAReactNativeViewController: TBAViewController {
         }
 
         let fallbackURL = Bundle.main.url(forResource: "main", withExtension: "jsbundle")
-        // Check if downloaded bundle (/Documents/ios/main.jsbundle) exists - otherwise use our bundled/shipped bundle
-        let bundleURL = documentsDirectory.appendingPathComponent(ReactNativeService.BundleName.downloaded.rawValue)
-        return (try? bundleURL.checkResourceIsReachable()) ?? false ? bundleURL : fallbackURL
+        return fallbackURL
     }
 
 }
 
+/*
 extension TBAReactNativeViewController: RCTRootViewDelegate {
 
     func rootViewDidChangeIntrinsicSize(_ rootView: RCTRootView!) {
@@ -177,3 +174,4 @@ extension TBAReactNativeViewController: RCTRootViewDelegate {
     }
 
 }
+*/

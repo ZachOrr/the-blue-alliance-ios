@@ -1,6 +1,5 @@
 import Foundation
 import CoreData
-import Crashlytics
 
 extension NSManagedObject {
 
@@ -27,7 +26,6 @@ extension NSManagedObjectContext {
             return true
         } catch {
             print(error)
-            Crashlytics.sharedInstance().recordError(error)
             rollback()
             return false
         }

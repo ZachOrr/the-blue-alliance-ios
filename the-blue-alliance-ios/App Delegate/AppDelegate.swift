@@ -1,10 +1,4 @@
 import CoreData
-import Crashlytics
-import Fabric
-import Firebase
-import FirebaseAuth
-import FirebaseMessaging
-import GoogleSignIn
 import MyTBAKit
 import TBAKit
 import UIKit
@@ -23,38 +17,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy private var rootSplitViewController: UISplitViewController = { [unowned self] in
         let splitViewController = UISplitViewController()
 
-        let eventsViewController = EventsContainerViewController(messaging: messaging,
-                                                                 myTBA: myTBA,
-                                                                 statusService: statusService,
+        let eventsViewController = EventsContainerViewController(myTBA: myTBA,
                                                                  urlOpener: urlOpener,
                                                                  persistentContainer: persistentContainer,
                                                                  tbaKit: tbaKit,
                                                                  userDefaults: userDefaults)
-        let teamsViewController = TeamsContainerViewController(messaging: messaging,
-                                                               myTBA: myTBA,
-                                                               statusService: statusService,
+        let teamsViewController = TeamsContainerViewController(myTBA: myTBA,
                                                                urlOpener: urlOpener,
                                                                persistentContainer: persistentContainer,
                                                                tbaKit: tbaKit,
                                                                userDefaults: userDefaults)
-        let districtsViewController = DistrictsContainerViewController(messaging: messaging,
-                                                                       myTBA: myTBA,
-                                                                       statusService: statusService,
+        let districtsViewController = DistrictsContainerViewController(myTBA: myTBA,
                                                                        urlOpener: urlOpener,
                                                                        persistentContainer: persistentContainer,
                                                                        tbaKit: tbaKit,
                                                                        userDefaults: userDefaults)
-        let settingsViewController = SettingsViewController(messaging: messaging,
-                                                            metadata: reactNativeMetadata,
-                                                            myTBA: myTBA,
-                                                            pushService: pushService,
+        let settingsViewController = SettingsViewController(myTBA: myTBA,
                                                             urlOpener: urlOpener,
                                                             persistentContainer: persistentContainer,
                                                             tbaKit: tbaKit,
                                                             userDefaults: userDefaults)
-        let myTBAViewController = MyTBAViewController(messaging: messaging,
-                                                      myTBA: myTBA,
-                                                      statusService: statusService,
+        let myTBAViewController = MyTBAViewController(myTBA: myTBA,
                                                       urlOpener: urlOpener,
                                                       persistentContainer: persistentContainer,
                                                       tbaKit: tbaKit,
@@ -86,7 +69,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Services
 
-    lazy var messaging: Messaging = Messaging.messaging()
     lazy var myTBA: MyTBA = {
         return MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString, deviceName: UIDevice.current.name)
     }()
@@ -97,27 +79,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
 
-    lazy var pushService: PushService = {
-        return PushService(messaging: messaging,
-                           myTBA: myTBA,
-                           retryService: RetryService(),
-                           userDefaults: userDefaults)
-    }()
-    lazy var statusService: StatusService = {
-        return StatusService(persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
-    }()
-    lazy var reactNativeService: ReactNativeService = {
-        return ReactNativeService(fileManager: FileManager.default,
-                                  firebaseStorage: Storage.storage(),
-                                  firebaseOptions: FirebaseOptions.defaultOptions(),
-                                  metadata: reactNativeMetadata,
-                                  retryService: RetryService(),
-                                  userDefaults: userDefaults)
-    }()
-    lazy var reactNativeMetadata: ReactNativeMetadata = {
-        return ReactNativeMetadata(userDefaults: userDefaults)
-    }()
-
     // A completion block for registering for remote notifications
     var registerForRemoteNotificationsCompletion: ((Error?) -> ())?
 
@@ -126,81 +87,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         AppDelegate.setupAppearance()
 
-        // Setup a dummy launch screen in our window while we're doing setup tasks
-        window = UIWindow()
-        guard let window = window else {
-            fatalError("window should be window")
-        }
-        window.rootViewController = launchViewController
-        window.makeKeyAndVisible()
-
         // Setup our Firebase app - make sure this is called before other Firebase setup
-        FirebaseApp.configure()
 
         // Disable Crashlytics during debug
-        #if DEBUG
-        Fabric.sharedSDK().debug = true
-        #else
-        Fabric.with([Crashlytics.self])
-        #endif
+//        #if DEBUG
+//        Fabric.sharedSDK().debug = true
+//        #else
+//        Fabric.with([Crashlytics.self])
+//        #endif
 
         let secrets = Secrets()
         tbaKit = TBAKit(apiKey: secrets.tbaAPIKey, userDefaults: userDefaults)
 
-        // Setup our React Native service
-        reactNativeService.registerRetryable(initiallyRetry: true)
-
-        // Listen for changes to FMS availability
-        registerForFMSStatusChanges()
-        registerForStatusChanges()
-
         // Assign our Push Service as a delegate to all push-related classes
-        setupPushServiceDelegates()
         // Register for remote notifications - don't worry if we fail here
         PushService.registerForRemoteNotifications(nil)
 
         // Register our myTBA object with Firebase Auth listener
         // Block gets called on init - ignore the init call
-        var initCall = true
-        Auth.auth().addIDTokenDidChangeListener { (_, user) in
-            if initCall {
-                initCall = false
-                return
-            }
 
-            if let user = user {
-                user.getIDToken(completion: { (token, _) in
-                    self.myTBA.authToken = token
-                })
-            } else {
-                self.myTBA.authToken = nil
-            }
+        // Setup a dummy launch screen in our window while we're doing setup tasks
+        window = UIWindow()
+        guard let window = window else {
+            fatalError("window should be window")
         }
-
-        // Kickoff background myTBA/Google sign in, along with setting up delegates
-        setupGoogleAuthentication()
+        window.rootViewController = rootSplitViewController
+        window.makeKeyAndVisible()
 
         // Our app setup operation will load our persistent stores, propogate persistance container
         let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer)
         weak var weakAppSetupOperation = appSetupOperation
         appSetupOperation.completionBlock = { [unowned self] in
             if let error = weakAppSetupOperation?.completionError as NSError? {
-                Crashlytics.sharedInstance().recordError(error)
                 DispatchQueue.main.async {
                     AppDelegate.showFatalError(error, in: window)
                 }
             } else {
                 // Register retries for our status service on the main thread
                 DispatchQueue.main.async {
-                    self.statusService.registerRetryable(initiallyRetry: true)
-
-                    // Check our minimum app version
-                    let mininmumAppVersion = self.statusService.status.safeMinAppVersion
-                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: mininmumAppVersion) {
-                        self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion!.intValue)
-                        return
-                    }
-
                     guard let window = self.window else {
                         fatalError("Window not setup when setting root vc")
                     }
@@ -247,9 +171,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
-        return GIDSignIn.sharedInstance().handle(url,
-                                                 sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-                                                 annotation: options[UIApplication.OpenURLOptionsKey.annotation])
+        return true
     }
 
     // MARK: Push Delegate Methods
@@ -288,22 +210,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.rootViewController?.present(alertController, animated: true, completion: nil)
     }
 
-    private func setupPushServiceDelegates() {
-        messaging.delegate = pushService
-        UNUserNotificationCenter.current().delegate = pushService
-        myTBA.authenticationProvider.add(observer: pushService)
-    }
-
-    private func setupGoogleAuthentication() {
-        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
-        GIDSignIn.sharedInstance().delegate = self
-
-        // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
-        if GIDSignIn.sharedInstance().hasAuthInKeychain() && Auth.auth().currentUser == nil {
-            GIDSignIn.sharedInstance().signInSilently()
-        }
-    }
-
     private var launchViewController: UIViewController {
         let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
         guard let launchViewController = launchStoryboard.instantiateInitialViewController() else {
@@ -325,88 +231,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let tabBarAppearance = UITabBar.appearance()
         tabBarAppearance.barTintColor = .white
-    }
-
-}
-
-extension AppDelegate: GIDSignInDelegate {
-
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
-        // Don't respond to errors from signInSilently or a user cancelling a sign in
-        if let error = error as NSError?, (error.code == GIDSignInErrorCode.canceled.rawValue || error.code == GIDSignInErrorCode.canceled.rawValue) {
-            return
-        } else if let error = error {
-            Crashlytics.sharedInstance().recordError(error)
-            if let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? ContainerViewController & Alertable {
-                signInDelegate.showErrorAlert(with: "Error authorizing notifications - \(error.localizedDescription)")
-            }
-            return
-        }
-
-        guard let authentication = user.authentication else { return }
-
-        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
-                                                       accessToken: authentication.accessToken)
-
-        Auth.auth().signInAndRetrieveData(with: credential) { (_, error) in
-            if let error = error {
-                Crashlytics.sharedInstance().recordError(error)
-                if let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? ContainerViewController & Alertable {
-                    signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
-                }
-            } else {
-                PushService.requestAuthorizationForNotifications { (_, error) in
-                    if let error = error {
-                        Crashlytics.sharedInstance().recordError(error)
-                    }
-                }
-            }
-        }
-    }
-
-    static func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
-        if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
-            return true
-        }
-
-        return Bundle.main.buildVersionNumber >= minimumAppVersion
-    }
-
-    func showMinimumAppVersionAlert(currentAppVersion: Int) {
-        guard let window = window else {
-            return
-        }
-
-        DispatchQueue.main.async {
-            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: currentAppVersion, in: window)
-        }
-    }
-
-}
-
-extension AppDelegate: StatusSubscribable {
-
-    func statusChanged(status: Status) {
-        if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.safeMinAppVersion) {
-            showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion!.intValue)
-        }
-    }
-
-}
-
-extension AppDelegate: FMSStatusSubscribable {
-
-    func fmsStatusChanged(isDatafeedDown: Bool) {
-        // We could react to hiding/showing something, like Android does
-        // Since we're not setup to do this, we'll show an alert view only when the data feed is down
-        if isDatafeedDown == false {
-            return
-        }
-
-        let alertController = UIAlertController(title: "FIRST's servers are down",
-                                                message: "We rely on FIRST to provide scores, ranking, and more. Unfortunately, FIRST's servers are broken right now, so we can't get the latest updates. The information you see here may be out of date.",
-                                                preferredStyle: .alert)
-        window?.rootViewController?.present(alertController, animated: true, completion: nil)
     }
 
 }

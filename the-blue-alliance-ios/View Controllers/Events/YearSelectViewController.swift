@@ -1,5 +1,5 @@
 import CoreData
-import Firebase
+
 import Foundation
 import TBAKit
 import UIKit
@@ -56,16 +56,6 @@ class YearSelectViewController: ContainerViewController {
         eventWeekSelectViewController?.delegate = delegate
 
         navigationController?.viewControllers = [self, eventWeekSelectViewController!]
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        var parameters = ["year": NSNumber(value: year), "years": NSArray(array: years)]
-        if let week = week {
-            parameters["week"] = NSString(string: week.key!)
-        }
-        Analytics.logEvent("year_select", parameters: parameters)
     }
 
     // MARK: - Private Methods

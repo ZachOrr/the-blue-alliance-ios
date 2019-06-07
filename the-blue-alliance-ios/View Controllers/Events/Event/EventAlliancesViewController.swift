@@ -1,5 +1,5 @@
 import CoreData
-import Firebase
+
 import Foundation
 import MyTBAKit
 import TBAKit
@@ -8,20 +8,20 @@ import UIKit
 class EventAlliancesContainerViewController: ContainerViewController {
 
     private(set) var event: Event
-    private let messaging: Messaging
+    
     private let myTBA: MyTBA
-    private let statusService: StatusService
+    
     private let urlOpener: URLOpener
 
     private var alliancesViewController: EventAlliancesViewController!
 
     // MARK: - Init
 
-    init(event: Event, messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, myTBA: MyTBA, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
-        self.messaging = messaging
+        
         self.myTBA = myTBA
-        self.statusService = statusService
+        
         self.urlOpener = urlOpener
 
         let alliancesViewController = EventAlliancesViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -40,20 +40,12 @@ class EventAlliancesContainerViewController: ContainerViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Lifecycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Analytics.logEvent("event_alliances", parameters: ["event": event.key!])
-    }
-
 }
 
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
     func teamKeySelected(_ teamKey: TeamKey) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, messaging: messaging, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

@@ -1,19 +1,15 @@
 import CoreData
-import Crashlytics
-import FirebaseAuth
-import FirebaseMessaging
-import GoogleSignIn
 import MyTBAKit
 import PureLayout
 import TBAKit
 import UIKit
 import UserNotifications
 
-class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
+class MyTBAViewController: ContainerViewController {
 
-    private let messaging: Messaging
+    
     private let myTBA: MyTBA
-    private let statusService: StatusService
+    
     private let urlOpener: URLOpener
 
     private(set) var signInViewController: MyTBASignInViewController = MyTBASignInViewController()
@@ -39,10 +35,10 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         return myTBA.isAuthenticated
     }
 
-    init(messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.messaging = messaging
+    init(myTBA: MyTBA, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        
         self.myTBA = myTBA
-        self.statusService = statusService
+        
         self.urlOpener = urlOpener
 
         favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -60,7 +56,6 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
 
-        GIDSignIn.sharedInstance().uiDelegate = self
         myTBA.authenticationProvider.add(observer: self)
     }
     
@@ -108,16 +103,12 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     }
 
     private func logout() {
-        guard let fcmToken = messaging.fcmToken else {
-            // No FCM token to unregister
-            return
-        }
+        return
 
-        let signOutOperation = myTBA.unregister(fcmToken) { [weak self] (_, error) in
+        let signOutOperation = myTBA.unregister("") { [weak self] (_, error) in
             self?.isLoggingOut = false
 
             if let error = error {
-                Crashlytics.sharedInstance().recordError(error)
                 self?.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
             } else {
                 // Run on main thread, since we delete our Core Data objects on the main thread.
@@ -131,9 +122,6 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     }
 
     private func logoutSuccessful() {
-        GIDSignIn.sharedInstance().signOut()
-        try! Auth.auth().signOut()
-
         // Cancel any ongoing requests
         for vc in [favoritesViewController, subscriptionsViewController] as! [Refreshable] {
             vc.cancelRefresh()
@@ -173,19 +161,19 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
         switch myTBAObject.modelType {
         case .event:
             if let event = myTBAObject.tbaObject as? Event {
-                viewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = EventViewController(event: event, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }
         case .team:
             if let team = myTBAObject.tbaObject as? Team {
-                viewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = TeamViewController(team: team, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }
         case .match:
             if let match = myTBAObject.tbaObject as? Match {
-                viewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = MatchViewController(match: match, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }

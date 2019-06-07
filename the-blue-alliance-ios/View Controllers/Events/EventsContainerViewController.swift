@@ -1,5 +1,5 @@
 import CoreData
-import Firebase
+
 import Foundation
 import MyTBAKit
 import TBAKit
@@ -7,9 +7,9 @@ import UIKit
 
 class EventsContainerViewController: ContainerViewController {
 
-    private let messaging: Messaging
+
     private let myTBA: MyTBA
-    private let statusService: StatusService
+
     private let urlOpener: URLOpener
 
     private(set) var year: Int
@@ -17,13 +17,12 @@ class EventsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.messaging = messaging
+    init(myTBA: MyTBA, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
-        self.statusService = statusService
+        
         self.urlOpener = urlOpener
 
-        year = statusService.currentSeason
+        year = 2019
         eventsViewController = WeekEventsViewController(year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [eventsViewController],
@@ -43,14 +42,6 @@ class EventsContainerViewController: ContainerViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Methods
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Analytics.logEvent("events", parameters: ["year": NSNumber(value: year)])
     }
 
     // MARK: - Private Methods
@@ -73,7 +64,7 @@ class EventsContainerViewController: ContainerViewController {
 extension EventsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
-        let yearSelectViewController = YearSelectViewController(year: year, years: Array(1992...statusService.maxSeason).reversed(), week: eventsViewController.weekEvent, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let yearSelectViewController = YearSelectViewController(year: year, years: Array(1992...2019).reversed(), week: eventsViewController.weekEvent, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         yearSelectViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: yearSelectViewController)
@@ -104,7 +95,7 @@ extension EventsContainerViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let eventViewController = EventViewController(event: event, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: eventViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }

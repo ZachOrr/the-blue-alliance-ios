@@ -11,8 +11,7 @@ class TeamsContainerViewControllerTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        teamsContainerViewController = TeamsContainerViewController(messaging: messaging,
-                                                                    myTBA: myTBA,
+        teamsContainerViewController = TeamsContainerViewController(myTBA: myTBA,
                                                                     statusService: statusService,
                                                                     urlOpener: urlOpener,
                                                                     persistentContainer: persistentContainer,

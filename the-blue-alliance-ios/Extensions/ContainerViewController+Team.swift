@@ -1,4 +1,3 @@
-import FirebaseMessaging
 import MyTBAKit
 import UIKit
 
@@ -7,8 +6,6 @@ import UIKit
 protocol ContainerTeamPushable {
     var teamKey: TeamKey { get }
     var myTBA: MyTBA { get }
-    var messaging: Messaging { get }
-    var statusService: StatusService { get }
     var urlOpener: URLOpener { get }
 }
 
@@ -50,7 +47,7 @@ extension ContainerTeamPushable where Self: ContainerViewController {
     }
 
     func _pushTeam(team: Team) {
-        let teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamViewController = TeamViewController(team: team, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 

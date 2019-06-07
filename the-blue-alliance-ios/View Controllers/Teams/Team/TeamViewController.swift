@@ -1,6 +1,5 @@
 import BFRImageViewer
 import CoreData
-import Firebase
 import MyTBAKit
 import Photos
 import TBAKit
@@ -9,7 +8,7 @@ import UIKit
 class TeamViewController: MyTBAContainerViewController, Observable {
 
     private(set) var team: Team
-    private let statusService: StatusService
+    
     private let urlOpener: URLOpener
 
     private(set) var infoViewController: TeamInfoViewController
@@ -44,11 +43,11 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     // MARK: Init
 
-    init(team: Team, statusService: StatusService, urlOpener: URLOpener, messaging: Messaging, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.team = team
-        self.statusService = statusService
+        
         self.urlOpener = urlOpener
-        self.year = TeamViewController.latestYear(currentSeason: statusService.currentSeason, years: team.yearsParticipated, in: persistentContainer.viewContext)
+        self.year = TeamViewController.latestYear(currentSeason: 2019, years: team.yearsParticipated, in: persistentContainer.viewContext)
 
         infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -59,7 +58,6 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             navigationTitle: "Team \(team.teamNumber!.stringValue)",
             navigationSubtitle: ContainerViewController.yearSubtitle(year),
             segmentedControlTitles: ["Info", "Events", "Media"],
-            messaging: messaging,
             myTBA: myTBA,
             persistentContainer: persistentContainer,
             tbaKit: tbaKit,
@@ -89,12 +87,6 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Analytics.logEvent("team", parameters: ["team": team.key!])
-    }
-
     // MARK: - Private
 
     private func setupObservers() {
@@ -107,7 +99,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             }
             if self.year == nil {
                 self.year = TeamViewController.latestYear(
-                    currentSeason: self.statusService.currentSeason,
+                    currentSeason: 2019,
                     years: team.getValue(\Team.yearsParticipated),
                     in: context
                 )
@@ -201,7 +193,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, messaging: messaging, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -308,7 +300,7 @@ class TeamMediaImageViewController: BFRImageViewController {
                 return
             }
             self?.photoLibrary?.performChanges({
-                PHAssetChangeRequest.creationRequestForAsset(from: image)
+                // PHAssetChangeRequest.creationRequestForAsset(from: image)
             }, completionHandler: nil)
         }
 

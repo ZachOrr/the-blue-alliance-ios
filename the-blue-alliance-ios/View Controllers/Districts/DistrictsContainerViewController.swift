@@ -1,5 +1,5 @@
 import CoreData
-import Firebase
+
 import Foundation
 import MyTBAKit
 import TBAKit
@@ -7,9 +7,9 @@ import UIKit
 
 class DistrictsContainerViewController: ContainerViewController {
 
-    private let messaging: Messaging
+    
     private let myTBA: MyTBA
-    private let statusService: StatusService
+    
     private let urlOpener: URLOpener
 
     private(set) var year: Int {
@@ -23,13 +23,13 @@ class DistrictsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.messaging = messaging
+    init(myTBA: MyTBA, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        
         self.myTBA = myTBA
-        self.statusService = statusService
+        
         self.urlOpener = urlOpener
 
-        year = statusService.currentSeason
+        year = 2019
         districtsViewController = DistrictsViewController(year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [districtsViewController],
@@ -50,14 +50,6 @@ class DistrictsContainerViewController: ContainerViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Lifecycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Analytics.logEvent("districts", parameters: nil)
-    }
-
     // MARK: - Private Methods
 
     private func updateInterface() {
@@ -69,7 +61,7 @@ class DistrictsContainerViewController: ContainerViewController {
 extension DistrictsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
-        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...statusService.maxSeason).reversed(), persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...2019).reversed(), persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
 
@@ -104,7 +96,7 @@ extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
 
     func districtSelected(_ district: District) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let districtViewController = DistrictViewController(district: district, messaging: messaging, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let districtViewController = DistrictViewController(district: district, myTBA: myTBA, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: districtViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }

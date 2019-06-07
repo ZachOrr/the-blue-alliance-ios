@@ -1,6 +1,5 @@
 import Foundation
 import UIKit
-import GoogleSignIn
 
 class MyTBASignInViewController: UIViewController {
 
@@ -52,7 +51,6 @@ class MyTBASignInViewController: UIViewController {
     // MARK: - IBActions
 
     @IBAction private func signIn() {
-        GIDSignIn.sharedInstance().signIn()
     }
 
 }

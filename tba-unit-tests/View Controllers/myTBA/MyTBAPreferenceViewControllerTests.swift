@@ -19,7 +19,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
 
         subscribableModel = insertDistrictEvent()
 
-        myTBAPreferencesViewController = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        myTBAPreferencesViewController = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         navigationController = MockNavigationController(rootViewController: myTBAPreferencesViewController)
 
         viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
@@ -61,7 +61,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
 
         // Insert a Favorite
         Favorite.insert(MyTBAFavorite(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType), in: persistentContainer.viewContext)
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         XCTAssertNotNil(newPreferences.favorite)
         XCTAssert(newPreferences.isFavorite)
         XCTAssert(newPreferences.isFavoriteInitially)
@@ -74,7 +74,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
 
         // Insert a Subscription
         Subscription.insert(MyTBASubscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, notifications: [.awards, .upcomingMatch]), in: persistentContainer.viewContext)
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         XCTAssertNotNil(newPreferences.subscription)
         XCTAssertFalse(newPreferences.notifications.isEmpty)
         XCTAssertFalse(newPreferences.notificationsInitial.isEmpty)
@@ -148,7 +148,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         let favorite = Favorite.insert(MyTBAFavorite(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType), in: persistentContainer.viewContext)
         try! persistentContainer.viewContext.save()
 
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.isFavorite = false
 
         let deletionExpectation = expectation(description: "Favorite deleted")
@@ -173,7 +173,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         let favorite = Favorite.insert(MyTBAFavorite(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType), in: persistentContainer.viewContext)
         try! persistentContainer.viewContext.save()
 
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.isFavorite = false
 
         let deletionExpectation = expectation(description: "Favorite deleted")
@@ -198,7 +198,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         let favorite = Favorite.insert(MyTBAFavorite(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType), in: persistentContainer.viewContext)
         try! persistentContainer.viewContext.save()
 
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.isFavorite = false
 
         let deletionExpectation = expectation(description: "Favorite deleted")
@@ -221,7 +221,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
     }
 
     func test_save_hasChanges_favorite_insert() {
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.isFavorite = true
 
         // Sanity check
@@ -239,7 +239,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
     }
 
     func test_save_hasChanges_favorite_insert_304() {
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.isFavorite = true
 
         // Sanity check
@@ -257,7 +257,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
     }
 
     func test_save_hasChanges_favorite_insert_500() {
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.isFavorite = true
 
         // Sanity check
@@ -278,7 +278,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         let subscription = Subscription.insert(MyTBASubscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, notifications: [.awards, .upcomingMatch]), in: persistentContainer.viewContext)
         try! persistentContainer.viewContext.save()
 
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.notifications = []
 
         let deletionExpectation = expectation(description: "Subscription deleted")
@@ -305,7 +305,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         let subscription = Subscription.insert(MyTBASubscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, notifications: [.awards, .upcomingMatch]), in: persistentContainer.viewContext)
         try! persistentContainer.viewContext.save()
 
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.notifications = []
 
         let deletionExpectation = expectation(description: "Subscription deleted")
@@ -332,7 +332,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         let subscription = Subscription.insert(MyTBASubscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, notifications: [.awards, .upcomingMatch]), in: persistentContainer.viewContext)
         try! persistentContainer.viewContext.save()
 
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.notifications = []
 
         let deletionExpectation = expectation(description: "Subscription deleted")
@@ -369,7 +369,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
             updateExpectation.fulfill()
         }
 
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.notifications = [.upcomingMatch]
 
         newPreferences.save()
@@ -396,7 +396,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
             updateExpectation.fulfill()
         }
 
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.notifications = [.upcomingMatch]
 
         newPreferences.save()
@@ -423,7 +423,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
             updateExpectation.fulfill()
         }
 
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.notifications = [.upcomingMatch]
 
         newPreferences.save()
@@ -438,7 +438,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
     }
 
     func test_save_hasChanges_subscription_insert() {
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.notifications = [.awards, .upcomingMatch]
 
         // Sanity check
@@ -456,7 +456,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
     }
 
     func test_save_hasChanges_subscription_insert_304() {
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.notifications = [.awards, .upcomingMatch]
 
         // Sanity check
@@ -474,7 +474,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
     }
 
     func test_save_hasChanges_subscription_insert_500() {
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.notifications = [.awards, .upcomingMatch]
 
         // Sanity check

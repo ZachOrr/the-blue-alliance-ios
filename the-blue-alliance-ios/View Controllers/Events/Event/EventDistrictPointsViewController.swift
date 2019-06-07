@@ -1,5 +1,4 @@
 import CoreData
-import Firebase
 import MyTBAKit
 import TBAKit
 import UIKit
@@ -8,18 +7,18 @@ import UIKit
 class EventDistrictPointsContainerViewController: ContainerViewController {
 
     private(set) var event: Event
-    private let messaging: Messaging
+    
     private let myTBA: MyTBA
-    private let statusService: StatusService
+    
     private let urlOpener: URLOpener
 
     // MARK: - Init
 
-    init(event: Event, messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, myTBA: MyTBA, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
-        self.messaging = messaging
+        
         self.myTBA = myTBA
-        self.statusService = statusService
+        
         self.urlOpener = urlOpener
 
         let districtPointsViewController = EventDistrictPointsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -38,20 +37,12 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Lifecycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Analytics.logEvent("event_district_points", parameters: ["event": event.key!])
-    }
-
 }
 
 extension EventDistrictPointsContainerViewController: EventDistrictPointsViewControllerDelegate {
 
     func districtEventPointsSelected(_ districtEventPoints: DistrictEventPoints) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: districtEventPoints.teamKey!, event: event, messaging: messaging, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: districtEventPoints.teamKey!, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

@@ -1,5 +1,4 @@
 import CoreData
-import Firebase
 import MyTBAKit
 import TBAKit
 import UIKit
@@ -11,7 +10,7 @@ class MatchViewController: MyTBAContainerViewController {
     private(set) var infoViewController: MatchInfoViewController
     private(set) var breakdownViewController: MatchBreakdownViewController?
 
-    private let statusService: StatusService
+    
     private let urlOpener: URLOpener
 
     override var subscribableModel: MyTBASubscribable {
@@ -20,9 +19,9 @@ class MatchViewController: MyTBAContainerViewController {
 
     // MARK: Init
 
-    init(match: Match, teamKey: TeamKey? = nil, statusService: StatusService, urlOpener: URLOpener, messaging: Messaging, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(match: Match, teamKey: TeamKey? = nil, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
-        self.statusService = statusService
+        
         self.urlOpener = urlOpener
         infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
@@ -37,8 +36,6 @@ class MatchViewController: MyTBAContainerViewController {
             viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }) as! [ContainableViewController],
             navigationTitle: "\(match.friendlyName)",
             navigationSubtitle: "@ \(match.event?.friendlyNameWithYear ?? match.key!)", // TODO: Use EventKey
-            segmentedControlTitles: titles,
-            messaging: messaging,
             myTBA: myTBA,
             persistentContainer: persistentContainer,
             tbaKit: tbaKit,
@@ -52,14 +49,6 @@ class MatchViewController: MyTBAContainerViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Lifecycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Analytics.logEvent("match", parameters: ["match": match.key!])
-    }
-
 }
 
 extension MatchViewController: MatchSummaryViewDelegate {
@@ -70,7 +59,7 @@ extension MatchViewController: MatchSummaryViewDelegate {
         // get team key that matches the target teamNumber
         guard let teamKey = match.teamKeys.first(where: { $0.teamNumber == "\(teamNumber)"}) else { return }
         
-        let teamAtEventVC = TeamAtEventViewController(teamKey: teamKey, event: event, messaging: messaging, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventVC = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
     

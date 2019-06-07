@@ -1,6 +1,5 @@
 import CoreData
 import Foundation
-import React
 import TBAKit
 import UIKit
 

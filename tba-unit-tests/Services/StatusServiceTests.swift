@@ -251,7 +251,7 @@ private class MockStatusSubscribable: StatusSubscribable {
     var statusChangedExpectation: XCTestExpectation?
 
     init(statusService: StatusService) {
-        self.statusService = statusService
+        
     }
 
     func statusChanged(status: Status) {
@@ -269,7 +269,7 @@ private class MockFMSStatusSubscribable: FMSStatusSubscribable {
     var fmsStatusChangedExpectation: XCTestExpectation?
 
     init(statusService: StatusService) {
-        self.statusService = statusService
+        
     }
 
     func fmsStatusChanged(isDatafeedDown: Bool) {
@@ -287,7 +287,7 @@ private class MockEventStatusSubscribable: EventStatusSubscribable {
     var eventStatusChangedExpectation: XCTestExpectation?
 
     init(statusService: StatusService) {
-        self.statusService = statusService
+        
     }
 
     func eventStatusChanged(isEventOffline: Bool) {

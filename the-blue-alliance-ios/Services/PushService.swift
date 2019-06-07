@@ -1,5 +1,3 @@
-import Crashlytics
-import FirebaseMessaging
 import Foundation
 import MyTBAKit
 import UserNotifications
@@ -22,13 +20,12 @@ class PushService: NSObject {
         }
     }
 
-    private var messaging: Messaging
     private var myTBA: MyTBA
     internal var retryService: RetryService
     private var userDefaults: UserDefaults
 
-    init(messaging: Messaging, myTBA: MyTBA, retryService: RetryService, userDefaults: UserDefaults) {
-        self.messaging = messaging
+    init(myTBA: MyTBA, retryService: RetryService, userDefaults: UserDefaults) {
+        
         self.myTBA = myTBA
         self.retryService = retryService
         self.userDefaults = userDefaults
@@ -43,7 +40,6 @@ class PushService: NSObject {
         } else {
             myTBA.register(token) { (_, error) in
                 if let error = error {
-                    Crashlytics.sharedInstance().recordError(error)
                     if !self.retryService.isRetryRegistered {
                         DispatchQueue.main.async {
                             self.registerRetryable()
@@ -59,10 +55,6 @@ class PushService: NSObject {
     }
 
     func registerFCMToken() {
-        guard let fcmToken = messaging.fcmToken else {
-            return
-        }
-        registerPushToken(fcmToken)
     }
 
     private func registerPendingPushToken() {
@@ -101,19 +93,21 @@ extension PushService: MyTBAAuthenticationObservable {
     }
 }
 
+/*
 extension PushService: MessagingDelegate {
 
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+    func messaging(_ didReceiveRegistrationToken fcmToken: String) {
         print("Firebase registration token: \(fcmToken)")
         registerPushToken(fcmToken)
     }
 
-    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+    func messaging(_ didReceive remoteMessage: MessagingRemoteMessage) {
         print("FCM Remote Data")
         print(remoteMessage.appData)
     }
 
 }
+*/
 
 extension PushService: UNUserNotificationCenterDelegate {
 

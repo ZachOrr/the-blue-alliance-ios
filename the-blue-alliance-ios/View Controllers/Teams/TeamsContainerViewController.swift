@@ -1,24 +1,24 @@
 import CoreData
-import Firebase
+
 import MyTBAKit
 import TBAKit
 import UIKit
 
 class TeamsContainerViewController: ContainerViewController {
 
-    private let messaging: Messaging
+    
     private let myTBA: MyTBA
-    private let statusService: StatusService
+    
     private let urlOpener: URLOpener
 
     private(set) var teamsViewController: TeamsViewController!
 
     // MARK: - Init
 
-    init(messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.messaging = messaging
+    init(myTBA: MyTBA, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        
         self.myTBA = myTBA
-        self.statusService = statusService
+        
         self.urlOpener = urlOpener
 
         teamsViewController = TeamsViewController(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -38,21 +38,13 @@ class TeamsContainerViewController: ContainerViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Lifecycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Analytics.logEvent("teams", parameters: nil)
-    }
-
 }
 
 extension TeamsContainerViewController: TeamsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamViewController = TeamViewController(team: team, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: teamViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }

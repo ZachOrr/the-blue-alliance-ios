@@ -1,5 +1,5 @@
 import CoreData
-import FirebaseMessaging
+
 import MyTBAKit
 import UIKit
 
@@ -23,7 +23,7 @@ class MyTBAPreferenceViewController: UITableViewController {
     let notificationsInitial: [NotificationType]
     var notifications: [NotificationType]
 
-    let messaging: Messaging
+    
     let myTBA: MyTBA
     let persistentContainer: NSPersistentContainer
 
@@ -45,9 +45,9 @@ class MyTBAPreferenceViewController: UITableViewController {
                                                                            action: #selector(save))
     internal var saveActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
 
-    init(subscribableModel: MyTBASubscribable, messaging: Messaging, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
+    init(subscribableModel: MyTBASubscribable, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
         self.subscribableModel = subscribableModel
-        self.messaging = messaging
+        
         self.myTBA = myTBA
         self.persistentContainer = persistentContainer
 
@@ -131,8 +131,7 @@ class MyTBAPreferenceViewController: UITableViewController {
 
         isSaving = true
 
-        let fcmToken = messaging.fcmToken
-        preferencesOperation = myTBA.updatePreferences(deviceKey: fcmToken, modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, favorite: isFavorite, notifications: notifications, completion: { [weak self] (favoriteResponse, subscriptionResponse, error) in
+        preferencesOperation = myTBA.updatePreferences(deviceKey: "", modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, favorite: isFavorite, notifications: notifications, completion: { [weak self] (favoriteResponse, subscriptionResponse, error) in
             guard let self = self else { return }
             let context = self.persistentContainer.newBackgroundContext()
 

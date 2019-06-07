@@ -1,5 +1,5 @@
 import CoreData
-import Firebase
+
 import Foundation
 import MyTBAKit
 import TBAKit
@@ -15,21 +15,21 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
     private let showDetailEvent: Bool
     private let showDetailTeam: Bool
 
-    let messaging: Messaging
+    
     let myTBA: MyTBA
-    let statusService: StatusService
+    
     let urlOpener: URLOpener
 
     // MARK: - Init
 
-    init(teamKey: TeamKey, event: Event, messaging: Messaging, myTBA: MyTBA, showDetailEvent: Bool, showDetailTeam: Bool, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(teamKey: TeamKey, event: Event, myTBA: MyTBA, showDetailEvent: Bool, showDetailTeam: Bool, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.teamKey = teamKey
         self.event = event
         self.showDetailEvent = showDetailEvent
         self.showDetailTeam = showDetailTeam
         self.myTBA = myTBA
-        self.messaging = messaging
-        self.statusService = statusService
+        
+
         self.urlOpener = urlOpener
 
         let summaryViewController = TeamSummaryViewController(teamKey: teamKey, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -60,18 +60,10 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Lifecycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Analytics.logEvent("team_at_event", parameters: ["event": event.key!, "team": teamKey.key!])
-    }
-
     // MARK: - Private Methods
 
     @objc private func pushEvent() {
-        let eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let eventViewController = EventViewController(event: event, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(eventViewController, animated: true)
     }
 
@@ -84,12 +76,12 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
 extension TeamAtEventViewController: MatchesViewControllerDelegate, TeamSummaryViewControllerDelegate {
 
     func awardsSelected() {
-        let awardsViewController = EventAwardsContainerViewController(event: event, teamKey: teamKey, messaging: messaging, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let awardsViewController = EventAwardsContainerViewController(event: event, teamKey: teamKey, myTBA: myTBA, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(awardsViewController, animated: true)
     }
 
     func matchSelected(_ match: Match) {
-        let matchViewController = MatchViewController(match: match, teamKey: teamKey, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let matchViewController = MatchViewController(match: match, teamKey: teamKey, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(matchViewController, animated: true)
     }
 
@@ -103,7 +95,7 @@ extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
             return
         }
 
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, messaging: messaging, myTBA: myTBA, showDetailEvent: showDetailEvent, showDetailTeam: showDetailTeam, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: showDetailEvent, showDetailTeam: showDetailTeam, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

@@ -1,5 +1,5 @@
 import CoreData
-import Firebase
+
 import Foundation
 import MyTBAKit
 import TBAKit
@@ -12,8 +12,8 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
     }
 
     private(set) var ranking: DistrictRanking
-    let statusService: StatusService
-    let messaging: Messaging
+    
+    
     let myTBA: MyTBA
     let urlOpener: URLOpener
 
@@ -21,11 +21,11 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 
     // MARK: Init
 
-    init(ranking: DistrictRanking, messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(ranking: DistrictRanking, myTBA: MyTBA, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.ranking = ranking
-        self.messaging = messaging
+        
         self.myTBA = myTBA
-        self.statusService = statusService
+        
         self.urlOpener = urlOpener
 
         let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -50,14 +50,6 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Lifecycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Analytics.logEvent("team_at_district", parameters: ["district": ranking.district!.key!, "team": ranking.teamKey!.key!])
-    }
-
     // MARK: - Private Methods
 
     @objc private func pushTeam() {
@@ -75,7 +67,7 @@ extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegat
         }
 
         // TODO: Let's see what we can to do not force-unwrap these from Core Data
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, messaging: messaging, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
