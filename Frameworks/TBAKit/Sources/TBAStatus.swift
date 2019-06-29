@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 public struct TBAStatus: TBAModel {
@@ -85,9 +86,9 @@ public struct TBAAppInfo: TBAModel, Equatable {
 extension TBAKit {
 
     @discardableResult
-    public func fetchStatus(_ completion: @escaping (Result<TBAStatus?, Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchStatus() -> AnyPublisher<(TBAStatus?, Bool, URLResponse), Error> {
         let method = "status"
-        return callObject(method: method, completion: completion)
+        return callObject(method: method)
     }
 
 }

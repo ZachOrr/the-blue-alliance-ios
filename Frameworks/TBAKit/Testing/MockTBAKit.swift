@@ -1,3 +1,4 @@
+import Combine
 import TBATestingMocks
 import XCTest
 @testable import TBAKit
@@ -46,34 +47,29 @@ public class MockTBAKit: TBAKit {
         return etag(for: url)
     }
 
-    public func sendUnauthorizedStub(for operation: TBAKitOperation) {
-        guard let mockRequest = operation.task as? MockURLSessionDataTask else {
-            XCTFail()
-            return
-        }
-        guard let requestURL = mockRequest.testRequest?.url else {
-            XCTFail()
-            return
-        }
+    public func sendUnauthorizedStub(for publisher: AnyPublisher<(URLRequest, [String : String], Bool), Error>) {
+        publisher.map { (request, _, unmodified) -> (URLRequest, [String: String], Bool) in
+            let url = request.url!
+            guard let resourceURL = self.bundle.url(forResource: "unauthorized", withExtension: "json") else {
+                XCTFail()
+                return (request, [:], unmodified)
+            }
 
-        guard let resourceURL = bundle.url(forResource: "unauthorized", withExtension: "json") else {
-            XCTFail()
-            return
-        }
+            var data: Data?
+            do {
+                data = try Data(contentsOf: resourceURL)
+            } catch {
+                XCTFail()
+            }
 
-        var data: Data?
-        do {
-            data = try Data(contentsOf: resourceURL)
-        } catch {
-            XCTFail()
+            return (request, )
+            let response = HTTPURLResponse(url: url, statusCode: 401, httpVersion: nil, headerFields: nil)
+            mockRequest.testResponse = response
+            mockRequest.completionHandler?(data, response, nil)
         }
-
-        let response = HTTPURLResponse(url: requestURL, statusCode: 401, httpVersion: nil, headerFields: nil)
-        mockRequest.testResponse = response
-        mockRequest.completionHandler?(data, response, nil)
     }
 
-    public func sendUnmodifiedStub(for operation: TBAKitOperation) {
+    public func sendUnmodifiedStub(for request: URLRequest) {
         guard let mockRequest = operation.task as? MockURLSessionDataTask else {
             XCTFail()
             return
@@ -92,7 +88,7 @@ public class MockTBAKit: TBAKit {
         mockRequest.completionHandler?(nil, response, nil)
     }
 
-    public func sendSuccessStub(for operation: TBAKitOperation, with code: Int = 200) {
+    public func sendSuccessStub(for request: URLRequest, with code: Int = 200) {
         guard let mockRequest = operation.task as? MockURLSessionDataTask else {
             XCTFail()
             return

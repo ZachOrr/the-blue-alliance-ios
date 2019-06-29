@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 public struct TBAEvent: TBAModel {
@@ -522,192 +523,163 @@ public struct TBAWebcast: TBAModel {
 extension TBAKit {
 
     @discardableResult
-    public func fetchEvents(year: Int, completion: @escaping (Result<[TBAEvent], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchEvents(year: Int) -> AnyPublisher<([TBAEvent], Bool, URLResponse), Error> {
         let method = "events/\(year)"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 
     @discardableResult
-    public func fetchEvent(key: String, completion: @escaping (Result<TBAEvent?, Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchEvent(key: String) -> AnyPublisher<(TBAEvent?, Bool, URLResponse), Error> {
         let method = "event/\(key)"
-        return callObject(method: method, completion: completion)
+        return callObject(method: method)
     }
 
     @discardableResult
-    public func fetchEventAlliances(key: String, completion: @escaping (Result<[TBAAlliance], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchEventAlliances(key: String) -> AnyPublisher<([TBAAlliance], Bool, URLResponse), Error> {
         let method = "event/\(key)/alliances"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 
     @discardableResult
-    public func fetchEventInsights(key: String, completion: @escaping (Result<TBAEventInsights?, Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchEventInsights(key: String) -> AnyPublisher<(TBAEventInsights?, Bool, URLResponse), Error> {
         let method = "event/\(key)/insights"
-        return callObject(method: method, completion: completion)
+        return callObject(method: method)
     }
 
     @discardableResult
-    public func fetchEventTeamStats(key: String, completion: @escaping (Result<[TBAStat], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchEventTeamStats(key: String) -> AnyPublisher<([TBAStat], Bool, URLResponse), Error> {
         let method = "event/\(key)/oprs"
-        return callDictionary(method: method) { (result, notModified) in
-            switch result {
-            case .failure(let error):
-                completion(.failure(error), notModified)
-            case .success(let dictionary):
-                var oprs: [String: Double] = [:]
-                if let oprsDict = dictionary["oprs"] as? [String: Double] {
-                    oprs = oprsDict
-                }
-
-                var dprs: [String: Double] = [:]
-                if let dprsDict = dictionary["dprs"] as? [String: Double] {
-                    dprs = dprsDict
-                }
-
-                var ccwms: [String: Double] = [:]
-                if let ccwmsDict = dictionary["ccwms"] as? [String: Double] {
-                    ccwms = ccwmsDict
-                }
-
-                var stats: [TBAStat] = []
-                // TODO: Problematic - reduce all 3 keys to get this
-                for teamKey in oprs.keys {
-                    guard let opr = oprs[teamKey] else {
-                        continue
-                    }
-                    guard let dpr = dprs[teamKey] else {
-                        continue
-                    }
-                    guard let ccwm = ccwms[teamKey] else {
-                        continue
-                    }
-
-                    let json = ["team_key": teamKey,
-                                "opr": opr,
-                                "dpr": dpr,
-                                "ccwm": ccwm] as [String: Any]
-
-                    if let stat = TBAStat(json: json) {
-                        stats.append(stat)
-                    }
-                }
-                completion(.success(stats), notModified)
+        return callDictionary(method: method).map { (dictionary, unmodified, response) -> ([TBAStat], Bool, URLResponse) in
+            var oprs: [String: Double] = [:]
+            if let oprsDict = dictionary["oprs"] as? [String: Double] {
+                oprs = oprsDict
             }
-        }
+
+            var dprs: [String: Double] = [:]
+            if let dprsDict = dictionary["dprs"] as? [String: Double] {
+                dprs = dprsDict
+            }
+
+            var ccwms: [String: Double] = [:]
+            if let ccwmsDict = dictionary["ccwms"] as? [String: Double] {
+                ccwms = ccwmsDict
+            }
+
+            return (oprs.keys.compactMap { (teamKey) -> TBAStat? in
+                guard let opr = oprs[teamKey] else {
+                    return nil
+                }
+                guard let dpr = dprs[teamKey] else {
+                    return nil
+                }
+                guard let ccwm = ccwms[teamKey] else {
+                    return nil
+                }
+
+                let json = ["team_key": teamKey,
+                            "opr": opr,
+                            "dpr": dpr,
+                            "ccwm": ccwm] as [String: Any]
+                return TBAStat(json: json)
+            }, unmodified, response)
+        }.eraseToAnyPublisher()
     }
 
     @discardableResult
-    public func fetchEventRankings(key: String, completion: @escaping (Result<([TBAEventRanking], [TBAEventRankingSortOrder], [TBAEventRankingSortOrder]), Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchEventRankings(key: String) -> AnyPublisher<(([TBAEventRanking], [TBAEventRankingSortOrder], [TBAEventRankingSortOrder]), Bool, URLResponse), Error> {
         let method = "event/\(key)/rankings"
-        return callDictionary(method: method, completion: { (result, notModified) in
-            switch result {
-            case .failure(let error):
-                completion(.failure(error), notModified)
-            case .success(let dictionary):
-                var rankings: [TBAEventRanking] = []
-                if let rankingsJSON = dictionary["rankings"] as? [[String: Any]] {
-                    rankings = rankingsJSON.compactMap({ (rankingJSON) -> TBAEventRanking? in
-                        return TBAEventRanking(json: rankingJSON)
-                    })
-                }
-
-                var sortOrderInfo: [TBAEventRankingSortOrder] = []
-                if let sortOrderInfoJSON = dictionary["sort_order_info"] as? [[String: Any]] {
-                    sortOrderInfo = sortOrderInfoJSON.compactMap({ (sortOrderJSON) -> TBAEventRankingSortOrder? in
-                        return TBAEventRankingSortOrder(json: sortOrderJSON)
-                    })
-                }
-
-                var extraStatsInfo: [TBAEventRankingSortOrder] = []
-                if let extraStatsInfoJSON = dictionary["extra_stats_info"] as? [[String: Any]] {
-                    extraStatsInfo = extraStatsInfoJSON.compactMap({ (extraInfoJSON) -> TBAEventRankingSortOrder? in
-                        return TBAEventRankingSortOrder(json: extraInfoJSON)
-                    })
-                }
-
-                completion(.success((rankings, sortOrderInfo, extraStatsInfo)), notModified)
+        return callDictionary(method: method).map { (dictionary, unmodified, response) -> (([TBAEventRanking], [TBAEventRankingSortOrder], [TBAEventRankingSortOrder]), Bool, URLResponse) in
+            var rankings: [TBAEventRanking] = []
+            if let rankingsJSON = dictionary["rankings"] as? [[String: Any]] {
+                rankings = rankingsJSON.compactMap({ (rankingJSON) -> TBAEventRanking? in
+                    return TBAEventRanking(json: rankingJSON)
+                })
             }
-        })
-        
+
+            var sortOrderInfo: [TBAEventRankingSortOrder] = []
+            if let sortOrderInfoJSON = dictionary["sort_order_info"] as? [[String: Any]] {
+                sortOrderInfo = sortOrderInfoJSON.compactMap({ (sortOrderJSON) -> TBAEventRankingSortOrder? in
+                    return TBAEventRankingSortOrder(json: sortOrderJSON)
+                })
+            }
+
+            var extraStatsInfo: [TBAEventRankingSortOrder] = []
+            if let extraStatsInfoJSON = dictionary["extra_stats_info"] as? [[String: Any]] {
+                extraStatsInfo = extraStatsInfoJSON.compactMap({ (extraInfoJSON) -> TBAEventRankingSortOrder? in
+                    return TBAEventRankingSortOrder(json: extraInfoJSON)
+                })
+            }
+            return ((rankings, sortOrderInfo, extraStatsInfo), unmodified, response)
+        }.eraseToAnyPublisher()
     }
 
     @discardableResult
-    public func fetchEventDistrictPoints(key: String, completion: @escaping (Result<([TBADistrictEventPoints], [TBADistrictPointsTiebreaker]), Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchEventDistrictPoints(key: String) -> AnyPublisher<(([TBADistrictEventPoints], [TBADistrictPointsTiebreaker]), Bool, URLResponse), Error> {
         let method = "event/\(key)/district_points"
-        return callDictionary(method: method) { (result, notModified) in
-            switch result {
-            case .failure(let error):
-                completion(.failure(error), notModified)
-            case .success(let dictionary):
-                var districtPoints: [TBADistrictEventPoints] = []
-                if let points = dictionary["points"] as? [String: Any] {
-                    districtPoints = points.compactMap({ (teamKey, pointsJSON) -> TBADistrictEventPoints? in
-                        // Add teamKey and eventKey to pointsJSON
-                        guard var json = pointsJSON as? [String: Any] else {
-                            return nil
-                        }
-                        json["team_key"] = teamKey
-                        json["event_key"] = key
-
-                        return TBADistrictEventPoints(json: json)
-                    })
-                }
-
-                var pointsTiebreakers: [TBADistrictPointsTiebreaker] = []
-                if let tiebreakers = dictionary["tiebreakers"] as? [String : Any] {
-                    pointsTiebreakers = tiebreakers.compactMap({ (teamKey, tiebreakerJSON) -> TBADistrictPointsTiebreaker? in
-                        // Add teamKey to pointsJSON
-                        guard var json = tiebreakerJSON as? [String: Any] else {
-                            return nil
-                        }
-                        json["team_key"] = teamKey
-
-                        return TBADistrictPointsTiebreaker(json: json)
-                    })
-                }
-
-                completion(.success((districtPoints, pointsTiebreakers)), notModified)
-            }
-        }
-    }
-
-    @discardableResult
-    public func fetchEventTeams(key: String, completion: @escaping (Result<[TBATeam], Error>, Bool) -> ()) -> TBAKitOperation {
-        let method = "event/\(key)/teams"
-        return callArray(method: method, completion: completion)
-    }
-
-    @discardableResult
-    public func fetchEventStatuses(key: String, completion: @escaping (Result<[TBAEventStatus], Error>, Bool) -> ()) -> TBAKitOperation {
-        let method = "event/\(key)/teams/statuses"
-        return callDictionary(method: method, completion: { (result, notModified) in
-            switch result {
-            case .failure(let error):
-                completion(.failure(error), notModified)
-            case .success(let dictionary):
-                let eventStatuses = dictionary.compactMap({ (eventKey, statusJSON) -> TBAEventStatus? in
-                    // Add teamKey/eventKey to statusJSON
-                    guard var json = statusJSON as? [String: Any] else {
+        return callDictionary(method: method).map { (dictionary, unmodified, response) -> (([TBADistrictEventPoints], [TBADistrictPointsTiebreaker]), Bool, URLResponse) in
+            var districtPoints: [TBADistrictEventPoints] = []
+            if let points = dictionary["points"] as? [String: Any] {
+                districtPoints = points.compactMap({ (teamKey, pointsJSON) -> TBADistrictEventPoints? in
+                    // Add teamKey and eventKey to pointsJSON
+                    guard var json = pointsJSON as? [String: Any] else {
                         return nil
                     }
-                    json["team_key"] = key
-                    json["event_key"] = eventKey
+                    json["team_key"] = teamKey
+                    json["event_key"] = key
 
-                    return TBAEventStatus(json: json)
+                    return TBADistrictEventPoints(json: json)
                 })
-                completion(.success(eventStatuses), notModified)
             }
-        })
+
+            var pointsTiebreakers: [TBADistrictPointsTiebreaker] = []
+            if let tiebreakers = dictionary["tiebreakers"] as? [String : Any] {
+                pointsTiebreakers = tiebreakers.compactMap({ (teamKey, tiebreakerJSON) -> TBADistrictPointsTiebreaker? in
+                    // Add teamKey to pointsJSON
+                    guard var json = tiebreakerJSON as? [String: Any] else {
+                        return nil
+                    }
+                    json["team_key"] = teamKey
+
+                    return TBADistrictPointsTiebreaker(json: json)
+                })
+            }
+
+            return ((districtPoints, pointsTiebreakers), unmodified, response)
+        }.eraseToAnyPublisher()
     }
 
     @discardableResult
-    public func fetchEventMatches(key: String, completion: @escaping (Result<[TBAMatch], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchEventTeams(key: String) -> AnyPublisher<([TBATeam], Bool, URLResponse), Error> {
+        let method = "event/\(key)/teams"
+        return callArray(method: method)
+    }
+
+    @discardableResult
+    public func fetchEventStatuses(key: String) -> AnyPublisher<([TBAEventStatus], Bool, URLResponse), Error> {
+        let method = "event/\(key)/teams/statuses"
+        return callDictionary(method: method).map { (dictionary, unmodified, response) -> ([TBAEventStatus], Bool, URLResponse) in
+            return (dictionary.compactMap({ (eventKey, statusJSON) -> TBAEventStatus? in
+                // Add teamKey/eventKey to statusJSON
+                guard var json = statusJSON as? [String: Any] else {
+                    return nil
+                }
+                json["team_key"] = key
+                json["event_key"] = eventKey
+
+                return TBAEventStatus(json: json)
+            }), unmodified, response)
+        }.eraseToAnyPublisher()
+    }
+
+    @discardableResult
+    public func fetchEventMatches(key: String) -> AnyPublisher<([TBAMatch], Bool, URLResponse), Error> {
         let method = "event/\(key)/matches"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 
     @discardableResult
-    public func fetchEventAwards(key: String, completion: @escaping (Result<[TBAAward], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchEventAwards(key: String) -> AnyPublisher<([TBAAward], Bool, URLResponse), Error> {
         let method = "event/\(key)/awards"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 }

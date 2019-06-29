@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 public typealias TBAKitOperationCompletion = (_ response: HTTPURLResponse?, _ json: Any?, _ error: Error?) -> ()
@@ -40,9 +41,9 @@ open class TBAKit: NSObject {
         self.userDefaults = userDefaults
     }
 
-    public func storeCacheHeaders(_ operation: TBAKitOperation) {
+    public func storeCacheHeaders(_ response: URLResponse) {
         // Pull our response off of our request
-        guard let httpResponse = operation.task.response as? HTTPURLResponse else {
+        guard let httpResponse = response as? HTTPURLResponse else {
             return
         }
         // Grab our lastModified to store
@@ -114,67 +115,67 @@ open class TBAKit: NSObject {
         return request
     }
 
-    func callApi(method: String, completion: @escaping (_ response: HTTPURLResponse?, _ json: Any?, _ error: Error?) -> ()) -> TBAKitOperation {
-        return TBAKitOperation(tbaKit: self, method: method, completion: completion)
-    }
-    
-    func callObject<T: TBAModel>(method: String, completion: @escaping (Result<T?, Error>, Bool) -> ()) -> TBAKitOperation {
-        return callApi(method: method) { (response, json, error) in
-            if let error = error {
-                completion(.failure(error), false)
-            } else if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(.success(nil), true)
-            } else if let json = json as? [String: Any] {
-                completion(.success(T(json: json)), false)
+    func callApi(method: String) -> AnyPublisher<([String : String], Bool, URLResponse), Error> {
+        let request = createRequest(method)
+        return urlSession.dataTaskPublisher(for: request).tryMap { (data, response) -> ([String : String], Bool, URLResponse) in
+            let httpResponse = response as! HTTPURLResponse
+            let unmodified = (httpResponse.statusCode == 304)
+            if let json = try? JSONSerialization.jsonObject(with: data, options: []) {
+                if let jsonDict = json as? [String: String] {
+                    if let apiError = jsonDict["Error"] {
+                        throw APIError.error(apiError)
+                    } else {
+                        return (jsonDict, unmodified, response)
+                    }
+                }
             } else {
-                completion(.failure(APIError.error("Unexpected response from server.")), false)
+                // Probably got a 'null' back from the API for the JSON
+                throw APIError.error("Unexpected response from server.")
             }
-        }
-    }
-    
-    func callArray<T: TBAModel>(method: String, completion: @escaping (Result<[T], Error>, Bool) -> ()) -> TBAKitOperation {
-        return callApi(method: method) { (response, json, error) in
-            if let error = error {
-                completion(.failure(error), false)
-            } else if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(.success([]), true)
-            } else if let json = json as? [[String: Any]] {
-                let models = json.compactMap({
-                    return T(json: $0)
-                })
-                completion(.success(models), false)
-            } else {
-                completion(.failure(APIError.error("Unexpected response from server.")), false)
-            }
-        }
-    }
-    
-    func callArray(method: String, completion: @escaping (Result<[Any], Error>, Bool) -> ()) -> TBAKitOperation {
-        return callApi(method: method) { (response, json, error) in
-            if let error = error {
-                completion(.failure(error), false)
-            } else if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(.success([]), true)
-            } else if let array = json as? [Any] {
-                completion(.success(array), false)
-            } else {
-                completion(.failure(APIError.error("Unexpected response from server.")), false)
-            }
-        }
+            return ([:], unmodified, response)
+        }.eraseToAnyPublisher()
     }
 
-    func callDictionary(method: String, completion: @escaping (Result<[String: Any], Error>, Bool) -> ()) -> TBAKitOperation {
-        return callApi(method: method) { (response, json, error) in
-            if let error = error {
-                completion(.failure(error), false)
-            } else if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(.success([:]), true)
-            } else if let dict = json as? [String: Any] {
-                completion(.success(dict), false)
+    func callObject<T: TBAModel>(method: String) -> AnyPublisher<(T?, Bool, URLResponse), Error> {
+        return callApi(method: method).map { (json, unmodified, response) -> (T?, Bool, URLResponse) in
+            if let json = json as? [String: Any] {
+                return (T(json: json), unmodified, response)
             } else {
-                completion(.failure(APIError.error("Unexpected response from server.")), false)
+                return (nil, unmodified, response)
             }
-        }
+        }.eraseToAnyPublisher()
+    }
+    
+    func callArray<T: TBAModel>(method: String) -> AnyPublisher<([T], Bool, URLResponse), Error> {
+        return callApi(method: method).tryMap { (json, unmodified, response) -> ([T], Bool, URLResponse) in
+            if let json = json as? [[String: Any]] {
+                return (json.compactMap({
+                    return T(json: $0)
+                }), unmodified, response)
+            } else {
+                throw APIError.error("Unexpected response from server.")
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func callArray(method: String) -> AnyPublisher<([Any], Bool, URLResponse), Error> {
+        return callApi(method: method).tryMap { (json, unmodified, response) -> ([Any], Bool, URLResponse) in
+            if let json = json as? [Any] {
+                return (json, unmodified, response)
+            } else {
+                throw APIError.error("Unexpected response from server.")
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    func callDictionary(method: String) -> AnyPublisher<([String: Any], Bool, URLResponse), Error> {
+        return callApi(method: method).tryMap { (json, unmodified, response) -> ([String: Any], Bool, URLResponse) in
+            if let dict = json as? [String: Any] {
+                return (dict, unmodified, response)
+            } else {
+                throw APIError.error("Unexpected response from server.")
+            }
+        }.eraseToAnyPublisher()
     }
     
 }

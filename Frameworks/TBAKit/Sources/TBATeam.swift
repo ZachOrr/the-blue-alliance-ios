@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 public struct TBATeam: TBAModel {
@@ -288,135 +289,120 @@ public struct TBAMedia: TBAModel {
 extension TBAKit {
 
     @discardableResult
-    public func fetchTeams(page: Int, year: Int? = nil, completion: @escaping (Result<[TBATeam], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchTeams(page: Int, year: Int? = nil) -> AnyPublisher<([TBATeam], Bool, URLResponse), Error> {
         var method = "teams"
         if let year = year {
             method = "\(method)/\(year)"
         }
         method = "\(method)/\(page)"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 
     @discardableResult
-    public func fetchTeam(key: String, completion: @escaping (Result<TBATeam?, Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchTeam(key: String) -> AnyPublisher<(TBATeam?, Bool, URLResponse), Error> {
         let method = "team/\(key)"
-        return callObject(method: method, completion: completion)
+        return callObject(method: method)
     }
 
     @discardableResult
-    public func fetchTeamYearsParticipated(key: String, completion: @escaping (Result<[Int], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchTeamYearsParticipated(key: String) -> AnyPublisher<([Int], Bool, URLResponse), Error> {
         let method = "team/\(key)/years_participated"
-        return callArray(method: method) { (result, notModified) in
-            switch result {
-            case .failure(let error):
-                completion(.failure(error), notModified)
-            case .success(let years):
-                if let years = years as? [Int] {
-                    completion(.success(years), notModified)
-                } else {
-                    completion(.failure(APIError.error("Unexpected response from server.")), notModified)
-                }
+        return callArray(method: method).tryMap { (array, unmodified, response) -> ([Int], Bool, URLResponse) in
+            if let years = array as? [Int] {
+                return (years, unmodified, response)
+            } else {
+                throw APIError.error("Unexpected response from server.") as Error
             }
-        }
+        }.eraseToAnyPublisher()
     }
 
     @discardableResult
-    public func fetchTeamDistricts(key: String, completion: @escaping (Result<[TBADistrict], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchTeamDistricts(key: String) -> AnyPublisher<([TBADistrict], Bool, URLResponse), Error> {
         let method = "team/\(key)/districts"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 
     @discardableResult
-    public func fetchTeamRobots(key: String, completion: @escaping (Result<[TBARobot], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchTeamRobots(key: String) -> AnyPublisher<([TBARobot], Bool, URLResponse), Error> {
         let method = "team/\(key)/robots"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 
     @discardableResult
-    public func fetchTeamEvents(key: String, year: Int? = nil, completion: @escaping (Result<[TBAEvent], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchTeamEvents(key: String, year: Int? = nil) -> AnyPublisher<([TBAEvent], Bool, URLResponse), Error> {
         var method = "team/\(key)/events"
         if let year = year {
             method = "\(method)/\(year)"
         }
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 
     @discardableResult
-    public func fetchTeamStatuses(key: String, year: Int, completion: @escaping (Result<[TBAEventStatus], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchTeamStatuses(key: String, year: Int) -> AnyPublisher<([TBAEventStatus], Bool, URLResponse), Error> {
         let method = "team/\(key)/events/\(year)/statuses"
-        return callDictionary(method: method, completion: { (result, notModified) in
-            switch result {
-            case .failure(let error):
-                completion(.failure(error), notModified)
-            case .success(let dictionary):
-                let eventStatuses = dictionary.compactMap({ (eventKey, statusJSON) -> TBAEventStatus? in
-                    // Add teamKey/eventKey to statusJSON
-                    guard var json = statusJSON as? [String: Any] else {
-                        return nil
-                    }
-                    json["team_key"] = key
-                    json["event_key"] = eventKey
-
-                    return TBAEventStatus(json: json)
-                })
-                completion(.success(eventStatuses), notModified)
-            }
-        })
-    }
-
-    @discardableResult
-    public func fetchTeamMatches(key: String, eventKey: String, completion: @escaping (Result<[TBAMatch], Error>, Bool) -> ()) -> TBAKitOperation {
-        let method = "team/\(key)/event/\(eventKey)/matches"
-        return callArray(method: method, completion: completion)
-    }
-
-    @discardableResult
-    public func fetchTeamAwards(key: String, eventKey: String, completion: @escaping (Result<[TBAAward], Error>, Bool) -> ()) -> TBAKitOperation {
-        let method = "team/\(key)/event/\(eventKey)/awards"
-        return callArray(method: method, completion: completion)
-    }
-
-    @discardableResult
-    public func fetchTeamStatus(key: String, eventKey: String, completion: @escaping (Result<TBAEventStatus?, Error>, Bool) -> ()) -> TBAKitOperation {
-        let method = "team/\(key)/event/\(eventKey)/status"
-        return callDictionary(method: method, completion: { (result, notModified) in
-            switch result {
-            case .failure(let error):
-                completion(.failure(error), notModified)
-            case .success(var dictionary):
-                dictionary["team_key"] = key
-                dictionary["event_key"] = eventKey
-
-                if let status = TBAEventStatus(json: dictionary) {
-                    completion(.success(status), notModified)
-                } else {
-                    completion(.failure(APIError.error("Unexpected response from server.")), notModified)
+        return callDictionary(method: method).map { (dictionary, unmodified, response) -> ([TBAEventStatus], Bool, URLResponse) in
+            return (dictionary.compactMap({ (eventKey, statusJSON) -> TBAEventStatus? in
+                // Add teamKey/eventKey to statusJSON
+                guard var json = statusJSON as? [String: Any] else {
+                    return nil
                 }
-            }
-        })
+                json["team_key"] = key
+                json["event_key"] = eventKey
+
+                return TBAEventStatus(json: json)
+            }), unmodified, response)
+        }.eraseToAnyPublisher()
     }
-    
-    public func fetchTeamAwards(key: String, year: Int? = nil, completion: @escaping (Result<[TBAAward], Error>, Bool) -> ()) -> TBAKitOperation {
+
+    @discardableResult
+    public func fetchTeamMatches(key: String, eventKey: String) -> AnyPublisher<([TBAMatch], Bool, URLResponse), Error> {
+        let method = "team/\(key)/event/\(eventKey)/matches"
+        return callArray(method: method)
+    }
+
+    @discardableResult
+    public func fetchTeamAwards(key: String, eventKey: String) -> AnyPublisher<([TBAAward], Bool, URLResponse), Error> {
+        let method = "team/\(key)/event/\(eventKey)/awards"
+        return callArray(method: method)
+    }
+
+    @discardableResult
+    public func fetchTeamStatus(key: String, eventKey: String) -> AnyPublisher<(TBAEventStatus?, Bool, URLResponse), Error> {
+        let method = "team/\(key)/event/\(eventKey)/status"
+        return callDictionary(method: method).tryMap { (dictionary, unmodified, response) -> (TBAEventStatus?, Bool, URLResponse) in
+            var dictionary = dictionary
+            dictionary["team_key"] = key
+            dictionary["event_key"] = eventKey
+
+            if let status = TBAEventStatus(json: dictionary) {
+                return (status, unmodified, response)
+            } else {
+                throw APIError.error("Unexpected response from server.")
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    public func fetchTeamAwards(key: String, year: Int? = nil) -> AnyPublisher<([TBAAward], Bool, URLResponse), Error> {
         var method = "team/\(key)/awards"
         if let year = year {
             method = "\(method)/\(year)"
         }
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
     
-    public func fetchTeamMatches(key: String, year: Int, completion: @escaping (Result<[TBAMatch], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchTeamMatches(key: String, year: Int) -> AnyPublisher<([TBAMatch], Bool, URLResponse), Error> {
         let method = "team/\(key)/matches/\(year)"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
     
-    public func fetchTeamMedia(key: String, year: Int, completion: @escaping (Result<[TBAMedia], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchTeamMedia(key: String, year: Int) -> AnyPublisher<([TBAMedia], Bool, URLResponse), Error> {
         let method = "team/\(key)/media/\(year)"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
     
-    public func fetchTeamSocialMedia(key: String, completion: @escaping (Result<[TBAMedia], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchTeamSocialMedia(key: String) -> AnyPublisher<([TBAMedia], Bool, URLResponse), Error> {
         let method = "team/\(key)/social_media"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 
 }

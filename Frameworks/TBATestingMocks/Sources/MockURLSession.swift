@@ -1,3 +1,4 @@
+import Combine
 import XCTest
 
 public class MockURLSession: URLSession {
@@ -6,7 +7,7 @@ public class MockURLSession: URLSession {
     public var cancelExpectation: XCTestExpectation?
 
     var tasksToVend: [MockURLSessionDataTask] = []
-    
+
     override public func dataTask(with request: URLRequest) -> URLSessionDataTask {
         return createTask(with: request)
     }

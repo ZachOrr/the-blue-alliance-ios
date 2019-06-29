@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 public struct TBADistrict: TBAModel {
@@ -178,27 +179,27 @@ public struct TBADistrictPointsTiebreaker: TBAModel {
 extension TBAKit {
 
     @discardableResult
-    public func fetchDistricts(year: Int, completion: @escaping (Result<[TBADistrict], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchDistricts(year: Int) -> AnyPublisher<([TBADistrict], Bool, URLResponse), Error> {
         let method = "districts/\(year)"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 
     @discardableResult
-    public func fetchDistrictEvents(key: String, completion: @escaping (Result<[TBAEvent], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchDistrictEvents(key: String) -> AnyPublisher<([TBAEvent], Bool, URLResponse), Error> {
         let method = "district/\(key)/events"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 
     @discardableResult
-    public func fetchDistrictTeams(key: String, completion: @escaping (Result<[TBATeam], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchDistrictTeams(key: String) -> AnyPublisher<([TBATeam], Bool, URLResponse), Error> {
         let method = "district/\(key)/teams"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 
     @discardableResult
-    public func fetchDistrictRankings(key: String, completion: @escaping (Result<[TBADistrictRanking], Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchDistrictRankings(key: String) -> AnyPublisher<([TBADistrictRanking], Bool, URLResponse), Error> {
         let method = "district/\(key)/rankings"
-        return callArray(method: method, completion: completion)
+        return callArray(method: method)
     }
 
 }

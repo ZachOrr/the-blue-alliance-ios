@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 public struct TBAMatch: TBAModel {
@@ -159,9 +160,9 @@ public struct TBAMatchAlliance: TBAModel {
 extension TBAKit {
 
     @discardableResult
-    public func fetchMatch(key: String, _ completion: @escaping (Result<TBAMatch?, Error>, Bool) -> ()) -> TBAKitOperation {
+    public func fetchMatch(key: String) -> AnyPublisher<(TBAMatch?, Bool, URLResponse), Error> {
         let method = "match/\(key)"
-        return callObject(method: method, completion: completion)
+        return callObject(method: method)
     }
 
 }
