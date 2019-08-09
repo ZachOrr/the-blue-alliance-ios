@@ -88,6 +88,51 @@ class PushService: NSObject {
         UIApplication.shared.registerForRemoteNotifications()
     }
 
+    func handleRemoteNotification(userInfo: [AnyHashable : Any]) -> UIBackgroundFetchResult {
+        guard let notificationType = userInfo["notification_type"] as? String else {
+            return .noData
+        }
+
+        if notificationType == "update_favorites" {
+            myTBA.fetchFavorites { (favorites, error) in
+                let context = self.persistentContainer.newBackgroundContext()
+                context.performChangesAndWait({
+                    if let favorites = favorites as? [MyTBAFavorite] {
+                        T.insert(models, in: context)
+                        // Kickoff fetch for myTBA objects that don't exist
+                        models.forEach({
+                            self.fetchMyTBAObj($0, finalOperation)
+                        })
+                    } else if error == nil {
+                        // If we don't get any models and we don't have an error, we probably don't have any models upstream
+                        context.deleteAllObjectsForEntity(entity: T.entity())
+                    }
+                }, saved: {
+                    self.markRefreshSuccessful()
+                })
+            }
+        } else if notificationType == "update_subscriptions" {
+            myTBA.fetchSubscriptions { (subscriptions, error) in
+                let context = self.persistentContainer.newBackgroundContext()
+                context.performChangesAndWait({
+                    if let models = models as? [T.RemoteType] {
+                        T.insert(models, in: context)
+                        // Kickoff fetch for myTBA objects that don't exist
+                        models.forEach({
+                            self.fetchMyTBAObj($0, finalOperation)
+                        })
+                    } else if error == nil {
+                        // If we don't get any models and we don't have an error, we probably don't have any models upstream
+                        context.deleteAllObjectsForEntity(entity: T.entity())
+                    }
+                }, saved: {
+                    self.markRefreshSuccessful()
+                })
+            }
+        }
+        return .noData
+    }
+
 }
 
 extension PushService: MyTBAAuthenticationObservable {
