@@ -98,6 +98,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
 
+    lazy var myTBAService: MyTBAService = {
+        return MyTBAService(tbaKit: tbaKit,
+                            myTBA: myTBA,
+                            persistentContainer: persistentContainer,
+                            retryService: RetryService(),
+                            errorRecorder: Crashlytics.sharedInstance())
+    }()
     lazy var pushService: PushService = {
         return PushService(messaging: messaging,
                            myTBA: myTBA,
@@ -147,6 +154,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let secrets = Secrets()
         tbaKit = TBAKit(apiKey: secrets.tbaAPIKey, userDefaults: userDefaults)
+
+        // Setup our myTBA service
+        myTBA.authenticationProvider.add(observer: myTBAService)
+        myTBAService.registerRetryable()
 
         // Setup our React Native service
         reactNativeService.registerRetryable(initiallyRetry: true)

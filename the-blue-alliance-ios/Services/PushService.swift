@@ -99,6 +99,7 @@ extension PushService: MyTBAAuthenticationObservable {
     func unauthenticated() {
         // unregister isn't asynchronous, so we don't subscribe to it
     }
+
 }
 
 extension PushService: MessagingDelegate {
