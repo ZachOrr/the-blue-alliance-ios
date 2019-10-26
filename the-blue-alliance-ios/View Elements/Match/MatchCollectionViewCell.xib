@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="W8e-3V-rVU" customClass="MatchCollectionViewCell" customModule="The_Blue_Alliance" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="432" height="160"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="EcB-BB-Qqx">
+                <rect key="frame" x="0.0" y="0.0" width="432" height="160"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5rL-YZ-pIw" customClass="MatchSummaryView" customModule="The_Blue_Alliance" customModuleProvider="target">
+                        <rect key="frame" x="16" y="8" width="408" height="144"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="999" constant="60" id="fsF-dZ-I1Y"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="5rL-YZ-pIw" secondAttribute="bottom" constant="8" id="B8L-5G-aBC"/>
+                    <constraint firstAttribute="trailing" secondItem="5rL-YZ-pIw" secondAttribute="trailing" constant="8" id="Rqb-J0-t8y"/>
+                    <constraint firstItem="5rL-YZ-pIw" firstAttribute="leading" secondItem="EcB-BB-Qqx" secondAttribute="leading" constant="16" id="TvQ-L6-tx7"/>
+                    <constraint firstItem="5rL-YZ-pIw" firstAttribute="top" secondItem="EcB-BB-Qqx" secondAttribute="top" constant="8" id="hAA-JC-gx3"/>
+                </constraints>
+            </collectionViewCellContentView>
+            <size key="customSize" width="432" height="160"/>
+            <connections>
+                <outlet property="matchSummaryView" destination="5rL-YZ-pIw" id="EtG-ne-CJk"/>
+            </connections>
+            <point key="canvasLocation" x="85.507246376811594" y="69.642857142857139"/>
+        </collectionViewCell>
+    </objects>
+</document>

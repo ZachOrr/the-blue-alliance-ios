@@ -27,6 +27,10 @@ extension UIImage {
         return UIImage(systemName: "line.horizontal.3.decrease.circle")
     }
 
+    static var shareIcon: UIImage? {
+        return UIImage(systemName: "square.and.arrow.up")
+    }
+
     static var sortFilterIconActive: UIImage? {
         return UIImage(systemName: "line.horizontal.3.decrease.circle.fill")
     }

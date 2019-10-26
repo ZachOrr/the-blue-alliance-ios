@@ -8,6 +8,7 @@ import UIKit
 
 protocol MatchesViewControllerDelegate: AnyObject {
     func showFilter()
+    func shareMatchSchedule(_ matches: [Match])
     func matchSelected(_ match: Match)
 }
 
@@ -26,8 +27,15 @@ class MatchesViewController: TBATableViewController {
     lazy var matchQueryBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(image: UIImage.sortFilterIcon, style: .plain, target: self, action: #selector(showFilter))
     }()
+    lazy var matchScheduleShareBarButtonItem: UIBarButtonItem = {
+        return UIBarButtonItem(image: UIImage.shareIcon, style: .plain, target: self, action: #selector(shareMatchSchedule))
+    }()
     override var additionalRightBarButtonItems: [UIBarButtonItem] {
-        return [matchQueryBarButtonItem]
+        var additionalRightBarButtonItems = [matchQueryBarButtonItem]
+        if teamKey != nil {
+            additionalRightBarButtonItems.append(matchScheduleShareBarButtonItem)
+        }
+        return additionalRightBarButtonItems
     }
 
     // MARK: - Init
@@ -128,6 +136,13 @@ class MatchesViewController: TBATableViewController {
     }
 
     // MARK: - Interface Methods
+
+    @objc func shareMatchSchedule(_ sender: UIBarButtonItem) {
+        guard let matches = dataSource.fetchedResultsController.fetchedObjects else {
+            return
+        }
+        delegate?.shareMatchSchedule(matches)
+    }
 
     @objc func showFilter(_ sender: UIBarButtonItem) {
         delegate?.showFilter()

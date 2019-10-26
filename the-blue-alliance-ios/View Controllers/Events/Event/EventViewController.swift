@@ -126,6 +126,10 @@ extension EventViewController: EventRankingsViewControllerDelegate {
 
 extension EventViewController: MatchesViewControllerDelegate, MatchesViewControllerQueryable {
 
+    func shareMatchSchedule(_ matches: [Match]) {
+        // Pass - we shouldn't hit this
+    }
+
     func matchSelected(_ match: Match) {
         let matchViewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(matchViewController, animated: true)

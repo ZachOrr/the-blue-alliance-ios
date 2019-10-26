@@ -103,6 +103,17 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
 
 extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewControllerQueryable, TeamSummaryViewControllerDelegate {
 
+    func shareMatchSchedule(_ matches: [Match]) {
+        let matchScheduleViewController = MatchScheduleViewController(matches: matches)
+        let renderer = UIGraphicsImageRenderer(bounds: matchScheduleViewController.view.bounds)
+        let matchScheduleImage = renderer.image { rendererContext in
+            matchScheduleViewController.view.layer.render(in: rendererContext.cgContext)
+        }
+        let activityViewController = UIActivityViewController(activityItems: [matchScheduleImage], applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = view
+        present(activityViewController, animated: true, completion: nil)
+    }
+
     func awardsSelected() {
         let awardsViewController = EventAwardsContainerViewController(event: event, teamKey: teamKey, messaging: messaging, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(awardsViewController, animated: true)
