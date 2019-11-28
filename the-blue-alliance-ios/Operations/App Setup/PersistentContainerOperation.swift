@@ -1,4 +1,5 @@
 import CoreData
+import Crashlytics
 import Foundation
 import TBAOperation
 
@@ -13,7 +14,10 @@ class PersistentContainerOperation: TBAOperation {
     }
 
     override func execute() {
-        persistentContainer.loadPersistentStores(completionHandler: { (_, error) in
+        persistentContainer.loadPersistentStores(completionHandler: { [unowned self] (_, error) in
+            if let error = error {
+                Crashlytics.sharedInstance().recordError(error)
+            }
             /*
              Typical reasons for an error here include:
              * The parent directory does not exist, cannot be created, or disallows writing.

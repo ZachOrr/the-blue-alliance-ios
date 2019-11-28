@@ -47,6 +47,7 @@
 		925D10EB2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */; };
 		9266825221B058DA0077C75C /* TBAReactNativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */; };
 		92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92688C2A2090091D00D12B7B /* ReactNativeService.swift */; };
+		926BE685238F7E4D008B960A /* RemoteConfig+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */; };
 		9274E14121B1026900F5D5D0 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */; };
 		9274E14521B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */; };
 		9274E14721B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */; };
@@ -113,6 +114,9 @@
 		92B55633215FDB5300C1D9A3 /* BasicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */; };
 		92B5565E21601D9000C1D9A3 /* MatchSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5565D21601D9000C1D9A3 /* MatchSummaryView.swift */; };
 		92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B5565F21601D9B00C1D9A3 /* MatchSummaryView.xib */; };
+		92BA25BA238EEA5100EC796D /* AuthDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA25B9238EEA5100EC796D /* AuthDelegate.swift */; };
+		92BA25BE238F4C6300EC796D /* RemoteConfigDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92BA25BD238F4C6300EC796D /* RemoteConfigDefaults.plist */; };
+		92BA25C0238F4E9000EC796D /* RemoteConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA25BF238F4E9000EC796D /* RemoteConfigService.swift */; };
 		92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */; };
 		92BB717F20CE19F40081F4E5 /* PersistentContainerOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717E20CE19F40081F4E5 /* PersistentContainerOperationTests.swift */; };
 		92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92BB718820D216D50081F4E5 /* EmptyViewController.xib */; };
@@ -231,6 +235,7 @@
 		925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDiffableDataSourceSnapshot+TBA.swift"; sourceTree = "<group>"; };
 		9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAReactNativeViewController.swift; sourceTree = "<group>"; };
 		92688C2A2090091D00D12B7B /* ReactNativeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactNativeService.swift; sourceTree = "<group>"; };
+		926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RemoteConfig+TBA.swift"; sourceTree = "<group>"; };
 		9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusTableViewCell.swift; sourceTree = "<group>"; };
 		9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusCellViewModel.swift; sourceTree = "<group>"; };
@@ -300,6 +305,9 @@
 		92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicCollectionViewCell.swift; sourceTree = "<group>"; };
 		92B5565D21601D9000C1D9A3 /* MatchSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchSummaryView.swift; sourceTree = "<group>"; };
 		92B5565F21601D9B00C1D9A3 /* MatchSummaryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MatchSummaryView.xib; sourceTree = "<group>"; };
+		92BA25B9238EEA5100EC796D /* AuthDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDelegate.swift; sourceTree = "<group>"; };
+		92BA25BD238F4C6300EC796D /* RemoteConfigDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = RemoteConfigDefaults.plist; sourceTree = "<group>"; };
+		92BA25BF238F4E9000EC796D /* RemoteConfigService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteConfigService.swift; sourceTree = "<group>"; };
 		92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupOperation.swift; sourceTree = "<group>"; };
 		92BB717E20CE19F40081F4E5 /* PersistentContainerOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperationTests.swift; sourceTree = "<group>"; };
 		92BB718820D216D50081F4E5 /* EmptyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyViewController.xib; sourceTree = "<group>"; };
@@ -465,6 +473,7 @@
 				92B0AA3A20CB837A0074FDF1 /* main.swift */,
 				92942D951E2154DA008E79CA /* AppDelegate.swift */,
 				92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */,
+				92BA25B8238EEA4500EC796D /* Delegates */,
 			);
 			path = "App Delegate";
 			sourceTree = "<group>";
@@ -601,6 +610,7 @@
 				92004C6221C21BC600A858C8 /* App Icons */,
 				92942DA31E2154DA008E79CA /* Info.plist */,
 				92D8CD1220C2634200777D93 /* GoogleService-Info.plist */,
+				92BA25BD238F4C6300EC796D /* RemoteConfigDefaults.plist */,
 				9287013D20CD72EC0077D6DA /* StatusDefaults.plist */,
 				92564C6C21644ACA0047917F /* Secrets.plist */,
 				92942DAE1E2158EC008E79CA /* Settings.bundle */,
@@ -764,6 +774,7 @@
 				92A5E5D021A22D550025CC85 /* UINavigationController+SplitView.swift */,
 				92A5E5D121A22D550025CC85 /* URL+Reachable.swift */,
 				92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */,
+				926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */,
 				928DE031222AF10A00C6234A /* UIImage+TBA.swift */,
 				921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */,
 				921D0B5E222B13480056578A /* ContainerViewController+Team.swift */,
@@ -805,6 +816,14 @@
 				92B55629215FCB1300C1D9A3 /* Reusable.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		92BA25B8238EEA4500EC796D /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				92BA25B9238EEA5100EC796D /* AuthDelegate.swift */,
+			);
+			path = Delegates;
 			sourceTree = "<group>";
 		};
 		92BB717920CE05770081F4E5 /* App Setup */ = {
@@ -952,6 +971,7 @@
 		92F8E354209AAE400094213F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				92BA25BF238F4E9000EC796D /* RemoteConfigService.swift */,
 				9255EB6C209AC9760006A745 /* RetryService.swift */,
 				92F8E355209AAE890094213F /* PushService.swift */,
 				92688C2A2090091D00D12B7B /* ReactNativeService.swift */,
@@ -1227,6 +1247,7 @@
 				92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */,
 				92564C6D21644ACA0047917F /* Secrets.plist in Resources */,
 				925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */,
+				92BA25BE238F4C6300EC796D /* RemoteConfigDefaults.plist in Resources */,
 				929DB38E2095640C00FB575F /* ReverseSubtitleTableViewCell.xib in Resources */,
 				92D8CD1320C2634200777D93 /* GoogleService-Info.plist in Resources */,
 				92943B0A222E1E0600EA35B2 /* SwitchTableViewCell.xib in Resources */,
@@ -1536,6 +1557,7 @@
 				92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */,
 				92FF10FA21A61AC2003BC5C4 /* MatchBreakdownViewController.swift in Sources */,
 				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,
+				92BA25BA238EEA5100EC796D /* AuthDelegate.swift in Sources */,
 				92FF10F121A61A1B003BC5C4 /* TeamInfoViewController.swift in Sources */,
 				92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */,
 				92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */,
@@ -1546,11 +1568,13 @@
 				14796948215EBD6C0075AF4E /* EventCellViewModel.swift in Sources */,
 				92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */,
 				92AB6CB5239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift in Sources */,
+				92BA25C0238F4E9000EC796D /* RemoteConfigService.swift in Sources */,
 				92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */,
 				92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */,
 				92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */,
 				92FF110B21A61AF6003BC5C4 /* EventAwardsViewController.swift in Sources */,
 				925D10EB2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift in Sources */,
+				926BE685238F7E4D008B960A /* RemoteConfig+TBA.swift in Sources */,
 				928DE032222AF10A00C6234A /* UIImage+TBA.swift in Sources */,
 				9275957321B7514700560D81 /* DistrictTeamsViewController.swift in Sources */,
 				92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */,

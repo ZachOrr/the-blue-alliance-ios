@@ -2,9 +2,7 @@ import CoreData
 import Crashlytics
 import Fabric
 import Firebase
-import FirebaseAuth
 import FirebaseMessaging
-import GoogleSignIn
 import MyTBAKit
 import Photos
 import TBAData
@@ -55,7 +53,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                             persistentContainer: persistentContainer,
                                                             tbaKit: tbaKit,
                                                             userDefaults: userDefaults)
-        let myTBAViewController = MyTBAViewController(myTBA: myTBA,
+        let myTBAViewController = MyTBAViewController(authDelegate: authDelegate,
+                                                      myTBA: myTBA,
+                                                      remoteConfig: remoteConfig,
                                                       statusService: statusService,
                                                       urlOpener: urlOpener,
                                                       persistentContainer: persistentContainer,
@@ -86,6 +86,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return navigationController
     }()
 
+    private var launchViewController: UIViewController {
+        let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
+        guard let launchViewController = launchStoryboard.instantiateInitialViewController() else {
+            fatalError("Unable to load launch view controller")
+        }
+        return launchViewController
+    }
+
+    static func setupAppearance() {
+        let navigationBarAppearance = UINavigationBar.appearance()
+
+        navigationBarAppearance.barTintColor = UIColor.navigationBarTintColor
+        navigationBarAppearance.tintColor = UIColor.white
+        // Remove the shadow for a more seamless split between navigation bar and segmented controls
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
+        navigationBarAppearance.isTranslucent = false
+        navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+        let tabBarAppearance = UITabBar.appearance()
+        tabBarAppearance.isTranslucent = false
+        tabBarAppearance.tintColor = UIColor.tabBarTintColor
+    }
+
+    // MARK: - Delegates
+
+    lazy var authDelegate: AuthDelegate = {
+        return AuthDelegate(myTBA: myTBA)
+    }()
+
     // MARK: - Services
 
     lazy var messaging: Messaging = Messaging.messaging()
@@ -99,6 +129,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return TBAPersistenceContainer()
     }()
     let photoLibrary = PHPhotoLibrary.shared()
+    lazy var remoteConfig: RemoteConfig = RemoteConfig.remoteConfig()
     var tbaKit: TBAKit!
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
@@ -106,9 +137,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var pushService: PushService = {
         return PushService(myTBA: myTBA,
                            retryService: RetryService())
-    }()
-    lazy var statusService: StatusService = {
-        return StatusService(persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
     }()
     lazy var reactNativeService: ReactNativeService = {
         return ReactNativeService(fileManager: FileManager.default,
@@ -120,6 +148,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     lazy var reactNativeMetadata: ReactNativeMetadata = {
         return ReactNativeMetadata(userDefaults: userDefaults)
+    }()
+    lazy var remoteConfigService: RemoteConfigService = {
+        return RemoteConfigService(remoteConfig: remoteConfig,
+                                   retryService: RetryService())
+    }()
+    lazy var statusService: StatusService = {
+        return StatusService(persistentContainer: persistentContainer,
+                             retryService: RetryService(),
+                             tbaKit: tbaKit)
     }()
 
     // A completion block for registering for remote notifications
@@ -163,38 +200,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Register for remote notifications - don't worry if we fail here
         PushService.registerForRemoteNotifications(nil)
 
-        Auth.auth().addIDTokenDidChangeListener { (_, user) in
-            if let user = user {
-                user.getIDToken { (token, _) in
-                    self.myTBA.authToken = token
-                }
-            } else {
-                self.myTBA.authToken = nil
-            }
-        }
-
-        // Kickoff background myTBA/Google sign in, along with setting up delegates
-        setupGoogleAuthentication()
-
         // Our app setup operation will load our persistent stores, propogate persistance container
         let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         weak var weakAppSetupOperation = appSetupOperation
         appSetupOperation.completionBlock = { [unowned self] in
+            // The error surfaced by the app setup operation is from the Core Data operation
             if let error = weakAppSetupOperation?.completionError as NSError? {
-                Crashlytics.sharedInstance().recordError(error)
                 DispatchQueue.main.async {
                     AppDelegate.showFatalError(error, in: window)
                 }
             } else {
                 // Register retries for our status service on the main thread
                 DispatchQueue.main.async {
+                    self.remoteConfigService.registerRetryable(initiallyRetry: true)
                     self.statusService.registerRetryable(initiallyRetry: true)
-
-                    // Check our minimum app version
-                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: self.statusService.status.minAppVersion) {
-                        self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion)
-                        return
-                    }
 
                     guard let window = self.window else {
                         fatalError("Window not setup when setting root vc")
@@ -242,7 +261,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
-        GIDSignIn.sharedInstance().handle(url)
+        return authDelegate.handle(url: url)
     }
 
     // MARK: Push Delegate Methods
@@ -270,8 +289,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    private static func showMinimumAppAlert(appStoreID: String, currentAppVersion: Int, in window: UIWindow) {
-        showRootAlertView(title: "Unsupported App Version", message: "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version", in: window, handler: nil)
+    private static func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
+        if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
+            return true
+        }
+
+        return Bundle.main.buildVersionNumber >= minimumAppVersion
+    }
+
+    private static func showMinimumAppVersionAlert(in window: UIWindow) {
+        DispatchQueue.main.async {
+            showRootAlertView(title: "Unsupported App Version", message: "Your version of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version", in: window, handler: nil)
+        }
     }
 
     private static func showRootAlertView(title: String, message: String, in window: UIWindow, handler: ((UIAlertAction) -> Void)?) {
@@ -287,104 +316,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         myTBA.authenticationProvider.add(observer: pushService)
     }
 
-    private func setupGoogleAuthentication() {
-        guard let signIn = GIDSignIn.sharedInstance() else { return }
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-
-        signIn.clientID = clientID
-        signIn.delegate = self
-
-        // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
-        if Auth.auth().currentUser == nil, signIn.hasPreviousSignIn() {
-            signIn.restorePreviousSignIn()
-        }
-    }
-
-    private var launchViewController: UIViewController {
-        let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
-        guard let launchViewController = launchStoryboard.instantiateInitialViewController() else {
-            fatalError("Unable to load launch view controller")
-        }
-        return launchViewController
-    }
-
-    static func setupAppearance() {
-        let navigationBarAppearance = UINavigationBar.appearance()
-
-        navigationBarAppearance.barTintColor = UIColor.navigationBarTintColor
-        navigationBarAppearance.tintColor = UIColor.white
-        // Remove the shadow for a more seamless split between navigation bar and segmented controls
-        navigationBarAppearance.shadowImage = UIImage()
-        navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
-        navigationBarAppearance.isTranslucent = false
-        navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-
-        let tabBarAppearance = UITabBar.appearance()
-        tabBarAppearance.isTranslucent = false
-        tabBarAppearance.tintColor = UIColor.tabBarTintColor
-    }
-
-}
-
-extension AppDelegate: GIDSignInDelegate {
-
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
-        // Don't respond to errors from signInSilently or a user cancelling a sign in
-        if let error = error as NSError?, error.code == GIDSignInErrorCode.canceled.rawValue {
-            return
-        } else if let error = error {
-            Crashlytics.sharedInstance().recordError(error)
-            if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
-                signInDelegate.showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
-            }
-            return
-        }
-
-        guard let authentication = user.authentication else { return }
-
-        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
-                                                       accessToken: authentication.accessToken)
-        Auth.auth().signIn(with: credential) { (_, error) in
-            if let error = error {
-                Crashlytics.sharedInstance().recordError(error)
-                if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
-                    signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
-                }
-            } else {
-                PushService.requestAuthorizationForNotifications { (_, error) in
-                    if let error = error {
-                        Crashlytics.sharedInstance().recordError(error)
-                    }
-                }
-            }
-        }
-    }
-
-    static func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
-        if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
-            return true
-        }
-
-        return Bundle.main.buildVersionNumber >= minimumAppVersion
-    }
-
-    func showMinimumAppVersionAlert(currentAppVersion: Int) {
-        guard let window = window else {
-            return
-        }
-
-        DispatchQueue.main.async {
-            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: currentAppVersion, in: window)
-        }
-    }
-
 }
 
 extension AppDelegate: StatusSubscribable {
 
     func statusChanged(status: Status) {
-        if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.minAppVersion) {
-            showMinimumAppVersionAlert(currentAppVersion: statusService.status.latestAppVersion)
+        if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.safeMinAppVersion) {
+            guard let window = window else {
+                return
+            }
+            AppDelegate.showMinimumAppVersionAlert(in: window)
         }
     }
 

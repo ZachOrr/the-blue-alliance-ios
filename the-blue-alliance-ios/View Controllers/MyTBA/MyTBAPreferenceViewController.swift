@@ -1,5 +1,6 @@
 import CoreData
 import Crashlytics
+import TBAData
 import MyTBAKit
 import TBAData
 import UIKit
@@ -106,7 +107,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
     func updateInterface() {
         saveBarButtonItem.isEnabled = hasChanges
         isModalInPresentation = hasChanges
-        
+
         if isSaving {
             navigationItem.rightBarButtonItem = saveActivityIndicatorBarButtonItem
         } else {

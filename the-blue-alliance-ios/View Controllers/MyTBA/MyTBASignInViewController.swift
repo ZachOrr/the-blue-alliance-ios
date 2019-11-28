@@ -1,24 +1,33 @@
+import AuthenticationServices
+import FirebaseRemoteConfig
 import Foundation
 import UIKit
-import GoogleSignIn
 
 class MyTBASignInViewController: UIViewController {
+
+    private let authDelegate: AuthDelegate
+    private let remoteConfig: RemoteConfig
 
     @IBOutlet var starImageView: UIImageView! {
         didSet {
             starImageView.tintColor = UIColor.myTBAStarColor
         }
     }
+    @IBOutlet var stackView: UIStackView!
     @IBOutlet var favoriteImageView: UIImageView!
     @IBOutlet var subscriptionImageView: UIImageView!
     @IBOutlet var signInButton: UIButton!
+    var signInWithAppleButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton(type: .default, style: .whiteOutline)
 
-    init() {
+    init(authDelegate: AuthDelegate, remoteConfig: RemoteConfig) {
+        self.authDelegate = authDelegate
+        self.remoteConfig = remoteConfig
+
         super.init(nibName: String(describing: type(of: self)), bundle: Bundle.main)
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - View Lifecycle
@@ -35,11 +44,15 @@ class MyTBASignInViewController: UIViewController {
         // Show/hide our images for compact size classes
         let shouldHideImages = newCollection.verticalSizeClass == .compact
         let newImageAlpha: CGFloat = shouldHideImages ? 0.0 : 1.0
+        let newStackViewSpacing: CGFloat = shouldHideImages ? 8.0 : 20.0
         let images = [starImageView, favoriteImageView, subscriptionImageView].filter({ $0.isHidden != shouldHideImages })
-        coordinator.animate(alongsideTransition: { (_) in
+        coordinator.animate(alongsideTransition: { [weak self] (_) in
             images.forEach {
                 $0.alpha = newImageAlpha
                 $0.isHidden = shouldHideImages
+            }
+            if let remoteConfig = self?.remoteConfig, remoteConfig.signInWithAppleEnabled {
+                self?.stackView.spacing = newStackViewSpacing
             }
         })
     }
@@ -55,6 +68,13 @@ class MyTBASignInViewController: UIViewController {
     private func styleInterface() {
         view.backgroundColor = UIColor.systemGroupedBackground
         signInButton.setTitleColor(UIColor.googleSignInTextColor, for: .normal)
+
+        if remoteConfig.signInWithAppleEnabled {
+            stackView.addArrangedSubview(signInWithAppleButton)
+            signInWithAppleButton.autoMatch(.width, to: .width, of: signInButton)
+            signInWithAppleButton.autoMatch(.height, to: .height, of: signInButton)
+            signInWithAppleButton.addTarget(self, action: #selector(signInWithApple), for: .touchUpInside)
+        }
 
         updateInterface(previousTraitCollection: nil)
     }
@@ -72,8 +92,12 @@ class MyTBASignInViewController: UIViewController {
 
     // MARK: - IBActions
 
-    @IBAction private func signIn() {
-        GIDSignIn.sharedInstance().signIn()
+    @objc private func signInWithApple() {
+        authDelegate.startSignInWithAppleFlow()
+    }
+
+    @IBAction private func signInWithGoogle() {
+        authDelegate.startSignInWithGoogleFlow()
     }
 
 }

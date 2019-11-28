@@ -35,6 +35,9 @@ PODS:
   - Firebase/Performance (6.14.0):
     - Firebase/CoreOnly
     - FirebasePerformance (~> 3.1.8)
+  - Firebase/RemoteConfig (6.14.0):
+    - Firebase/CoreOnly
+    - FirebaseRemoteConfig (~> 4.4.6)
   - Firebase/Storage (6.14.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 3.4.3)
@@ -438,6 +441,7 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Messaging
   - Firebase/Performance
+  - Firebase/RemoteConfig
   - Firebase/Storage
   - Folly (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/glog.podspec`)
@@ -679,6 +683,6 @@ SPEC CHECKSUMS:
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 0484679385e4b56c18026f9c9ed0ccfc58d33e69
+PODFILE CHECKSUM: efa6f79435a269bd000b98286900ec2750f999dd
 
 COCOAPODS: 1.8.4

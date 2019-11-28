@@ -2,6 +2,7 @@ import CoreData
 import Crashlytics
 import FirebaseAnalytics
 import FirebaseAuth
+import FirebaseRemoteConfig
 import GoogleSignIn
 import MyTBAKit
 import Photos
@@ -13,13 +14,16 @@ import UserNotifications
 
 class MyTBAViewController: ContainerViewController {
 
+    private let authDelegate: AuthDelegate
     private let myTBA: MyTBA
     private let pasteboard: UIPasteboard?
     private let photoLibrary: PHPhotoLibrary?
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
-    private(set) var signInViewController: MyTBASignInViewController = MyTBASignInViewController()
+    private(set) lazy var signInViewController: MyTBASignInViewController = {
+        return MyTBASignInViewController(authDelegate: authDelegate, remoteConfig: remoteConfig)
+    }()
     private(set) var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
     private(set) var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
 
@@ -42,10 +46,12 @@ class MyTBAViewController: ContainerViewController {
         return myTBA.isAuthenticated
     }
 
-    init(myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(authDelegate: AuthDelegate, myTBA: MyTBA, pasteboard: UIPasteboard? = nil, photoLibrary: PHPhotoLibrary? = nil, remoteConfig: RemoteConfig, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.authDelegate = authDelegate
         self.myTBA = myTBA
         self.pasteboard = pasteboard
         self.photoLibrary = photoLibrary
+        self.remoteConfig = remoteConfig
         self.statusService = statusService
         self.urlOpener = urlOpener
 
@@ -64,7 +70,7 @@ class MyTBAViewController: ContainerViewController {
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
 
-        GIDSignIn.sharedInstance()?.presentingViewController = self
+        authDelegate.presentingViewController = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -141,8 +147,7 @@ class MyTBAViewController: ContainerViewController {
     }
 
     private func logoutSuccessful() {
-        GIDSignIn.sharedInstance().signOut()
-        try! Auth.auth().signOut()
+        authDelegate.signOut()
 
         // Cancel any ongoing requests
         for vc in [favoritesViewController, subscriptionsViewController] as! [Refreshable] {
