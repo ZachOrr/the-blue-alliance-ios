@@ -19,8 +19,8 @@ class MatchSummaryView: UIView {
     // change this variable so that the teams are shown as buttons
     private var teamsTappable: Bool = false
 
-    private let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
-    private let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
+    private let winnerFont = UIFont.preferredFont(forTextStyle: .subheadline).bold()
+    private let notWinnerFont = UIFont.preferredFont(forTextStyle: .subheadline)
 
     // MARK: - IBOutlet
 
@@ -210,6 +210,8 @@ class MatchSummaryView: UIView {
 
     private func label(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UILabel {
         let label = UILabel()
+        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
         label.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -226,9 +228,9 @@ class MatchSummaryView: UIView {
         let attributeString =  NSMutableAttributedString(string: text)
         let attributedStringRange = NSMakeRange(0, attributeString.length)
 
-        var font: UIFont = .systemFont(ofSize: 14)
+        var font: UIFont = UIFont.preferredFont(forTextStyle: .subheadline)
         if isBold {
-            font = .boldSystemFont(ofSize: 14)
+            font = font.bold()
         }
         attributeString.addAttribute(.font, value: font, range: attributedStringRange)
 

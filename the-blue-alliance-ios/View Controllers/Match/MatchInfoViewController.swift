@@ -30,7 +30,8 @@ class MatchInfoViewController: TBAViewController, Observable {
     private lazy var infoStackView: UIStackView = {
         let labels = [teamsLabel, scoreTitleLabel]
         for label in labels {
-            label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+            label.font = UIFont.preferredFont(forTextStyle: .headline)
+            label.adjustsFontForContentSizeCategory = true
             label.textAlignment = .center
             label.backgroundColor = UIColor.systemFill
             label.translatesAutoresizingMaskIntoConstraints = false
