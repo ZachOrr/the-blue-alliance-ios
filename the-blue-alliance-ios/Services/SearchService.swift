@@ -1,6 +1,7 @@
 import CoreData
 import CoreSpotlight
 import Foundation
+import Intents
 import Search
 import TBAData
 import TBAKit
@@ -180,8 +181,28 @@ public class SearchService: NSObject {
 
         activity.isEligibleForPublicIndexing = true
         activity.isEligibleForSearch = true
+        activity.isEligibleForPrediction = true
+        activity.isEligibleForHandoff
         // TODO: Support handoff, eventually
 
+        let shortcut = INShortcut(userActivity: activity)
+        let relevantShortcut = INRelevantShortcut(shortcut: shortcut)
+
+        // When viewing an Event, the shortcut is relevant during the Event, or if the user is at the Event location.
+        // When viewing a Team, the shortcut is relevant if an Event the Team is at is going on (maybe filter this by favorites only)
+        var relevanceProviders: [INRelevanceProvider] = []
+        if let startDate = searchAttributes.startDate, let endDate = searchAttributes.endDate {
+            relevanceProviders.append(INDateRelevanceProvider(start: startDate, end: endDate))
+        }
+        if let lat = searchAttributes.latitude, let lng = searchAttributes.longitude {
+            // Show the name of the Event location
+            let identifier = searchAttributes.namedLocation ?? searchAttributes.locationString ?? searchAttributes.displayName ?? "---"
+            relevanceProviders.append(INLocationRelevanceProvider(region: CLCircularRegion(center: CLLocationCoordinate2D(latitude: lat.doubleValue,
+                                                                                                                          longitude: lng.doubleValue),
+                                                                                           radius: 1000,
+                                                                                           identifier: identifier)))
+        }
+        relevantShortcut.relevanceProviders = relevanceProviders
         return activity
     }
 

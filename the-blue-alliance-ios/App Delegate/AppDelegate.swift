@@ -268,6 +268,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: Search Delegate Methods
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        print(userActivity.activityType)
+        print(userActivity.userInfo ?? "")
         if userActivity.activityType == CSSearchableItemActionType {
             guard let identifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String, let uri = URL(string: identifier) else {
                 return false
