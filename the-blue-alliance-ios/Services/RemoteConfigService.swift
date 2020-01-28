@@ -10,13 +10,11 @@ protocol RemoteConfigObservable {
 class RemoteConfigService {
 
     var remoteConfig: RemoteConfig
-    var retryService: RetryService
 
     public var remoteConfigProvider = Provider<RemoteConfigObservable>()
 
-    init(remoteConfig: RemoteConfig, retryService: RetryService) {
+    init(remoteConfig: RemoteConfig) {
         self.remoteConfig = remoteConfig
-        self.retryService = retryService
 
         // Allow remote config fetching frequently
         #if DEBUG
@@ -39,20 +37,6 @@ class RemoteConfigService {
             }
             completion?(error)
         }
-    }
-
-}
-
-extension RemoteConfigService: Retryable {
-
-    var retryInterval: TimeInterval {
-        // Poll every... 5 mins for a new config
-        // Note that this data will only be invalidated every 12 hours - otherwise we hit a cache
-        return 5 * 60
-    }
-
-    func retry() {
-        fetchRemoteConfig()
     }
 
 }

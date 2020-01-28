@@ -170,6 +170,8 @@
 		92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E9F0AA216C439700C1F916 /* NoDataViewController.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92F79A7623D6536A0026E9E8 /* SearchContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F79A7523D6536A0026E9E8 /* SearchContainer.swift */; };
+		92F860CD23DFBB360002C4C6 /* BackgroundService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F860CC23DFBB360002C4C6 /* BackgroundService.swift */; };
+		92F860CF23DFC25A0002C4C6 /* MyTBAService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F860CE23DFC25A0002C4C6 /* MyTBAService.swift */; };
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
 		92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */; };
 		92FA4D2F228624D500030BA3 /* UIFont+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */; };
@@ -414,6 +416,8 @@
 		92E9F0AA216C439700C1F916 /* NoDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
 		92F79A7523D6536A0026E9E8 /* SearchContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContainer.swift; sourceTree = "<group>"; };
+		92F860CC23DFBB360002C4C6 /* BackgroundService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundService.swift; sourceTree = "<group>"; };
+		92F860CE23DFC25A0002C4C6 /* MyTBAService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAService.swift; sourceTree = "<group>"; };
 		92F8E355209AAE890094213F /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
 		92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderView.swift; sourceTree = "<group>"; };
 		92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+TBA.swift"; sourceTree = "<group>"; };
@@ -1130,13 +1134,15 @@
 		92F8E354209AAE400094213F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				92F860CC23DFBB360002C4C6 /* BackgroundService.swift */,
 				927309B123DD1E66006145E0 /* HandoffService.swift */,
-				92BA25BF238F4E9000EC796D /* RemoteConfigService.swift */,
-				14F51703239AA70A00D9240F /* SearchService.swift */,
-				9255EB6C209AC9760006A745 /* RetryService.swift */,
+				92F860CE23DFC25A0002C4C6 /* MyTBAService.swift */,
 				92F8E355209AAE890094213F /* PushService.swift */,
-				92DF54E021B1B65A0082C58C /* StatusService.swift */,
+				92BA25BF238F4E9000EC796D /* RemoteConfigService.swift */,
+				9255EB6C209AC9760006A745 /* RetryService.swift */,
+				14F51703239AA70A00D9240F /* SearchService.swift */,
 				92564C6A21644AA30047917F /* Secrets.swift */,
+				92DF54E021B1B65A0082C58C /* StatusService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1733,6 +1739,7 @@
 				92A5E5DB21A22D550025CC85 /* UINavigationController+SplitView.swift in Sources */,
 				92B3874021CAF67F0041A049 /* IconCellViewModel.swift in Sources */,
 				9280B54723CEBF220021FEBE /* MatchBreakdownConfigurator.swift in Sources */,
+				92F860CD23DFBB360002C4C6 /* BackgroundService.swift in Sources */,
 				92FF110621A61AF6003BC5C4 /* EventViewController.swift in Sources */,
 				9279737923CFF38D00FF9B86 /* EventStatsConfigurator2016.swift in Sources */,
 				9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */,
@@ -1758,6 +1765,7 @@
 				92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */,
 				92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */,
 				92FF111A21A61B37003BC5C4 /* DistrictViewController.swift in Sources */,
+				92F860CF23DFC25A0002C4C6 /* MyTBAService.swift in Sources */,
 				92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */,
 				929F57222092B80B00E5313A /* ContainerViewController.swift in Sources */,
 				92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */,

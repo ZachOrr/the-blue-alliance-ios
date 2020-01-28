@@ -1,3 +1,4 @@
+import BackgroundTasks
 import CoreData
 import CoreSpotlight
 import Crashlytics
@@ -92,6 +93,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
 
     // MARK: - Services
+
+    let backgroundTaskScheduler = BGTaskScheduler.shared
     lazy var indexDelegate: TBACoreDataCoreSpotlightDelegate = {
         let description = persistentContainer.persistentStoreDescriptions.first!
         return TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
@@ -113,17 +116,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
 
+    lazy var backgroundService: BackgroundService = {
+        return BackgroundService(errorRecorder: Crashlytics.sharedInstance(),
+                                 statusService: statusService,
+                                 taskScheduler: backgroundTaskScheduler)
+    }()
     lazy var handoffService: HandoffService = {
         return HandoffService(persistentContainer: persistentContainer,
                               rootViewController: tabBarController)
     }()
     lazy var pushService: PushService = {
-        return PushService(myTBA: myTBA,
-                           retryService: RetryService())
+        return PushService(backgroundService: backgroundService,
+                           myTBA: myTBA)
     }()
     lazy var remoteConfigService: RemoteConfigService = {
-        return RemoteConfigService(remoteConfig: remoteConfig,
-                                   retryService: RetryService())
+        return RemoteConfigService(remoteConfig: remoteConfig)
     }()
     lazy var searchService: SearchService = {
         return SearchService(application: UIApplication.shared,
@@ -137,7 +144,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     lazy var statusService: StatusService = {
         return StatusService(persistentContainer: persistentContainer,
-                             retryService: RetryService(),
                              tbaKit: tbaKit)
     }()
 
@@ -203,12 +209,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             } else {
                 self.searchService.refresh()
+                self.remoteConfigService.fetchRemoteConfig()
 
-                // Register retries for our status service on the main thread
                 DispatchQueue.main.async {
-                    self.remoteConfigService.registerRetryable(initiallyRetry: true)
-                    self.statusService.registerRetryable(initiallyRetry: true)
-
                     // Check our minimum app version
                     if !AppDelegate.isAppVersionSupported(minimumAppVersion: self.statusService.status.minAppVersion) {
                         self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion)
@@ -236,6 +239,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         OperationQueue.main.addOperation(appSetupOperation)
 
+        // Register for background tasks, schedule our initial background tasks on launch
+        for identifier in BackgroundService.backgroundTaskIdentifiers {
+            backgroundTaskScheduler.register(forTaskWithIdentifier: identifier, using: nil) {
+                self.backgroundService.handleBackgroundTask($0)
+            }
+        }
+        backgroundService.scheduleUpdateStatus()
+
         return true
     }
 
@@ -247,6 +258,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        backgroundService.scheduleBackgroundTasks()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

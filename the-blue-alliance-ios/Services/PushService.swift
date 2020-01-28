@@ -8,18 +8,17 @@ import UserNotifications
 // Has to be an NSObject subclass so we can be a UNUserNotificationCenterDelegate
 class PushService: NSObject {
 
-    private var myTBA: MyTBA
-    internal var retryService: RetryService
+    private let backgroundService: BackgroundService
+    private let myTBA: MyTBA
 
     private let operationQueue = OperationQueue()
 
-    init(myTBA: MyTBA, retryService: RetryService) {
+    init(backgroundService: BackgroundService, myTBA: MyTBA) {
+        self.backgroundService = backgroundService
         self.myTBA = myTBA
-        self.retryService = retryService
-
-        super.init()
     }
 
+    // TODO: Services like this maybe shouldn't contain their own operations queues, we should move them elsewhere?
     fileprivate func registerPushToken() {
         if !myTBA.isAuthenticated {
             // Not authenticated to myTBA - we'll try again when we're auth'd
@@ -32,16 +31,11 @@ class PushService: NSObject {
             // We should look to fix this properly some other time
             return
         }
+        // TODO: We should make sure this ALWAYS ALWAYS completes
         let registerOperation = myTBA.register { (_, error) in
             if let error = error {
+                self.backgroundService.scheduleRegisterPush()
                 Crashlytics.sharedInstance().recordError(error)
-                if !self.retryService.isRetryRegistered {
-                    DispatchQueue.main.async {
-                        self.registerRetryable()
-                    }
-                }
-            } else {
-                self.unregisterRetryable()
             }
         }
         guard let op = registerOperation else { return }
@@ -73,9 +67,7 @@ extension PushService: MyTBAAuthenticationObservable {
     }
 
     func unauthenticated() {
-        if self.retryService.isRetryRegistered {
-            self.unregisterRetryable()
-        }
+        // TODO: Un-register shit with background task service?
     }
 }
 
@@ -112,19 +104,6 @@ extension PushService: UNUserNotificationCenterDelegate {
 
         // Handle being launched from a push notification
         completionHandler()
-    }
-
-}
-
-extension PushService: Retryable {
-
-    var retryInterval: TimeInterval {
-        // Retry push notification register once a minute until success
-        return 1 * 60
-    }
-
-    func retry() {
-        registerPushToken()
     }
 
 }

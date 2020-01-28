@@ -9,10 +9,6 @@ import Foundation
  */
 public class StatusService: NSObject {
 
-    var retryService: RetryService
-
-    private let operationQueue = OperationQueue()
-
     private let bundle: Bundle
     private let persistentContainer: NSPersistentContainer
     private let tbaKit: TBAKit
@@ -49,16 +45,15 @@ public class StatusService: NSObject {
         return status.maxSeason
     }
 
-    init(bundle: Bundle = Bundle.main, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
+    init(bundle: Bundle = Bundle.main, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.bundle = bundle
         self.persistentContainer = persistentContainer
-        self.retryService = retryService
         self.tbaKit = tbaKit
 
         super.init()
     }
 
-    func setupStatusObservers() {
+    public func setupStatusObservers() {
         contextObserver.observeObject(object: status, state: .updated) { [weak self] (status, _) in
             self?.dispatchStatusChanged(status)
             self?.dispatchFMSDown(status.isDatafeedDown)
@@ -66,7 +61,7 @@ public class StatusService: NSObject {
         }
     }
 
-    internal func fetchStatus(completion: ((_ error: Error?) -> Void)? = nil) -> TBAKitOperation {
+    public func fetchStatus(completion: ((_ error: Error?) -> Void)? = nil) -> TBAKitOperation {
         return tbaKit.fetchStatus { (result, notModified) in
             switch result {
             case .failure(let error):
@@ -83,18 +78,20 @@ public class StatusService: NSObject {
         }
     }
 
-    func dispatchStatusChanged(_ status: Status) {
+    // MARK: - Private Methods
+
+    private func dispatchStatusChanged(_ status: Status) {
         updateStatusSubscribers(status)
     }
 
-    func dispatchFMSDown(_ fmsStatus: Bool) {
+    private func dispatchFMSDown(_ fmsStatus: Bool) {
         if fmsStatus != previousFMSStatus {
             updateFMSSubscribers(isDatafeedDown: fmsStatus)
         }
         previousFMSStatus = fmsStatus
     }
 
-    func dispatchEvents(downEventKeys: [String]) {
+    private func dispatchEvents(downEventKeys: [String]) {
         // Dispatch new events are down
         let newlyDownEventKeys = downEventKeys.filter({ !previouslyDownEventKeys.contains($0) })
         for eventKey in newlyDownEventKeys {
@@ -146,20 +143,6 @@ public class StatusService: NSObject {
         for subscriber in subscribersTable.allObjects {
             subscriber.eventStatusChanged(isEventOffline: isEventOffline)
         }
-    }
-
-}
-
-extension StatusService: Retryable {
-
-    var retryInterval: TimeInterval {
-        // Poll every... 5 mins for a new status object
-        return 5 * 60
-    }
-
-    func retry() {
-        let op = fetchStatus()
-        operationQueue.addOperation(op)
     }
 
 }

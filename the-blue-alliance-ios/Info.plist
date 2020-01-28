@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.the-blue-alliance.tba.mytba</string>
+		<string>com.the-blue-alliance.tba.search</string>
+		<string>com.the-blue-alliance.tba.status</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -102,17 +108,19 @@
 	<string>Enable photo library access to save images to your photo library directly from the app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Enable photo library access to save images to your photo library directly from the app.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-	</array>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>com.the-blue-alliance.tba.Team</string>
 		<string>com.the-blue-alliance.tba.Event</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
