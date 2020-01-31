@@ -178,36 +178,19 @@ public class SearchService: NSObject, TeamsRefreshProvider {
                     return
                 }
 
-                // TODO: NSBatchInsertRequest/NSBatchDeleteRequest
+                // TODO: We need to go multiple-levels up on our mergeChanges call - right now it just hits
+                // the single context up, not multiple contexts. Which fucking blows.
+                /*
                 let managedObjectContext = self.persistentContainer.newBackgroundContext()
                 managedObjectContext.performChangesAndWait({
-                    // Batch insert/save our teams
-                    // Fetch all of our existing teams so we can clean up orphans
-                    let oldTeams = Team.fetch(in: managedObjectContext)
-
-                    var newTeams: [Team] = []
-                    for i in stride(from: teams.startIndex, to: teams.endIndex, by: self.batchSize) {
-                        let subTeams = Array(teams[i..<min(i + self.batchSize, teams.count)])
-                        newTeams.append(contentsOf: subTeams.map {
-                            return Team.insert($0, in: managedObjectContext)
-                        })
-                        managedObjectContext.saveOrRollback(errorRecorder: self.errorRecorder)
-                    }
-
-                    // Delete orphaned Teams for this year
-                    let orphanedTeams = Array(Set(oldTeams).subtracting(Set(newTeams)))
-                    for i in stride(from: orphanedTeams.startIndex, to: orphanedTeams.endIndex, by: self.batchSize) {
-                        let subTeams = Array(orphanedTeams[i..<min(i + self.batchSize, orphanedTeams.count)])
-                        subTeams.forEach {
-                            managedObjectContext.delete($0)
-                        }
-                        managedObjectContext.saveOrRollback(errorRecorder: self.errorRecorder)
-                    }
+                    Team.insert(teams, in: managedObjectContext)
                 }, saved: {
                     self.tbaKit.storeCacheHeaders(teamsOperation!)
+                    // TODO: Wrap these in getters/setters
                     self.userDefaults.set(Date(), forKey: SearchConstants.lastRefreshTeamsAllKey)
                     self.userDefaults.synchronize()
                 }, errorRecorder: self.errorRecorder)
+                */
             }
         }
         return teamsOperation

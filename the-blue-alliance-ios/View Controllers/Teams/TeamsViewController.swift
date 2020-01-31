@@ -98,6 +98,11 @@ class TeamsViewController: TBASearchableTableViewController, Refreshable, Statef
         }
 
         let operation = BlockOperation {
+            /*
+            OperationQueue.main.addOperation {
+                self.updateDataSource()
+            }
+            */
             self.markRefreshSuccessful()
         }
         operation.addDependency(refreshOperation)

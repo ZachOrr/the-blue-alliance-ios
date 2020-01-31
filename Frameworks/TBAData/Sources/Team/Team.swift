@@ -310,24 +310,50 @@ extension Team: Managed {
     }
 
     /**
-     Insert Teams with values from TBAKit Team models in to the managed object context.
+     Batch insert Teams with values from TBAKit Team models in to the managed object context.
+     Note: This uses NSBatchInsertRequest, not the traditional in-memory insert methods.
+     Make sure any models you're inserting have been configured for this method.
+
      This method manages deleting orphaned Teams.
      - Parameter teams: The TBAKit Team representations to set values from.
      - Parameter context: The NSManagedContext to insert the Event in to.
      */
     public static func insert(_ teams: [TBATeam], in context: NSManagedObjectContext) {
-        // Fetch all of the previous Teams
-        let oldTeams = Team.fetch(in: context)
-
-        // Insert new Teams for this page
-        let teams = teams.map {
-            return Team.insert($0, in: context)
+        // Convert our TBATeam models in to a key/value dictionary that maps with our Team model
+        let teamObjects: [[String: Any]] = teams.map {
+            let teamDictionary: [String: Any?] = [
+                #keyPath(Team.addressRaw): $0.address,
+                #keyPath(Team.cityRaw): $0.city,
+                #keyPath(Team.countryRaw): $0.country,
+                #keyPath(Team.gmapsPlaceIDRaw): $0.gmapsPlaceID,
+                #keyPath(Team.gmapsURLRaw): $0.gmapsURL,
+                #keyPath(Team.homeChampionshipRaw): $0.homeChampionship,
+                #keyPath(Team.keyRaw): $0.key,
+                #keyPath(Team.latRaw): $0.lat,
+                #keyPath(Team.lngRaw): $0.lng,
+                #keyPath(Team.locationNameRaw): $0.locationName,
+                #keyPath(Team.nameRaw): $0.name,
+                #keyPath(Team.nicknameRaw): $0.nickname,
+                #keyPath(Team.postalCodeRaw): $0.postalCode,
+                #keyPath(Team.rookieYearRaw): $0.rookieYear,
+                #keyPath(Team.schoolNameRaw): $0.schoolName,
+                #keyPath(Team.stateProvRaw): $0.stateProv,
+                #keyPath(Team.teamNumberRaw): $0.teamNumber,
+                #keyPath(Team.websiteRaw): $0.website
+            ]
+            return teamDictionary.compactMapValues { $0 }
         }
 
-        // Delete orphaned Teams for this year
-        Set(oldTeams).subtracting(Set(teams)).forEach({
-            context.delete($0)
-        })
+        // Insert new Teams
+        let insertRequest = NSBatchInsertRequest(entityName: Team.entityName, objects: teamObjects)
+        try! context.executeAndMergeChanges(insertRequest)
+
+        // Delete orphaned Teams
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Team.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "NOT (%K IN %@)",
+                                             #keyPath(Team.keyRaw), teams.map { $0.key} )
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        try! context.executeAndMergeChanges(deleteRequest)
     }
 
     /**

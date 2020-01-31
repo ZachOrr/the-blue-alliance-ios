@@ -109,17 +109,34 @@ extension NSManagedObjectContext {
     }
 
     public func deleteAllObjectsForEntity(entity: NSEntityDescription) {
-        let fetchRequest = NSFetchRequest<NSManagedObject>()
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
         fetchRequest.entity = entity
-
-        let objects = try! fetch(fetchRequest)
-        deleteObjects(objects)
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        try! executeAndMergeChanges(deleteRequest)
     }
 
-    private func deleteObjects(_ objects: [NSManagedObject]) {
-        for object in objects {
-            delete(object)
-        }
+    /// Executes the given `NSBatchInsertRequest` and directly merges the changes to bring the given managed object context up to date.
+    ///
+    /// - Parameter request: The `NSBatchInsertRequest` to execute.
+    /// - Throws: An error if anything went wrong executing the batch deletion.
+    public func executeAndMergeChanges(_ request: NSBatchInsertRequest) throws {
+        request.resultType = .objectIDs
+        let result = try execute(request) as? NSBatchInsertResult
+        let changes: [AnyHashable: Any] = [NSInsertedObjectsKey: result?.result as? [NSManagedObjectID] ?? []]
+
+        NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self, self.parent!])
+    }
+
+    /// Executes the given `NSBatchDeleteRequest` and directly merges the changes to bring the given managed object context up to date.
+    ///
+    /// - Parameter request: The `NSBatchDeleteRequest` to execute.
+    /// - Throws: An error if anything went wrong executing the batch deletion.
+    public func executeAndMergeChanges(_ request: NSBatchDeleteRequest) throws {
+        request.resultType = .resultTypeObjectIDs
+        let result = try execute(request) as? NSBatchDeleteResult
+        let changes: [AnyHashable: Any] = [NSDeletedObjectsKey: result?.result as? [NSManagedObjectID] ?? []]
+
+        NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self])
     }
 
 }
