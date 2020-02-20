@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>244307294958-c5cfnucl0sl0r6d5kjv0dobkhrtnq820.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.244307294958-c5cfnucl0sl0r6d5kjv0dobkhrtnq820</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>244307294958-ot5ogovqhjufr0h9n2a9ch7bq5k9am32.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCAN84c4HZhBUyy6nV8OjuXguwAourPN7A</string>
+	<key>GCM_SENDER_ID</key>
+	<string>244307294958</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.the-blue-alliance.gameday.zach-dev</string>
+	<key>PROJECT_ID</key>
+	<string>zach-tba-dev</string>
+	<key>STORAGE_BUCKET</key>
+	<string>zach-tba-dev.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:244307294958:ios:5b485aa7ef215a28cc91ff</string>
+	<key>DATABASE_URL</key>
+	<string>https://zach-tba-dev.firebaseio.com</string>
+</dict>
+</plist>

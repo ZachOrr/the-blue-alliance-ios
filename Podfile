@@ -1,5 +1,3 @@
-platform :ios, '13.0'
-
 inhibit_all_warnings!
 
 if ENV['TRAVIS']
@@ -7,6 +5,8 @@ if ENV['TRAVIS']
 end
 
 target 'The Blue Alliance' do
+  platform :ios, '13.0'
+
   use_frameworks!
 
   # Deps
@@ -55,7 +55,21 @@ target 'The Blue Alliance' do
   end
 end
 
+target 'GameDay' do
+  platform :tvos, '13.0'
+  use_frameworks!
+
+  # Firebase is only partially supported on tvOS.
+  # These podspecs (and these Podfile lines) are taken from:
+  # https://github.com/firebase/firebase-ios-sdk/blob/master/Example/tvOSSample/Podfile
+  # pod 'FirebaseCore', :git => 'https://github.com/firebase/firebase-ios-sdk.git'
+  # pod 'FirebaseDatabase', :git => 'https://github.com/firebase/firebase-ios-sdk.git'
+  pod 'FirebaseCore'
+  pod 'FirebaseDatabase'
+end
+
 target 'TBA Spotlight Index Extension' do
+  platform :ios, '13.0'
   use_frameworks!
 
   pod 'Search', :path => 'Frameworks/Search'
@@ -70,12 +84,6 @@ post_install do | installer |
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       config.build_settings['WARNING_CFLAGS'] ||= ['"-Wno-nullability-completeness"']
-    end
-
-    if "#{target}" == "AppAuth"
-      target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.3'
-      end
     end
   end
 end

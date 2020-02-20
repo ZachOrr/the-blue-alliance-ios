@@ -24,6 +24,7 @@
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */; };
 		5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */; };
+		8D1E355B13461DFD706BB5DF /* Pods_GameDay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1BF4881099A3E7547C837B5 /* Pods_GameDay.framework */; };
 		92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */; };
 		92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */; };
 		92009B5723DD49A60058E567 /* HandoffServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92009B5623DD49A60058E567 /* HandoffServiceTests.swift */; };
@@ -143,6 +144,13 @@
 		92BB8B62214F16710035AF28 /* SettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B61214F16710035AF28 /* SettingsViewControllerTests.swift */; };
 		92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B63214F17440035AF28 /* URLOpener.swift */; };
 		92C079C723F99CA400AE2AFA /* EventStatsConfigurator2020.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C079C623F99CA400AE2AFA /* EventStatsConfigurator2020.swift */; };
+		92C07A3123FE3F4100AE2AFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92C07A2723FE3F4100AE2AFA /* Assets.xcassets */; };
+		92C07A3223FE3F4100AE2AFA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92C07A2823FE3F4100AE2AFA /* GoogleService-Info.plist */; };
+		92C07A3323FE3F4100AE2AFA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92C07A2A23FE3F4100AE2AFA /* Preview Assets.xcassets */; };
+		92C07A3423FE3F4100AE2AFA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92C07A2B23FE3F4100AE2AFA /* LaunchScreen.storyboard */; };
+		92C07A3523FE3F4100AE2AFA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C07A2D23FE3F4100AE2AFA /* AppDelegate.swift */; };
+		92C07A3623FE3F4100AE2AFA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C07A2E23FE3F4100AE2AFA /* ContentView.swift */; };
+		92C07A3823FE3F4100AE2AFA /* ContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C07A3023FE3F4100AE2AFA /* ContentProvider.swift */; };
 		92C1F2E02169A3B800BD8445 /* MockNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */; };
 		92C1F2E42169AA7200BD8445 /* TeamsContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2E32169AA7200BD8445 /* TeamsContainerViewControllerTests.swift */; };
 		92C1F2E62169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2E52169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift */; };
@@ -387,6 +395,16 @@
 		92BB8B61214F16710035AF28 /* SettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		92BB8B63214F17440035AF28 /* URLOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLOpener.swift; sourceTree = "<group>"; };
 		92C079C623F99CA400AE2AFA /* EventStatsConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatsConfigurator2020.swift; sourceTree = "<group>"; };
+		92C079F123FE3DE400AE2AFA /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = Library/Frameworks/TVServices.framework; sourceTree = DEVELOPER_DIR; };
+		92C07A1423FE3F2D00AE2AFA /* GameDay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameDay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		92C07A2723FE3F4100AE2AFA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		92C07A2823FE3F4100AE2AFA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		92C07A2A23FE3F4100AE2AFA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		92C07A2C23FE3F4100AE2AFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		92C07A2D23FE3F4100AE2AFA /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		92C07A2E23FE3F4100AE2AFA /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		92C07A2F23FE3F4100AE2AFA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		92C07A3023FE3F4100AE2AFA /* ContentProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentProvider.swift; sourceTree = "<group>"; };
 		92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationController.swift; sourceTree = "<group>"; };
 		92C1F2E32169AA7200BD8445 /* TeamsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsContainerViewControllerTests.swift; sourceTree = "<group>"; };
 		92C1F2E52169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictsContainerViewControllerTests.swift; sourceTree = "<group>"; };
@@ -455,8 +473,11 @@
 		A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.debug.xcconfig"; sourceTree = "<group>"; };
 		A6544CEF21DC3CDC00D423F2 /* MatchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewModelTests.swift; sourceTree = "<group>"; };
 		AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
+		B1BF4881099A3E7547C837B5 /* Pods_GameDay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GameDay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
+		D704667648D347FA9F2C99D9 /* Pods-GameDay.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GameDay.release.xcconfig"; path = "Pods/Target Support Files/Pods-GameDay/Pods-GameDay.release.xcconfig"; sourceTree = "<group>"; };
 		E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
+		F5DFF2AF3AA3A1AF6C8EE5C1 /* Pods-GameDay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GameDay.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GameDay/Pods-GameDay.debug.xcconfig"; sourceTree = "<group>"; };
 		FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_The_Blue_Alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -474,6 +495,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92C07A1123FE3F2D00AE2AFA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D1E355B13461DFD706BB5DF /* Pods_GameDay.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,6 +555,8 @@
 				E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */,
 				40CCF3469BDAF2BE1A6C262B /* Pods-TBA Spotlight Index Extension.debug.xcconfig */,
 				33B371C298C347B696EE56F8 /* Pods-TBA Spotlight Index Extension.release.xcconfig */,
+				F5DFF2AF3AA3A1AF6C8EE5C1 /* Pods-GameDay.debug.xcconfig */,
+				D704667648D347FA9F2C99D9 /* Pods-GameDay.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -728,6 +759,7 @@
 				927309A923DC0F68006145E0 /* spotlight-index */,
 				92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */,
 				927309AF23DCD69D006145E0 /* Debug */,
+				92C07A2623FE3F4100AE2AFA /* GameDay */,
 				AB6808F14167475E1AE2783E /* Frameworks */,
 				92942D931E2154DA008E79CA /* Products */,
 				5EC6F9271347DB8630C82782 /* Pods */,
@@ -740,6 +772,7 @@
 				92942D921E2154DA008E79CA /* The Blue Alliance.app */,
 				92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */,
 				9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */,
+				92C07A1423FE3F2D00AE2AFA /* GameDay.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1029,6 +1062,29 @@
 			path = "View Controllers";
 			sourceTree = "<group>";
 		};
+		92C07A2623FE3F4100AE2AFA /* GameDay */ = {
+			isa = PBXGroup;
+			children = (
+				92C07A2D23FE3F4100AE2AFA /* AppDelegate.swift */,
+				92C07A2E23FE3F4100AE2AFA /* ContentView.swift */,
+				92C07A3023FE3F4100AE2AFA /* ContentProvider.swift */,
+				92C07A2723FE3F4100AE2AFA /* Assets.xcassets */,
+				92C07A2F23FE3F4100AE2AFA /* Info.plist */,
+				92C07A2823FE3F4100AE2AFA /* GoogleService-Info.plist */,
+				92C07A2923FE3F4100AE2AFA /* Preview Content */,
+				92C07A2B23FE3F4100AE2AFA /* LaunchScreen.storyboard */,
+			);
+			path = GameDay;
+			sourceTree = "<group>";
+		};
+		92C07A2923FE3F4100AE2AFA /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				92C07A2A23FE3F4100AE2AFA /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		92C1F2E12169AA5D00BD8445 /* Teams */ = {
 			isa = PBXGroup;
 			children = (
@@ -1298,6 +1354,8 @@
 				0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */,
 				52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */,
 				67630A8FA037CC2DB84E244D /* Pods_TBA_Spotlight_Index_Extension.framework */,
+				92C079F123FE3DE400AE2AFA /* TVServices.framework */,
+				B1BF4881099A3E7547C837B5 /* Pods_GameDay.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1344,6 +1402,25 @@
 			name = "The Blue Alliance";
 			productName = "the-blue-alliance";
 			productReference = 92942D921E2154DA008E79CA /* The Blue Alliance.app */;
+			productType = "com.apple.product-type.application";
+		};
+		92C07A1323FE3F2D00AE2AFA /* GameDay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 92C07A2323FE3F3000AE2AFA /* Build configuration list for PBXNativeTarget "GameDay" */;
+			buildPhases = (
+				C7887730D3DB8452BC0D57BE /* [CP] Check Pods Manifest.lock */,
+				92C07A1023FE3F2D00AE2AFA /* Sources */,
+				92C07A1123FE3F2D00AE2AFA /* Frameworks */,
+				92C07A1223FE3F2D00AE2AFA /* Resources */,
+				FE1440FED5650DB7C5AC8A62 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GameDay;
+			productName = GameDay;
+			productReference = 92C07A1423FE3F2D00AE2AFA /* GameDay.app */;
 			productType = "com.apple.product-type.application";
 		};
 		92D6483920BE4CB8008F0DB3 /* tba-unit-tests */ = {
@@ -1393,6 +1470,10 @@
 							};
 						};
 					};
+					92C07A1323FE3F2D00AE2AFA = {
+						CreatedOnToolsVersion = 11.3;
+						ProvisioningStyle = Automatic;
+					};
 					92D6483920BE4CB8008F0DB3 = {
 						CreatedOnToolsVersion = 9.3.1;
 						LastSwiftMigration = 1020;
@@ -1417,6 +1498,7 @@
 				92942D911E2154DA008E79CA /* The Blue Alliance */,
 				9273099B23DC0F26006145E0 /* TBA Spotlight Index Extension */,
 				92D6483920BE4CB8008F0DB3 /* tba-unit-tests */,
+				92C07A1323FE3F2D00AE2AFA /* GameDay */,
 			);
 		};
 /* End PBXProject section */
@@ -1463,6 +1545,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		92C07A1223FE3F2D00AE2AFA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92C07A3123FE3F4100AE2AFA /* Assets.xcassets in Resources */,
+				92C07A3423FE3F4100AE2AFA /* LaunchScreen.storyboard in Resources */,
+				92C07A3323FE3F4100AE2AFA /* Preview Assets.xcassets in Resources */,
+				92C07A3223FE3F4100AE2AFA /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92D6483820BE4CB8008F0DB3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1504,7 +1597,7 @@
 				"${BUILT_PRODUCTS_DIR}/GTMAppAuth/GTMAppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities-ac14cd06/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/MyTBAKit/MyTBAKit.framework",
 				"${BUILT_PRODUCTS_DIR}/PINCache/PINCache.framework",
 				"${BUILT_PRODUCTS_DIR}/PINOperation/PINOperation.framework",
@@ -1521,7 +1614,7 @@
 				"${BUILT_PRODUCTS_DIR}/TBAUtils/TBAUtils.framework",
 				"${BUILT_PRODUCTS_DIR}/XCDYouTubeKit/XCDYouTubeKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
-				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb-iOS/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -1590,6 +1683,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
+		};
+		C7887730D3DB8452BC0D57BE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GameDay-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
 		DC9F63135A2623342564B887 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1665,6 +1780,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FE1440FED5650DB7C5AC8A62 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GameDay/Pods-GameDay-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities-Environment-Logger/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb-tvOS/nanopb.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GameDay/Pods-GameDay-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1821,6 +1958,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		92C07A1023FE3F2D00AE2AFA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92C07A3823FE3F4100AE2AFA /* ContentProvider.swift in Sources */,
+				92C07A3623FE3F4100AE2AFA /* ContentView.swift in Sources */,
+				92C07A3523FE3F4100AE2AFA /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92D6483620BE4CB8008F0DB3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1883,6 +2030,14 @@
 			);
 			name = LaunchScreen.storyboard;
 			path = .;
+			sourceTree = "<group>";
+		};
+		92C07A2B23FE3F4100AE2AFA /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				92C07A2C23FE3F4100AE2AFA /* Base */,
+			);
+			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -2103,6 +2258,58 @@
 			};
 			name = Release;
 		};
+		92C07A2423FE3F3000AE2AFA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F5DFF2AF3AA3A1AF6C8EE5C1 /* Pods-GameDay.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_ASSET_PATHS = "\"GameDay/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = GameDay/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.GameDay";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 13.2;
+			};
+			name = Debug;
+		};
+		92C07A2523FE3F3000AE2AFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D704667648D347FA9F2C99D9 /* Pods-GameDay.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"GameDay/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = GameDay/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.GameDay";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 13.2;
+			};
+			name = Release;
+		};
 		92D6484220BE4CB8008F0DB3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */;
@@ -2200,6 +2407,15 @@
 			buildConfigurations = (
 				92942DA71E2154DA008E79CA /* Debug */,
 				92942DA81E2154DA008E79CA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		92C07A2323FE3F3000AE2AFA /* Build configuration list for PBXNativeTarget "GameDay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92C07A2423FE3F3000AE2AFA /* Debug */,
+				92C07A2523FE3F3000AE2AFA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
