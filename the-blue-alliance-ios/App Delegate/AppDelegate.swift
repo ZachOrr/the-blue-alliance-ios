@@ -113,6 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
 
+    let castService = CastService()
     lazy var handoffService: HandoffService = {
         return HandoffService(persistentContainer: persistentContainer,
                               rootViewController: tabBarController)

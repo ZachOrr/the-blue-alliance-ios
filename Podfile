@@ -11,6 +11,7 @@ target 'The Blue Alliance' do
 
   # Deps
   pod 'BFRImageViewer', :git => 'https://github.com/ZachOrr/buffer-ios-image-viewer.git'
+  pod 'google-cast-sdk'
   pod 'PINRemoteImage', '3.0.0-beta.14'
   pod 'PureLayout'
   pod 'XCDYouTubeKit', '~> 2.8'

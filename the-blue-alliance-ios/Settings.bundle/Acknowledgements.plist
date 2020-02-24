@@ -5311,6 +5311,16 @@ SOFTWARE.
 		</dict>
 		<dict>
 			<key>FooterText</key>
+			<string>https://developers.google.com/terms/</string>
+			<key>License</key>
+			<string>Commercial</string>
+			<key>Title</key>
+			<string>google-cast-sdk</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
 			<string>Copyright (c) 2011 Petteri Aimonen &lt;jpa at nanopb.mail.kapsi.fi&gt;
 
 This software is provided 'as-is', without any express or 
