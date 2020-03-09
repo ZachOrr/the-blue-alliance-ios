@@ -180,14 +180,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Register for remote notifications - don't worry if we fail here
         PushService.registerForRemoteNotifications(nil)
 
-        Auth.auth().addIDTokenDidChangeListener { (_, user) in
-            if let user = user {
-                user.getIDToken { (token, _) in
-                    self.myTBA.authToken = token
-                }
-            } else {
-                self.myTBA.authToken = nil
-            }
+        Auth.auth().addStateDidChangeListener { (_, user) in
+            self.myTBA.user = user
         }
 
         // Kickoff background myTBA/Google sign in, along with setting up delegates
@@ -506,3 +500,5 @@ extension AppDelegate: UISplitViewControllerDelegate {
 extension Crashlytics: ErrorRecorder {}
 // Make Messaging conform to FCMTokenProvider for MyTBAKit
 extension Messaging: FCMTokenProvider {}
+// Make FIRUser conform to MyTBAUser
+extension User: MyTBAUser {}

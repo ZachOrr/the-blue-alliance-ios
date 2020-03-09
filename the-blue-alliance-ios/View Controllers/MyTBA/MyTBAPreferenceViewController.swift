@@ -1,3 +1,4 @@
+import Combine
 import CoreData
 import Crashlytics
 import MyTBAKit
@@ -24,7 +25,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
         }
     }
 
-    var subscription: Subscription?
+    var subscription: TBAData.Subscription?
     let notificationsInitial: [NotificationType]
     var notifications: [NotificationType] {
         didSet {
@@ -35,7 +36,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
     let myTBA: MyTBA
     let persistentContainer: NSPersistentContainer
 
-    var preferencesOperation: MyTBAOperation?
+    var preferencesPublisher: AnyPublisher<MyTBAPreferencesMessageResponse, Error>?
     let operationQueue = OperationQueue()
 
     var hasChanges: Bool {
@@ -124,6 +125,13 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
     }
 
     @objc func save() {
+        preferencesPublisher = myTBA.updatePreferences(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, favorite: isFavorite, notifications: notifications)
+        preferencesPublisher?.sink(receiveCompletion: { (completion) in
+            // Pass
+        }, receiveValue: { _ in
+            // Pass
+        })
+        /*
         preferencesOperation = myTBA.updatePreferences(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, favorite: isFavorite, notifications: notifications) { [weak self] (favoriteResponse, subscriptionResponse, error) in
             guard let self = self else { return }
             let context = self.persistentContainer.newBackgroundContext()
@@ -177,6 +185,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
         isSaving = true
         dismissOperation.addDependency(op)
         operationQueue.addOperations([op, dismissOperation], waitUntilFinished: false)
+        */
     }
 
     @objc func close() {

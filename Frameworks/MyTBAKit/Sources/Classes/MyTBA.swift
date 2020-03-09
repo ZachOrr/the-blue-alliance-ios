@@ -1,12 +1,9 @@
+import Combine
 import Foundation
 import TBAUtils
 
-public typealias MyTBARequestCompletionBlock = (_ data: Data?, _ error: Error?) -> Void
-
-private struct Constants {
-    struct APIConstants {
-        static let baseURL = URL(string: "https://www.thebluealliance.com/clientapi/tbaClient/v9/")!
-    }
+struct APIConstants {
+    static let baseURL = URL(string: "https://www.thebluealliance.com/clientapi/tbaClient/v9/")!
 }
 
 public enum MyTBAError: Error {
@@ -34,15 +31,17 @@ open class MyTBA {
 
     // This is public, which is terrible, because it shouldn't be. But we need it so in TBA
     // when Firebase Auth changes, we can remove the token
-    public var authToken: String? {
+    public var user: MyTBAUser? {
         didSet {
-            // Only disaptch on changed state
-            if oldValue == authToken {
+            /*
+            // Only dispatch on changed state
+            if oldValue == user {
                 return
             }
+            */
 
             authenticationProvider.post { (observer) in
-                if authToken == nil {
+                if user == nil {
                     observer.unauthenticated()
                 } else {
                     observer.authenticated()
@@ -52,14 +51,14 @@ open class MyTBA {
     }
 
     public var isAuthenticated: Bool {
-        return authToken != nil
+        return user != nil
     }
 
-    public init(uuid: String, deviceName: String, fcmTokenProvider: FCMTokenProvider, urlSession: URLSession? = nil) {
+    public init(uuid: String, deviceName: String, fcmTokenProvider: FCMTokenProvider, urlSession: URLSession = URLSession(configuration: .default)) {
         self.uuid = uuid
         self.deviceName = deviceName
         self.fcmTokenProvider = fcmTokenProvider
-        self.urlSession = urlSession ?? URLSession(configuration: .default)
+        self.urlSession = urlSession
     }
 
     public var authenticationProvider = Provider<MyTBAAuthenticationObservable>()
@@ -85,14 +84,12 @@ open class MyTBA {
         return jsonDecoder
     }
 
-    func createRequest(_ method: String, _ bodyData: Data? = nil) -> URLRequest {
-        let apiURL = URL(string: method, relativeTo: Constants.APIConstants.baseURL)!
+    func createRequest(_ method: String, authToken: String, _ bodyData: Data? = nil) -> URLRequest {
+        let apiURL = URL(string: method, relativeTo: APIConstants.baseURL)!
         var request = URLRequest(url: apiURL)
         request.httpMethod = "POST"
 
-        if let authToken = authToken {
-            request.addValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
-        }
+        request.addValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
 
         #if DEBUG
         if let bodyData = bodyData, let dataString = try? JSONSerialization.jsonObject(with: bodyData, options: []) {
@@ -105,8 +102,39 @@ open class MyTBA {
         return request
     }
 
-    func callApi<T: MyTBAResponse>(method: String, bodyData: Data? = nil, completion: @escaping (T?, Error?) -> Void) -> MyTBAOperation {
-        return MyTBAOperation(myTBA: self, method: method, bodyData: bodyData, completion: completion)
+    func dataTaskPublisher(for request: URLRequest) -> URLSession.DataTaskPublisher {
+        return urlSession.dataTaskPublisher(for: request)
+    }
+
+    func callApi<T: MyTBAResponse>(method: String, bodyData: Data? = nil) -> AnyPublisher<T, Error> {
+        let tokenPublisher = CurrentValueSubject<String?, Error>(nil)
+        guard let user = user else {
+            let publisher = PassthroughSubject<T, Error>()
+            publisher.send(completion: .failure(MyTBAError.error(nil, "No user for myTBA")))
+            return publisher.eraseToAnyPublisher()
+        }
+
+        let token = user.getIDToken(completion: { (authToken, error) in
+            if let error = error {
+                tokenPublisher.send(completion: .failure(error))
+            } else if let authToken = authToken {
+                tokenPublisher.send(authToken)
+            } else {
+                tokenPublisher.send(completion: .failure(MyTBAError.error(nil, "Could not fetch token for myTBA user")))
+            }
+        })
+
+        // TODO: Make sure we call `finish` here at some point?
+        return tokenPublisher.compactMap {
+            guard let authToken = $0 else {
+                return nil
+            }
+            return self.createRequest(method, authToken: authToken, bodyData)
+        }.flatMap {
+            self.dataTaskPublisher(for: $0)
+                .map { $0.data }
+                .decode(type: T.self, decoder: MyTBA.jsonDecoder)
+        }.eraseToAnyPublisher()
     }
 
 }

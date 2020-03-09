@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/364d6da2f3fc464deef5ba580ea37b6cd2816c4a/consts/notification_type.py
@@ -52,7 +53,7 @@ public enum NotificationType: String, Codable {
     }
 }
 
-struct MyTBASubscriptionsResponse: MyTBAResponse, Codable {
+public struct MyTBASubscriptionsResponse: MyTBAResponse, Codable {
     var subscriptions: [MyTBASubscription]?
 }
 
@@ -72,17 +73,14 @@ public struct MyTBASubscription: MyTBAModel, Equatable, Codable {
     public var modelType: MyTBAModelType
     public var notifications: [NotificationType]
 
-    public static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation = MyTBA.fetchSubscriptions
+    // public static var fetch: (MyTBA) -> () -> AnyPublisher<MyTBASubscriptionsResponse, Error> = MyTBA.fetchSubscriptions
 }
 
 extension MyTBA {
 
-    public func fetchSubscriptions(_ completion: @escaping (_ subscriptions: [MyTBASubscription]?, _ error: Error?) -> Void) -> MyTBAOperation {
+    public func fetchSubscriptions() -> AnyPublisher<MyTBASubscriptionsResponse, Error> {
         let method = "\(MyTBASubscription.arrayKey)/list"
-
-        return callApi(method: method, completion: { (favoritesResponse: MyTBASubscriptionsResponse?, error) in
-            completion(favoritesResponse?.subscriptions, error)
-        })
+        return callApi(method: method)
     }
 
 }

@@ -1,10 +1,11 @@
+import Combine
 import Foundation
 
 struct MyTBAFavoritesRequest: Codable {
     var favorites: [MyTBAFavorite]
 }
 
-struct MyTBAFavoritesResponse: MyTBAResponse, Codable {
+public struct MyTBAFavoritesResponse: MyTBAResponse {
     var favorites: [MyTBAFavorite]?
 }
 
@@ -22,17 +23,14 @@ public struct MyTBAFavorite: MyTBAModel, Equatable, Codable {
     public var modelKey: String
     public var modelType: MyTBAModelType
 
-    public static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation = MyTBA.fetchFavorites
+    // public static var fetch: (MyTBA) -> () -> AnyPublisher<MyTBAFavoritesResponse, Error> = MyTBA.fetchFavorites
 }
 
 extension MyTBA {
 
-    public func fetchFavorites(_ completion: @escaping (_ favorites: [MyTBAFavorite]?, _ error: Error?) -> Void) -> MyTBAOperation {
+    public func fetchFavorites() -> AnyPublisher<MyTBAFavoritesResponse, Error> {
         let method = "\(MyTBAFavorite.arrayKey)/list"
-
-        return callApi(method: method, completion: { (favoritesResponse: MyTBAFavoritesResponse?, error) in
-            completion(favoritesResponse?.favorites, error)
-        })
+        return callApi(method: method)
     }
 
 }

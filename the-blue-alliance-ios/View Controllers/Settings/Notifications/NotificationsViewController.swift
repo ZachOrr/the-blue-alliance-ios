@@ -46,11 +46,11 @@ class NotificationsViewController: TBATableViewController {
     private var fetchingDeviceAuthorizationStatus = false
     private var deviceAuthorizationStatus: UNAuthorizationStatus?
 
-    private var myTBARegisterOperation: MyTBAOperation?
+    // private var myTBARegisterOperation: MyTBAOperation?
     private var myTBARegisterResponse: MyTBABaseResponse?
     private var myTBARegisterError: Error?
 
-    private var myTBAPingOperation: MyTBAOperation?
+    // private var myTBAPingOperation: MyTBAOperation?
     private var myTBAPingResponse: MyTBABaseResponse?
     private var myTBAPingError: Error?
 
@@ -87,8 +87,8 @@ class NotificationsViewController: TBATableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        myTBARegisterOperation?.cancel()
-        myTBAPingOperation?.cancel()
+        // myTBARegisterOperation?.cancel()
+        // myTBAPingOperation?.cancel()
     }
 
     // MARK: - Table View Data Source
@@ -133,19 +133,25 @@ class NotificationsViewController: TBATableViewController {
                 }()
                 return NotificationStatusCellViewModel(title: "Firebase Token", notificationStatus: status)
             case .myTBA:
+                return NotificationStatusCellViewModel(title: "Checking Remote Notification Registration...", notificationStatus: .loading)
+                /*
                 if myTBARegisterOperation == nil {
                     let status = self.myTBARegistrationNotificationStatus()
                     return NotificationStatusCellViewModel(title: "myTBA Registration", notificationStatus: status)
                 } else {
                     return NotificationStatusCellViewModel(title: "Checking myTBA Registration...", notificationStatus: .loading)
                 }
+                */
             case .ping:
+                return NotificationStatusCellViewModel(title: "Checking Remote Notification Registration...", notificationStatus: .loading)
+                /*
                 if myTBAPingOperation == nil {
                     let status = self.myTBAPingNotificationStatus()
                     return NotificationStatusCellViewModel(title: "Ping Device", notificationStatus: status)
                 } else {
                     return NotificationStatusCellViewModel(title: "Pinging Device...", notificationStatus: .loading)
                 }
+                */
             }
         }()
         cell.viewModel = viewModel
@@ -278,6 +284,7 @@ class NotificationsViewController: TBATableViewController {
     // MARK: - myTBA Registration
 
     private func checkMyTBARegistration() {
+        /*
         // Already checking myTBA registration
         guard myTBARegisterOperation == nil else {
             return
@@ -299,6 +306,7 @@ class NotificationsViewController: TBATableViewController {
         refreshOperationQueue.addOperation(op)
 
         reloadMain()
+        */
     }
 
     private func myTBARegistrationNotificationStatus() -> NotificationStatus {
@@ -318,6 +326,7 @@ class NotificationsViewController: TBATableViewController {
     // MARK: - Ping
 
     func sendPing() {
+        /*
         // We wouldn't get the ping, since our device isn't authorized to get push notifications
         let deviceAuthorizationStatusValid: Bool = {
             if let deviceAuthorizationStatus = self.deviceAuthorizationStatus {
@@ -355,6 +364,7 @@ class NotificationsViewController: TBATableViewController {
         refreshOperationQueue.addOperation(op)
 
         reloadMain()
+        */
     }
 
     private func myTBAPingNotificationStatus() -> NotificationStatus {

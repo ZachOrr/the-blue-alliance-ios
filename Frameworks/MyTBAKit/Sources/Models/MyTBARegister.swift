@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 public struct MyTBARegisterRequest: Codable {
@@ -9,24 +10,31 @@ public struct MyTBARegisterRequest: Codable {
 
 extension MyTBA {
 
-    public func register(completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
-        return registerUnregister("register", completion: completion)
+    public func register() -> AnyPublisher<MyTBABaseResponse, Error> {
+        return registerUnregister("register")
     }
 
-    public func unregister(completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
-        return registerUnregister("unregister", completion: completion)
+    public func unregister() -> AnyPublisher<MyTBABaseResponse, Error> {
+        return registerUnregister("unregister")
     }
 
-    private func registerUnregister(_ method: String, completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
+    private func registerUnregister(_ method: String) -> AnyPublisher<MyTBABaseResponse, Error> {
+        let failurePublisher = PassthroughSubject<MyTBABaseResponse, Error>()
+
         guard let token = fcmToken else {
-            return nil
+            failurePublisher.send(completion: .failure(MyTBAError.error(nil, "No FCM token for myTBA user")))
+            return failurePublisher.eraseToAnyPublisher()
         }
-        let registration = MyTBARegisterRequest(deviceUuid: uuid, mobileId: token, name: deviceName)
 
-        guard let encodedRegistration = try? MyTBA.jsonEncoder.encode(registration) else {
-            return nil
+        let registration = MyTBARegisterRequest(deviceUuid: uuid, mobileId: token, name: deviceName)
+        do {
+            let encodedRegistration = try MyTBA.jsonEncoder.encode(registration)
+            return callApi(method: method, bodyData: encodedRegistration)
+        } catch {
+            failurePublisher.send(completion: .failure(error))
+            return failurePublisher.eraseToAnyPublisher()
         }
-        return callApi(method: method, bodyData: encodedRegistration, completion: completion)
+
     }
 
 }

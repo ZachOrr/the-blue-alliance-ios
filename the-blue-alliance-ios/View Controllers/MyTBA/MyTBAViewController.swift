@@ -115,6 +115,7 @@ class MyTBAViewController: ContainerViewController {
     }
 
     private func logout() {
+        /*
         let signOutOperation = myTBA.unregister { [weak self] (_, error) in
             self?.isLoggingOut = false
 
@@ -132,6 +133,7 @@ class MyTBAViewController: ContainerViewController {
 
         isLoggingOut = true
         OperationQueue.main.addOperation(op)
+        */
     }
 
     private func logoutSuccessful() {

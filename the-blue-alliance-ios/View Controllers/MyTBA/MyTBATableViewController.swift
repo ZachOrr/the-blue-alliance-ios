@@ -218,8 +218,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             return
         }
 
+        /*
         var finalOperation: Operation!
-
+        
         var operation: MyTBAOperation!
         operation = J.fetch(myTBA)() { [unowned self] (models, error) in
             let context = self.persistentContainer.newBackgroundContext()
@@ -239,6 +240,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             }, errorRecorder: Crashlytics.sharedInstance())
         }
         finalOperation = addRefreshOperations([operation])
+        */
     }
 
     private func fetchMyTBAObject(_ myTBAModel: MyTBAModel, _ dependentOperation: Operation) {

@@ -1,3 +1,4 @@
+import Combine
 import Crashlytics
 import FirebaseMessaging
 import Foundation
@@ -11,7 +12,7 @@ class PushService: NSObject {
     private var myTBA: MyTBA
     internal var retryService: RetryService
 
-    private let operationQueue = OperationQueue()
+    private var registerPublisher: AnyPublisher<MyTBABaseResponse, Error>?
 
     init(myTBA: MyTBA, retryService: RetryService) {
         self.myTBA = myTBA
@@ -25,27 +26,20 @@ class PushService: NSObject {
             // Not authenticated to myTBA - we'll try again when we're auth'd
             return
         }
-        guard operationQueue.operationCount == 0 else {
-            // Hack-y fix for register being called twice during app startup -
-            // Once from MyTBAAuthenticationObservable.authenticated and once from
-            // MessagingDelegate.didReceiveRegistrationToken
-            // We should look to fix this properly some other time
-            return
-        }
-        let registerOperation = myTBA.register { (_, error) in
-            if let error = error {
+        registerPublisher = myTBA.register()
+        registerPublisher?.sink(receiveCompletion: { (completion) in
+            switch completion {
+            case .failure(let error):
                 Crashlytics.sharedInstance().recordError(error)
                 if !self.retryService.isRetryRegistered {
                     DispatchQueue.main.async {
                         self.registerRetryable()
                     }
                 }
-            } else {
+            case .finished:
                 self.unregisterRetryable()
             }
-        }
-        guard let op = registerOperation else { return }
-        operationQueue.addOperation(op)
+        }, receiveValue: { _ in })
     }
 
     static func requestAuthorizationForNotifications(_ completion: ((Bool, Error?) -> Void)?) {

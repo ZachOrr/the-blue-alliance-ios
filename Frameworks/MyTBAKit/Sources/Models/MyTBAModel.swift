@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/364d6da2f3fc464deef5ba580ea37b6cd2816c4a/consts/model_type.py
@@ -13,9 +14,6 @@ public enum MyTBAModelType: Int, Codable {
 }
 
 public protocol MyTBAResponse: Codable {}
-
-// TODO: Remove when we move to Result
-public typealias MyTBABaseCompletionBlock = (MyTBABaseResponse?, Error?) -> ()
 
 public struct MyTBABaseResponse: MyTBAResponse, Codable {
     public var code: Int
@@ -42,5 +40,5 @@ public protocol MyTBAModel: Codable {
     var modelKey: String { get set }
     var modelType: MyTBAModelType { get set }
 
-    static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation { get }
+    // static var fetch: (MyTBA) -> () -> AnyPublisher<MyTBAResponse, Error> { get }
 }

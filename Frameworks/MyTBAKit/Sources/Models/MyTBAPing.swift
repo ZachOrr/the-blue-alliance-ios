@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 struct MyTBAPingRequest: Codable {
@@ -6,16 +7,22 @@ struct MyTBAPingRequest: Codable {
 
 extension MyTBA {
 
-    public func ping(completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
-        guard let token = fcmToken else {
-            return nil
-        }
-        let ping = MyTBAPingRequest(mobileId: token)
+    public func ping() -> AnyPublisher<MyTBABaseResponse, Error> {
+        let failurePublisher = PassthroughSubject<MyTBABaseResponse, Error>()
 
-        guard let encodedPing = try? MyTBA.jsonEncoder.encode(ping) else {
-            return nil
+        guard let token = fcmToken else {
+            failurePublisher.send(completion: .failure(MyTBAError.error(nil, "No FCM token for myTBA user")))
+            return failurePublisher.eraseToAnyPublisher()
         }
-        return callApi(method: "ping", bodyData: encodedPing, completion: completion)
+
+        let ping = MyTBAPingRequest(mobileId: token)
+        do {
+            let encodedPing = try MyTBA.jsonEncoder.encode(ping)
+            return callApi(method: "ping", bodyData: encodedPing)
+        } catch {
+            failurePublisher.send(completion: .failure(error))
+            return failurePublisher.eraseToAnyPublisher()
+        }
     }
 
 }
