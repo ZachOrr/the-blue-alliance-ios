@@ -13,6 +13,7 @@ enum RootType: CaseIterable {
     case events
     case teams
     case districts
+    case gameDay
     case myTBA
     case settings
 
@@ -24,6 +25,8 @@ enum RootType: CaseIterable {
             return "Teams"
         case .districts:
             return "Districts"
+        case .gameDay:
+            return "GameDay"
         case .myTBA:
             return "myTBA"
         case .settings:
@@ -39,6 +42,8 @@ enum RootType: CaseIterable {
             return UIImage.teamIcon
         case .districts:
             return UIImage.districtIcon
+        case .gameDay:
+            return UIImage.gameDayIcon
         case .myTBA:
             return UIImage.starIcon
         case .settings:
@@ -47,8 +52,7 @@ enum RootType: CaseIterable {
     }
 
     var supportsPush: Bool {
-        // Settings is currently the only VC that doesn't support a sub-menu push
-        return self != .settings
+        return ![RootType.gameDay, RootType.settings].contains(self)
     }
 
 }
@@ -100,13 +104,10 @@ extension RootController {
                                                 dependencies: dependencies)
     }
 
-    var settingsViewController: SettingsViewController {
-        return SettingsViewController(fcmTokenProvider: fcmTokenProvider,
-                                      myTBA: myTBA,
-                                      pushService: pushService,
-                                      searchService: searchService,
-                                      urlOpener: urlOpener,
-                                      dependencies: dependencies)
+    var gameDayViewController: GameDayDashboardViewController {
+        return GameDayDashboardViewController(persistentContainer: persistentContainer,
+                                              tbaKit: tbaKit,
+                                              userDefaults: userDefaults)
     }
 
     var myTBAViewController: MyTBAViewController {
@@ -116,6 +117,15 @@ extension RootController {
                                    statusService: statusService,
                                    urlOpener: urlOpener,
                                    dependencies: dependencies)
+    }
+
+    var settingsViewController: SettingsViewController {
+        return SettingsViewController(fcmTokenProvider: fcmTokenProvider,
+                                      myTBA: myTBA,
+                                      pushService: pushService,
+                                      searchService: searchService,
+                                      urlOpener: urlOpener,
+                                      dependencies: dependencies)
     }
 
 }

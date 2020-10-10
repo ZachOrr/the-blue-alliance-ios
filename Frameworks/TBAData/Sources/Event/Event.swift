@@ -1214,6 +1214,14 @@ extension Event {
         return "\(eventType)"
     }
 
+    public var gameDayWebcasts: [Webcast] {
+        webcasts.filter { $0.supportedInGameDay }
+    }
+
+    public var hasGameDayWebcasts: Bool {
+        return !gameDayWebcasts.isEmpty
+    }
+
 }
 
 extension Event: Comparable {

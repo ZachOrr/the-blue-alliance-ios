@@ -5,6 +5,7 @@ import TBAKit
 import UIKit
 
 protocol EventInfoViewControllerDelegate: AnyObject {
+    func showGameDay()
     func showAlliances()
     func showAwards()
     func showDistrictPoints()
@@ -13,13 +14,14 @@ protocol EventInfoViewControllerDelegate: AnyObject {
 
 private enum EventInfoSection: Int {
     case title
-    case detail
     case webcast
+    case detail
     case link
 }
 
 private enum EventInfoItem: Hashable {
     case title
+    case gameday
     case webcast(Webcast)
     case alliances
     case districtPoints
@@ -67,6 +69,7 @@ class EventInfoViewController: TBATableViewController, Observable {
 
         tableView.sectionFooterHeight = 0
         tableView.registerReusableCell(InfoTableViewCell.self)
+        tableView.registerReusableCell(EventGameDayTableViewCell.self)
 
         setupDataSource()
         tableView.dataSource = tableViewDataSource
@@ -85,12 +88,10 @@ class EventInfoViewController: TBATableViewController, Observable {
             switch item {
             case .title:
                 return self.tableView(tableView, titleCellForRowAt: indexPath)
+            case .gameday:
+                return self.tableView(tableView, gameDayCellForRowAt: indexPath)
             case .webcast(let webcast):
-                let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-                cell.textLabel?.text = "Watch on \(webcast.displayName)"
-                cell.detailTextLabel?.text = webcast.channel
-                cell.accessoryType = .disclosureIndicator
-                return cell
+                return self.tableView(tableView, webcastCellForWebcast: webcast, at: indexPath)
             case .alliances:
                 let cell = self.tableView(tableView, detailCellForRowAtIndexPath: indexPath)
                 cell.textLabel?.text = "Alliances"
@@ -137,23 +138,31 @@ class EventInfoViewController: TBATableViewController, Observable {
         snapshot.appendSections([.title])
         snapshot.appendItems([.title], toSection: .title)
 
-        // Webcasts
-        let webcasts = event.webcasts
-            .sorted { $0.channel > $1.channel } // Sort by name lexicographically
-            .filter { $0.urlString != nil } // Only show linkable webcasts
-            // Only show webcasts with dates on the specified day
-            .filter { (webcast) -> Bool in
-                // If webcast is date-less, we can display it
-                guard let date = webcast.date else {
-                    return true
-                }
-                return Calendar.current.isDateInToday(date)
-            }
-            .map { EventInfoItem.webcast($0) }
-        if !webcasts.isEmpty, event.isHappeningThisWeek {
+        // if !event.webcasts.isEmpty, event.isHappeningThisWeek {
             snapshot.appendSections([.webcast])
-            snapshot.appendItems(webcasts, toSection: .webcast)
-        }
+
+            // GameDay
+            if event.hasGameDayWebcasts {
+                snapshot.appendItems([.gameday], toSection: .webcast)
+            }
+
+            // Webcasts (non-GameDay)
+            let webcasts = event.webcasts
+                .filter { $0.urlString != nil } // Only show linkable webcasts
+                .sorted { $0.channel > $1.channel } // Sort by name lexicographically
+                // Only show webcasts with dates on the specified day
+                .filter { (webcast) -> Bool in
+                    // If webcast is date-less, we can display it
+                    guard let date = webcast.date else {
+                        return true
+                    }
+                    return Calendar.current.isDateInToday(date)
+                }
+                .map { EventInfoItem.webcast($0) }
+            if !webcasts.isEmpty {
+                snapshot.appendItems(webcasts, toSection: .webcast)
+            }
+        // }
 
         // Details
         var detailItems: [EventInfoItem] = [.alliances, .insights, .awards]
@@ -186,6 +195,18 @@ class EventInfoViewController: TBATableViewController, Observable {
         return cell
     }
 
+    func tableView(_ tableView: UITableView, gameDayCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventGameDayTableViewCell
+        cell.viewModel = EventGameDayCellViewModel(event: event)
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, webcastCellForWebcast webcast: Webcast, at indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventGameDayTableViewCell
+        cell.viewModel = EventGameDayCellViewModel(webcast: webcast)
+        return cell
+    }
+
     func tableView(_ tableView: UITableView, detailCellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
         cell.accessoryType = .disclosureIndicator
@@ -203,6 +224,10 @@ class EventInfoViewController: TBATableViewController, Observable {
 
         var urlString: String?
         switch item {
+        case .gameday:
+            delegate?.showGameDay()
+        case .webcast(let webcast):
+            urlString = webcast.urlString
         case .alliances:
             delegate?.showAlliances()
         case .districtPoints:
@@ -211,8 +236,6 @@ class EventInfoViewController: TBATableViewController, Observable {
             delegate?.showInsights()
         case .awards:
             delegate?.showAwards()
-        case .webcast(let webcast):
-            urlString = webcast.urlString
         case .website:
             urlString = event.website
         case .twitter:

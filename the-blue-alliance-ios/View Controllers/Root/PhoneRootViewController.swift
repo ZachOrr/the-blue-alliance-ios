@@ -31,8 +31,12 @@ class PhoneRootViewController: UITabBarController, RootController {
 
         super.init(nibName: nil, bundle: nil)
 
-        viewControllers = [eventsViewController, teamsViewController, districtsViewController, myTBAViewController, settingsViewController].compactMap({ (viewController) -> UIViewController? in
-            return UINavigationController(rootViewController: viewController)
+        viewControllers = [eventsViewController, teamsViewController, districtsViewController, gameDayViewController, myTBAViewController, settingsViewController].compactMap({ (viewController) -> UIViewController? in
+            var navigationController = UINavigationController(rootViewController: viewController)
+            if viewController.isKind(of: GameDayDashboardViewController.self) {
+                navigationController = GameDayNavigationController(rootViewController: viewController)
+            }
+            return navigationController
         })
     }
 

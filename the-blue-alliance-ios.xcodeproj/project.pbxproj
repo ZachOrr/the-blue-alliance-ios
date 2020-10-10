@@ -27,6 +27,7 @@
 		92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */; };
 		92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */; };
 		92009B5723DD49A60058E567 /* HandoffServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92009B5623DD49A60058E567 /* HandoffServiceTests.swift */; };
+		921450C6249FB81E00F15806 /* WebcastDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921450C5249FB81E00F15806 /* WebcastDatabaseService.swift */; };
 		921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B52222AF36A0056578A /* UIImage+TBATests.swift */; };
 		921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */; };
 		921D0B5B222AFFE40056578A /* UIBarButtonItem+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */; };
@@ -36,6 +37,8 @@
 		9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */; };
 		9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */; };
 		92269EE1219B9CF300FAA610 /* DistrictViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92269EE0219B9CF300FAA610 /* DistrictViewControllerTests.swift */; };
+		92314654240C6D1500440A0F /* WebcastPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92314653240C6D1500440A0F /* WebcastPlayer.swift */; };
+		92314657240F5B4300440A0F /* GameDayLayoutSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92314656240F5B4300440A0F /* GameDayLayoutSelectViewController.swift */; };
 		923AEE8C21658C5800EF50C8 /* Bundle+Version_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE8B21658C5800EF50C8 /* Bundle+Version_Tests.swift */; };
 		92435E2E23CBC2ED00CDD2D4 /* EventInsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92435E2D23CBC2ED00CDD2D4 /* EventInsightsView.swift */; };
 		924459C420CB796B0007570D /* Int16+Suffix_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */; };
@@ -53,6 +56,11 @@
 		92592F8423CB7F8900F3E124 /* TBASearchableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */; };
 		92598CC724A92AFE007E08CB /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92598CC624A92AFE007E08CB /* Dependencies.swift */; };
 		925D10EB2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */; };
+		926431AA24A7035E00C2526B /* GameDayRegionCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 926431A924A7035E00C2526B /* GameDayRegionCollectionViewCell.xib */; };
+		926431AC24A7036D00C2526B /* GameDayRegionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926431AB24A7036D00C2526B /* GameDayRegionCollectionViewCell.swift */; };
+		926431AE24A7A9A400C2526B /* GameDayWebcastCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 926431AD24A7A9A400C2526B /* GameDayWebcastCollectionViewCell.xib */; };
+		926431B024A7A9AF00C2526B /* GameDayWebcastCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926431AF24A7A9AE00C2526B /* GameDayWebcastCollectionViewCell.swift */; };
+		926A2141240C58EF00BFB73C /* TwitchPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A2140240C58EF00BFB73C /* TwitchPlayer.swift */; };
 		926BE685238F7E4D008B960A /* RemoteConfig+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */; };
 		927309A423DC0F26006145E0 /* TBA Spotlight Index Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		927309AC23DC0F68006145E0 /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927309AA23DC0F68006145E0 /* IndexRequestHandler.swift */; };
@@ -96,6 +104,11 @@
 		92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */; };
 		92943B08222E1DF700EA35B2 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92943B07222E1DF700EA35B2 /* SwitchTableViewCell.swift */; };
 		92943B0A222E1E0600EA35B2 /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92943B09222E1E0600EA35B2 /* SwitchTableViewCell.xib */; };
+		9295C397249E96E7005ED40E /* GameDayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9295C396249E96E7005ED40E /* GameDayViewController.swift */; };
+		9295C39B249EA4C5005ED40E /* GameDayWebcastsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9295C39A249EA4C5005ED40E /* GameDayWebcastsViewController.swift */; };
+		92975B6F2414A7DC006A8C44 /* EventGameDayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92975B6E2414A7DC006A8C44 /* EventGameDayTableViewCell.swift */; };
+		92975B712414A7EC006A8C44 /* EventGameDayCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92975B702414A7EC006A8C44 /* EventGameDayCellViewModel.swift */; };
+		92975B732414A8A1006A8C44 /* EventGameDayTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92975B722414A8A1006A8C44 /* EventGameDayTableViewCell.xib */; };
 		929820CD216966890080C1C8 /* EventsContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929820CC216966890080C1C8 /* EventsContainerViewControllerTests.swift */; };
 		929820CF216968020080C1C8 /* TBATestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929820CE216968020080C1C8 /* TBATestCase.swift */; };
 		929B91F723D4EC030029257E /* 2020InfiniteRechargeIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 929B91F523D4EC020029257E /* 2020InfiniteRechargeIcon@2x.png */; };
@@ -121,6 +134,7 @@
 		92A5E5DB21A22D550025CC85 /* UINavigationController+SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5D021A22D550025CC85 /* UINavigationController+SplitView.swift */; };
 		92A5E5DC21A22D550025CC85 /* URL+Reachable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5D121A22D550025CC85 /* URL+Reachable.swift */; };
 		92A5E5DD21A22D550025CC85 /* Int16+Suffix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */; };
+		92A98CB6249EAAE600236170 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A98CB5249EAAE600236170 /* RoundedButton.swift */; };
 		92AB6CB5239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB6CB4239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift */; };
 		92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectTableViewController.swift */; };
 		92AF73D821EB9E1E006A338D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF73D721EB9E1E006A338D /* SearchViewController.swift */; };
@@ -149,6 +163,7 @@
 		92C1F2E02169A3B800BD8445 /* MockNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */; };
 		92C1F2E42169AA7200BD8445 /* TeamsContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2E32169AA7200BD8445 /* TeamsContainerViewControllerTests.swift */; };
 		92C1F2E62169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2E52169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift */; };
+		92C25D89240CC84900FFB568 /* GameDayLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C25D88240CC84900FFB568 /* GameDayLayout.swift */; };
 		92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */; };
 		92C8CE4221AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4121AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift */; };
 		92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4321ACB03300683558 /* Subscribable.swift */; };
@@ -167,6 +182,7 @@
 		92CAF550240775180078CA0A /* PhoneRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CAF54F240775180078CA0A /* PhoneRootViewController.swift */; };
 		92CC6D36234588810085867D /* Test.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92CC6D34234588810085867D /* Test.xcdatamodeld */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
+		92D57F8B24A4EF66002E0DF3 /* GameDayDashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D57F8A24A4EF66002E0DF3 /* GameDayDashboardViewController.swift */; };
 		92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */; };
 		92D855D41EC68F4200572F27 /* TeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D31EC68F4200572F27 /* TeamsViewController.swift */; };
 		92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D61EC695C400572F27 /* TeamTableViewCell.swift */; };
@@ -177,6 +193,7 @@
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92F79A7623D6536A0026E9E8 /* SearchContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F79A7523D6536A0026E9E8 /* SearchContainer.swift */; };
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
+		92FA3D9A24C4A66200E66BDD /* GameDayHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA3D9924C4A66100E66BDD /* GameDayHeaderView.swift */; };
 		92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */; };
 		92FA4D2F228624D500030BA3 /* UIFont+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */; };
 		92FA4D3122865C1A00030BA3 /* TeamHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */; };
@@ -270,6 +287,7 @@
 		92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@2x.png"; sourceTree = "<group>"; };
 		92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@3x.png"; sourceTree = "<group>"; };
 		92009B5623DD49A60058E567 /* HandoffServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffServiceTests.swift; sourceTree = "<group>"; };
+		921450C5249FB81E00F15806 /* WebcastDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebcastDatabaseService.swift; sourceTree = "<group>"; };
 		921D0B52222AF36A0056578A /* UIImage+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBATests.swift"; sourceTree = "<group>"; };
 		921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBA.swift"; sourceTree = "<group>"; };
 		921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBATests.swift"; sourceTree = "<group>"; };
@@ -279,6 +297,8 @@
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
 		9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCollectionViewCell.swift; sourceTree = "<group>"; };
 		92269EE0219B9CF300FAA610 /* DistrictViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictViewControllerTests.swift; sourceTree = "<group>"; };
+		92314653240C6D1500440A0F /* WebcastPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebcastPlayer.swift; sourceTree = "<group>"; };
+		92314656240F5B4300440A0F /* GameDayLayoutSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDayLayoutSelectViewController.swift; sourceTree = "<group>"; };
 		923AEE8B21658C5800EF50C8 /* Bundle+Version_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version_Tests.swift"; sourceTree = "<group>"; };
 		92435E2D23CBC2ED00CDD2D4 /* EventInsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsView.swift; sourceTree = "<group>"; };
 		924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int16+Suffix_Tests.swift"; sourceTree = "<group>"; };
@@ -296,6 +316,11 @@
 		92592F8323CB7F8900F3E124 /* TBASearchableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBASearchableTableViewController.swift; sourceTree = "<group>"; };
 		92598CC624A92AFE007E08CB /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDiffableDataSourceSnapshot+TBA.swift"; sourceTree = "<group>"; };
+		926431A924A7035E00C2526B /* GameDayRegionCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GameDayRegionCollectionViewCell.xib; sourceTree = "<group>"; };
+		926431AB24A7036D00C2526B /* GameDayRegionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDayRegionCollectionViewCell.swift; sourceTree = "<group>"; };
+		926431AD24A7A9A400C2526B /* GameDayWebcastCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GameDayWebcastCollectionViewCell.xib; sourceTree = "<group>"; };
+		926431AF24A7A9AE00C2526B /* GameDayWebcastCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDayWebcastCollectionViewCell.swift; sourceTree = "<group>"; };
+		926A2140240C58EF00BFB73C /* TwitchPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitchPlayer.swift; sourceTree = "<group>"; };
 		926BE684238F7E4D008B960A /* RemoteConfig+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RemoteConfig+TBA.swift"; sourceTree = "<group>"; };
 		9273099C23DC0F26006145E0 /* TBA Spotlight Index Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TBA Spotlight Index Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		927309A823DC0F5F006145E0 /* spotlight-index.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "spotlight-index.entitlements"; sourceTree = "<group>"; };
@@ -345,6 +370,11 @@
 		92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBAViewController.swift; sourceTree = "<group>"; };
 		92943B07222E1DF700EA35B2 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		92943B09222E1E0600EA35B2 /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
+		9295C396249E96E7005ED40E /* GameDayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameDayViewController.swift; sourceTree = "<group>"; };
+		9295C39A249EA4C5005ED40E /* GameDayWebcastsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDayWebcastsViewController.swift; sourceTree = "<group>"; };
+		92975B6E2414A7DC006A8C44 /* EventGameDayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventGameDayTableViewCell.swift; sourceTree = "<group>"; };
+		92975B702414A7EC006A8C44 /* EventGameDayCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventGameDayCellViewModel.swift; sourceTree = "<group>"; };
+		92975B722414A8A1006A8C44 /* EventGameDayTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventGameDayTableViewCell.xib; sourceTree = "<group>"; };
 		929820CC216966890080C1C8 /* EventsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsContainerViewControllerTests.swift; sourceTree = "<group>"; };
 		929820CE216968020080C1C8 /* TBATestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBATestCase.swift; sourceTree = "<group>"; };
 		929B91F523D4EC020029257E /* 2020InfiniteRechargeIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2020InfiniteRechargeIcon@2x.png"; sourceTree = "<group>"; };
@@ -370,6 +400,7 @@
 		92A5E5D021A22D550025CC85 /* UINavigationController+SplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationController+SplitView.swift"; sourceTree = "<group>"; };
 		92A5E5D121A22D550025CC85 /* URL+Reachable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Reachable.swift"; sourceTree = "<group>"; };
 		92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int16+Suffix.swift"; sourceTree = "<group>"; };
+		92A98CB5249EAAE600236170 /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 		92AB6CB4239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestroyPersistentStoreOperation.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTableViewController.swift; sourceTree = "<group>"; };
 		92AF73D721EB9E1E006A338D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -398,6 +429,7 @@
 		92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationController.swift; sourceTree = "<group>"; };
 		92C1F2E32169AA7200BD8445 /* TeamsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsContainerViewControllerTests.swift; sourceTree = "<group>"; };
 		92C1F2E52169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictsContainerViewControllerTests.swift; sourceTree = "<group>"; };
+		92C25D88240CC84900FFB568 /* GameDayLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDayLayout.swift; sourceTree = "<group>"; };
 		92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewController.swift; sourceTree = "<group>"; };
 		92C8CE4121AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewControllerTests.swift; sourceTree = "<group>"; };
 		92C8CE4321ACB03300683558 /* Subscribable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscribable.swift; sourceTree = "<group>"; };
@@ -416,6 +448,7 @@
 		92CAF54F240775180078CA0A /* PhoneRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneRootViewController.swift; sourceTree = "<group>"; };
 		92CC6D35234588810085867D /* Test.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Test.xcdatamodel; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
+		92D57F8A24A4EF66002E0DF3 /* GameDayDashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDayDashboardViewController.swift; sourceTree = "<group>"; };
 		92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-unit-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D6483E20BE4CB8008F0DB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsContainerViewController.swift; sourceTree = "<group>"; };
@@ -428,6 +461,7 @@
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
 		92F79A7523D6536A0026E9E8 /* SearchContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContainer.swift; sourceTree = "<group>"; };
 		92F8E355209AAE890094213F /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
+		92FA3D9924C4A66100E66BDD /* GameDayHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDayHeaderView.swift; sourceTree = "<group>"; };
 		92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderView.swift; sourceTree = "<group>"; };
 		92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+TBA.swift"; sourceTree = "<group>"; };
 		92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderViewModel.swift; sourceTree = "<group>"; };
@@ -573,6 +607,15 @@
 			path = Breakdown;
 			sourceTree = "<group>";
 		};
+		92314655240F5B3100440A0F /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				92C25D88240CC84900FFB568 /* GameDayLayout.swift */,
+				92314656240F5B4300440A0F /* GameDayLayoutSelectViewController.swift */,
+			);
+			path = Layout;
+			sourceTree = "<group>";
+		};
 		923A0D7620D21D3800BF5E31 /* Launch Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -648,6 +691,39 @@
 				145C57BC1ED3C3AA004955B2 /* PlayerView.swift */,
 			);
 			path = Media;
+			sourceTree = "<group>";
+		};
+		926431A824A7034400C2526B /* GameDay */ = {
+			isa = PBXGroup;
+			children = (
+				92FA3D9924C4A66100E66BDD /* GameDayHeaderView.swift */,
+				926431A924A7035E00C2526B /* GameDayRegionCollectionViewCell.xib */,
+				926431AB24A7036D00C2526B /* GameDayRegionCollectionViewCell.swift */,
+				926431AD24A7A9A400C2526B /* GameDayWebcastCollectionViewCell.xib */,
+				926431AF24A7A9AE00C2526B /* GameDayWebcastCollectionViewCell.swift */,
+			);
+			path = GameDay;
+			sourceTree = "<group>";
+		};
+		926A2136240C431000BFB73C /* GameDay */ = {
+			isa = PBXGroup;
+			children = (
+				92D57F8A24A4EF66002E0DF3 /* GameDayDashboardViewController.swift */,
+				9295C396249E96E7005ED40E /* GameDayViewController.swift */,
+				9295C39A249EA4C5005ED40E /* GameDayWebcastsViewController.swift */,
+				92314655240F5B3100440A0F /* Layout */,
+				926A213F240C58E100BFB73C /* Embeds */,
+			);
+			path = GameDay;
+			sourceTree = "<group>";
+		};
+		926A213F240C58E100BFB73C /* Embeds */ = {
+			isa = PBXGroup;
+			children = (
+				92314653240C6D1500440A0F /* WebcastPlayer.swift */,
+				926A2140240C58EF00BFB73C /* TwitchPlayer.swift */,
+			);
+			path = Embeds;
 			sourceTree = "<group>";
 		};
 		927309A923DC0F68006145E0 /* spotlight-index */ = {
@@ -786,6 +862,7 @@
 				92942DB21E215B08008E79CA /* Events */,
 				92942DB31E215B0E008E79CA /* Teams */,
 				92942DB41E215B1F008E79CA /* Districts */,
+				926A2136240C431000BFB73C /* GameDay */,
 				92942DB51E215B34008E79CA /* MyTBA */,
 				92A321C5214EF81700FDADFB /* Settings */,
 				92FF10F221A61AC2003BC5C4 /* Match */,
@@ -847,6 +924,16 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
+		9295C39F249EA5A4005ED40E /* GameDay */ = {
+			isa = PBXGroup;
+			children = (
+				92975B722414A8A1006A8C44 /* EventGameDayTableViewCell.xib */,
+				92975B6E2414A7DC006A8C44 /* EventGameDayTableViewCell.swift */,
+				92975B702414A7EC006A8C44 /* EventGameDayCellViewModel.swift */,
+			);
+			path = GameDay;
+			sourceTree = "<group>";
+		};
 		929820CB2169667A0080C1C8 /* Events */ = {
 			isa = PBXGroup;
 			children = (
@@ -884,6 +971,7 @@
 				929DB38B2095640000FB575F /* ReverseSubtitleTableViewCell.swift */,
 				92943B09222E1E0600EA35B2 /* SwitchTableViewCell.xib */,
 				92943B07222E1DF700EA35B2 /* SwitchTableViewCell.swift */,
+				92A98CB5249EAAE600236170 /* RoundedButton.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1158,6 +1246,7 @@
 				92F8E355209AAE890094213F /* PushService.swift */,
 				92DF54E021B1B65A0082C58C /* StatusService.swift */,
 				92564C6A21644AA30047917F /* Secrets.swift */,
+				921450C5249FB81E00F15806 /* WebcastDatabaseService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1265,6 +1354,7 @@
 		92FFE5221E7C994B0037E48C /* View Elements */ = {
 			isa = PBXGroup;
 			children = (
+				926431A824A7034400C2526B /* GameDay */,
 				92B55628215FCB0900C1D9A3 /* Protocols */,
 				929DB38A209563E800FB575F /* Base */,
 				92564C69216180470047917F /* Media */,
@@ -1281,6 +1371,7 @@
 		92FFE5231E7C994B0037E48C /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				9295C39F249EA5A4005ED40E /* GameDay */,
 				92435E2A23CBC21300CDD2D4 /* Stats */,
 				304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */,
 				304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */,
@@ -1449,17 +1540,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */,
+				926431AA24A7035E00C2526B /* GameDayRegionCollectionViewCell.xib in Resources */,
 				145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */,
 				92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */,
 				92C8CE5021ADCC5F00683558 /* MyTBASignInViewController.xib in Resources */,
 				92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */,
 				9274E14921B1AAD300F5D5D0 /* NotificationStatusTableViewCell.xib in Resources */,
+				926431AE24A7A9A400C2526B /* GameDayWebcastCollectionViewCell.xib in Resources */,
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
 				929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */,
 				929B91F723D4EC030029257E /* 2020InfiniteRechargeIcon@2x.png in Resources */,
 				924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
+				92975B732414A8A1006A8C44 /* EventGameDayTableViewCell.xib in Resources */,
 				92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */,
 				929B91F823D4EC030029257E /* 2020InfiniteRechargeIcon@3x.png in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
@@ -1521,6 +1615,7 @@
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/MyTBAKit/MyTBAKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Nuke/Nuke.framework",
 				"${BUILT_PRODUCTS_DIR}/PINCache/PINCache.framework",
 				"${BUILT_PRODUCTS_DIR}/PINOperation/PINOperation.framework",
 				"${BUILT_PRODUCTS_DIR}/PINRemoteImage/PINRemoteImage.framework",
@@ -1536,6 +1631,7 @@
 				"${BUILT_PRODUCTS_DIR}/TBAUtils/TBAUtils.framework",
 				"${BUILT_PRODUCTS_DIR}/XCDYouTubeKit/XCDYouTubeKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -1547,6 +1643,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MyTBAKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nuke.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINCache.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINOperation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINRemoteImage.framework",
@@ -1562,6 +1659,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAUtils.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XCDYouTubeKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1697,6 +1795,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92C25D89240CC84900FFB568 /* GameDayLayout.swift in Sources */,
 				927309B223DD1E66006145E0 /* HandoffService.swift in Sources */,
 				92A5E5DD21A22D550025CC85 /* Int16+Suffix.swift in Sources */,
 				92FF110E21A61AF6003BC5C4 /* EventInsightsViewController.swift in Sources */,
@@ -1705,6 +1804,8 @@
 				9288BD1223CEC40200157F74 /* MatchBreakdownConfigurator2017.swift in Sources */,
 				92D855D41EC68F4200572F27 /* TeamsViewController.swift in Sources */,
 				92C079C723F99CA400AE2AFA /* EventStatsConfigurator2020.swift in Sources */,
+				9295C397249E96E7005ED40E /* GameDayViewController.swift in Sources */,
+				92D57F8B24A4EF66002E0DF3 /* GameDayDashboardViewController.swift in Sources */,
 				1479694C215EC1670075AF4E /* EventTeamStatCellViewModel.swift in Sources */,
 				9274E14521B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift in Sources */,
 				92CAF54E240774B90078CA0A /* PadRootViewController.swift in Sources */,
@@ -1737,6 +1838,7 @@
 				92FF110821A61AF6003BC5C4 /* EventDistrictPointsViewController.swift in Sources */,
 				921D0B5F222B13480056578A /* ContainerViewController+Team.swift in Sources */,
 				92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */,
+				92314657240F5B4300440A0F /* GameDayLayoutSelectViewController.swift in Sources */,
 				92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */,
 				929F572C2092BB1C00E5313A /* Alertable.swift in Sources */,
 				9280B54523CEBDE70021FEBE /* MatchBreakdownConfigurator2015.swift in Sources */,
@@ -1747,6 +1849,7 @@
 				14796946215EB0B90075AF4E /* RankingCellViewModel.swift in Sources */,
 				92FF10F921A61AC2003BC5C4 /* MatchViewController.swift in Sources */,
 				92AF73D821EB9E1E006A338D /* SearchViewController.swift in Sources */,
+				92975B712414A7EC006A8C44 /* EventGameDayCellViewModel.swift in Sources */,
 				92FF10EE21A61A1B003BC5C4 /* TeamSummaryViewController.swift in Sources */,
 				92FF111B21A61B37003BC5C4 /* DistrictRankingsViewController.swift in Sources */,
 				92A5E5DC21A22D550025CC85 /* URL+Reachable.swift in Sources */,
@@ -1768,7 +1871,9 @@
 				92FF110D21A61AF6003BC5C4 /* EventTeamStatsViewController.swift in Sources */,
 				929F57262092BA1C00E5313A /* Persistable.swift in Sources */,
 				92FF10F821A61AC2003BC5C4 /* MatchesViewController.swift in Sources */,
+				926431AC24A7036D00C2526B /* GameDayRegionCollectionViewCell.swift in Sources */,
 				92B1DF6C23655F74008130F6 /* CollectionViewDataSourceFetchedResultsController.swift in Sources */,
+				926431B024A7A9AF00C2526B /* GameDayWebcastCollectionViewCell.swift in Sources */,
 				92943B08222E1DF700EA35B2 /* SwitchTableViewCell.swift in Sources */,
 				929F572A2092BAFD00E5313A /* Refreshable.swift in Sources */,
 				92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */,
@@ -1782,7 +1887,9 @@
 				9279737723CFF06A00FF9B86 /* EventInsightsConfigurator.swift in Sources */,
 				92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */,
 				92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */,
+				9295C39B249EA4C5005ED40E /* GameDayWebcastsViewController.swift in Sources */,
 				92FF111A21A61B37003BC5C4 /* DistrictViewController.swift in Sources */,
+				92FA3D9A24C4A66200E66BDD /* GameDayHeaderView.swift in Sources */,
 				92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */,
 				929F57222092B80B00E5313A /* ContainerViewController.swift in Sources */,
 				92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */,
@@ -1804,6 +1911,7 @@
 				929F57202092B7D400E5313A /* TBAViewController.swift in Sources */,
 				929DB38C2095640000FB575F /* ReverseSubtitleTableViewCell.swift in Sources */,
 				9274E14721B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift in Sources */,
+				92A98CB6249EAAE600236170 /* RoundedButton.swift in Sources */,
 				1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */,
 				92598CC724A92AFE007E08CB /* Dependencies.swift in Sources */,
 				92FF10F721A61AC2003BC5C4 /* MatchInfoViewController.swift in Sources */,
@@ -1824,6 +1932,9 @@
 				92FA4D3122865C1A00030BA3 /* TeamHeaderViewModel.swift in Sources */,
 				92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */,
 				92FF10EC21A61A1B003BC5C4 /* TeamEventsViewController.swift in Sources */,
+				92314654240C6D1500440A0F /* WebcastPlayer.swift in Sources */,
+				926A2141240C58EF00BFB73C /* TwitchPlayer.swift in Sources */,
+				92975B6F2414A7DC006A8C44 /* EventGameDayTableViewCell.swift in Sources */,
 				92FF110921A61AF6003BC5C4 /* EventAlliancesViewController.swift in Sources */,
 				928018F42096431200693447 /* MyTBASignInViewController.swift in Sources */,
 				92942DB11E215B06008E79CA /* EventsViewController.swift in Sources */,
@@ -1838,6 +1949,7 @@
 				92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */,
 				921DD67D241D3D6C00403192 /* RootController.swift in Sources */,
 				9255EB6D209AC9760006A745 /* RetryService.swift in Sources */,
+				921450C6249FB81E00F15806 /* WebcastDatabaseService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

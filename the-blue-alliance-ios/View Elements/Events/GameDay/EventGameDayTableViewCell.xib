@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="105" id="JPO-CM-Pt3" customClass="EventGameDayTableViewCell" customModule="The_Blue_Alliance" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="461" height="105"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="JPO-CM-Pt3" id="nmq-3z-IG8">
+                <rect key="frame" x="0.0" y="0.0" width="430" height="105"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="iXm-Ig-mKL">
+                        <rect key="frame" x="16" y="8" width="406" height="89"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="I6j-tU-5uq">
+                                <rect key="frame" x="0.0" y="24" width="374" height="41"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Watch on GameDay" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JpN-bi-mDG">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NZy-Pn-5gy">
+                                        <rect key="frame" x="0.0" y="20.5" width="374" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Y5d-hV-Ba8">
+                                <rect key="frame" x="382" y="35" width="24" height="19.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Y5d-hV-Ba8" secondAttribute="height" multiplier="1:1" id="DRT-9r-1L9"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="iXm-Ig-mKL" firstAttribute="leading" secondItem="nmq-3z-IG8" secondAttribute="leading" constant="16" id="GqI-o5-HNk"/>
+                    <constraint firstItem="iXm-Ig-mKL" firstAttribute="top" secondItem="nmq-3z-IG8" secondAttribute="top" constant="8" id="e74-Ve-X0D"/>
+                    <constraint firstAttribute="trailing" secondItem="iXm-Ig-mKL" secondAttribute="trailing" constant="8" id="f19-p5-6Be"/>
+                    <constraint firstAttribute="bottom" secondItem="iXm-Ig-mKL" secondAttribute="bottom" constant="8" id="iBe-VR-7Xs"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="rightImageView" destination="Y5d-hV-Ba8" id="ejr-Hn-ra7"/>
+                <outlet property="subtitleLabel" destination="NZy-Pn-5gy" id="xJR-oJ-gmA"/>
+                <outlet property="titleLabel" destination="JpN-bi-mDG" id="WoX-lI-rEU"/>
+            </connections>
+            <point key="canvasLocation" x="-59" y="103"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="video.fill" catalog="system" width="128" height="82"/>
+    </resources>
+</document>

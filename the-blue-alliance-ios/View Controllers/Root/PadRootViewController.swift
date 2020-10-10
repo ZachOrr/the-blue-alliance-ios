@@ -174,7 +174,10 @@ private class PadMasterViewController: ContainerViewController, RootController {
     }
 
     func _push(_ viewController: UIViewController) {
-        let navigationController = UINavigationController(rootViewController: viewController)
+        var navigationController = UINavigationController(rootViewController: viewController)
+        if viewController.isKind(of: GameDayDashboardViewController.self) {
+            navigationController = GameDayNavigationController(rootViewController: viewController)
+        }
         showDetailViewController(navigationController, sender: nil)
     }
 
@@ -193,6 +196,8 @@ extension PadMasterViewController: PadRootTableViewControllerDelegate {
                 return teamsViewController
             case .districts:
                 return districtsViewController
+            case .gameDay:
+                return gameDayViewController
             case .myTBA:
                 return myTBAViewController
             case .settings:

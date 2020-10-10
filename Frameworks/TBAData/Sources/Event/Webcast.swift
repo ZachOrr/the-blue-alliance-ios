@@ -2,7 +2,26 @@ import CoreData
 import Foundation
 import TBAKit
 
+// https://github.com/the-blue-alliance/the-blue-alliance/blob/52b459db5e1a1a0a0bb70c76e6ceccbe2f603227/static/swagger/api_v3.json#L4843
+public enum WebcastType: String {
+    case youtube = "youtube"
+    case twitch = "twitch"
+    case ustream = "ustream"
+    case iframe = "iframe"
+    case html5 = "html5"
+    case rtmp = "rtmp"
+    case livestream = "livestream"
+
+    fileprivate static var gameDayTypes: [String] {
+        return [WebcastType.twitch.rawValue]
+    }
+}
+
 extension Webcast {
+
+    public var supportedInGameDay: Bool {
+        return WebcastType.gameDayTypes.contains(type)
+    }
 
     public var displayName: String {
         if type == "youtube" {

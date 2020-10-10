@@ -11,6 +11,7 @@ target 'The Blue Alliance' do
 
   # Deps
   pod 'BFRImageViewer'
+  pod 'Nuke'
   pod 'PINRemoteImage'
   pod 'PureLayout'
   pod 'XCDYouTubeKit', '~> 2.8'
@@ -21,6 +22,7 @@ target 'The Blue Alliance' do
   pod 'Firebase/Auth'
   pod 'Firebase/Core'
   pod 'Firebase/Crashlytics'
+  pod 'Firebase/Database'
   pod 'Firebase/Messaging'
   pod 'Firebase/Performance'
   pod 'Firebase/RemoteConfig'

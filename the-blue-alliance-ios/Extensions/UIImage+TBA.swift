@@ -15,6 +15,10 @@ extension UIImage {
         return UIImage(systemName: "circle.grid.hex.fill")
     }
 
+    static var gameDayIcon: UIImage? {
+        return UIImage(systemName: "video.fill")
+    }
+
     static var starIcon: UIImage? {
         return UIImage(systemName: "star.fill")
     }

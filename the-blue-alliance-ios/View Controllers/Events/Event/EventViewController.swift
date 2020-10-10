@@ -112,6 +112,11 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
 extension EventViewController: EventInfoViewControllerDelegate {
 
+    func showGameDay() {
+        let gameDayViewController = GameDayViewController(webcasts: event.gameDayWebcasts)
+        navigationController?.pushViewController(gameDayViewController, animated: true)
+    }
+
     func showAlliances() {
         let eventAlliancesViewController = EventAlliancesContainerViewController(event: event, myTBA: myTBA, pasteboard: pasteboard, photoLibrary: photoLibrary, statusService: statusService, urlOpener: urlOpener, dependencies: dependencies)
         self.navigationController?.pushViewController(eventAlliancesViewController, animated: true)

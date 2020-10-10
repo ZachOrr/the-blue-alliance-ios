@@ -32,4 +32,5 @@ class TeamTableViewCell: UITableViewCell, Reusable {
         nameLabel.text = viewModel.nickname
         locationLabel.text = viewModel.location
     }
+
 }

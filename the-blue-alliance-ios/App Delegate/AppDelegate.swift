@@ -3,6 +3,7 @@ import CoreSpotlight
 import Firebase
 import FirebaseAuth
 import FirebaseCrashlytics
+import FirebaseDatabase
 import FirebaseMessaging
 import GoogleSignIn
 import MyTBAKit
@@ -116,6 +117,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                              retryService: RetryService(),
                              tbaKit: tbaKit)
     }()
+    lazy var webcastDatabaseService: WebcastDatabaseService = {
+        return WebcastDatabaseService(database: Database.database())
+    }()
 
     // A completion block for registering for remote notifications
     var registerForRemoteNotificationsCompletion: ((Error?) -> ())?
@@ -156,6 +160,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupPushServiceDelegates()
         // Register for remote notifications - don't worry if we fail here
         PushService.registerForRemoteNotifications(nil)
+
+        let wds = webcastDatabaseService
 
         Auth.auth().addIDTokenDidChangeListener { (_, user) in
             if let user = user {
@@ -322,6 +328,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
         navigationBarAppearance.isTranslucent = false
         navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+        /*
+        let gameDayNavigationBarAppearance = UINavigationBar.appearance(whenContainedInInstancesOf: [GameDayNavigationController.self])
+        gameDayNavigationBarAppearance.isTranslucent = true
+        */
 
         let tabBarAppearance = UITabBar.appearance()
         tabBarAppearance.isTranslucent = false
