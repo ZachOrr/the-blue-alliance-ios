@@ -149,6 +149,7 @@
 		92C1F2E02169A3B800BD8445 /* MockNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */; };
 		92C1F2E42169AA7200BD8445 /* TeamsContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2E32169AA7200BD8445 /* TeamsContainerViewControllerTests.swift */; };
 		92C1F2E62169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2E52169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift */; };
+		92C5A33E25A0DB8C009D4DC7 /* FCMTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C5A33D25A0DB8C009D4DC7 /* FCMTokenProvider.swift */; };
 		92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */; };
 		92C8CE4221AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4121AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift */; };
 		92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4321ACB03300683558 /* Subscribable.swift */; };
@@ -398,6 +399,7 @@
 		92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationController.swift; sourceTree = "<group>"; };
 		92C1F2E32169AA7200BD8445 /* TeamsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsContainerViewControllerTests.swift; sourceTree = "<group>"; };
 		92C1F2E52169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictsContainerViewControllerTests.swift; sourceTree = "<group>"; };
+		92C5A33D25A0DB8C009D4DC7 /* FCMTokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FCMTokenProvider.swift; path = Frameworks/MyTBAKit/Sources/Protocols/FCMTokenProvider.swift; sourceTree = SOURCE_ROOT; };
 		92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewController.swift; sourceTree = "<group>"; };
 		92C8CE4121AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewControllerTests.swift; sourceTree = "<group>"; };
 		92C8CE4321ACB03300683558 /* Subscribable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscribable.swift; sourceTree = "<group>"; };
@@ -1136,6 +1138,7 @@
 		92EA0CEF1E2C296300C12A4C /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				92C5A33D25A0DB8C009D4DC7 /* FCMTokenProvider.swift */,
 				929F57252092BA1C00E5313A /* Persistable.swift */,
 				929F57292092BAFD00E5313A /* Refreshable.swift */,
 				929F572B2092BB1C00E5313A /* Alertable.swift */,
@@ -1732,6 +1735,7 @@
 				92CAF54E240774B90078CA0A /* PadRootViewController.swift in Sources */,
 				92B55633215FDB5300C1D9A3 /* BasicCollectionViewCell.swift in Sources */,
 				92FF10F021A61A1B003BC5C4 /* TeamMediaCollectionViewController.swift in Sources */,
+				92C5A33E25A0DB8C009D4DC7 /* FCMTokenProvider.swift in Sources */,
 				92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */,
 				92F79A7623D6536A0026E9E8 /* SearchContainer.swift in Sources */,
 				92B5562A215FCB1300C1D9A3 /* Reusable.swift in Sources */,
