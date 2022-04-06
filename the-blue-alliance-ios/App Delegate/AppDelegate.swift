@@ -170,9 +170,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-        // Kickoff background myTBA/Google sign in, along with setting up delegates
-        setupGoogleAuthentication()
-
         // Our app setup operation will load our persistent stores, propogate persistance container
         let appSetupOperation = AppSetupOperation(indexDelegate: indexDelegate, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         weak var weakAppSetupOperation = appSetupOperation
@@ -243,7 +240,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
-        GIDSignIn.sharedInstance().handle(url)
+        GIDSignIn.sharedInstance.handle(url)
     }
 
     // MARK: Search Delegate Methods
@@ -292,19 +289,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         messaging.delegate = pushService
         UNUserNotificationCenter.current().delegate = pushService
         myTBA.authenticationProvider.add(observer: pushService)
-    }
-
-    private func setupGoogleAuthentication() {
-        guard let signIn = GIDSignIn.sharedInstance() else { return }
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-
-        signIn.clientID = clientID
-        signIn.delegate = self
-
-        // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
-        if Auth.auth().currentUser == nil, signIn.hasPreviousSignIn() {
-            signIn.restorePreviousSignIn()
-        }
     }
 
     private var launchViewController: UIViewController {
@@ -361,39 +345,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
-extension AppDelegate: GIDSignInDelegate {
-
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
-        // Don't respond to errors from signInSilently or a user cancelling a sign in
-        if let error = error as NSError?, error.code == GIDSignInErrorCode.canceled.rawValue {
-            return
-        } else if let error = error {
-            errorRecorder.record(error)
-            if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
-                signInDelegate.showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
-            }
-            return
-        }
-
-        guard let authentication = user.authentication else { return }
-
-        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
-                                                       accessToken: authentication.accessToken)
-        Auth.auth().signIn(with: credential) { [self] (_, error) in
-            if let error = error {
-                errorRecorder.record(error)
-                if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
-                    signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
-                }
-            } else {
-                PushService.requestAuthorizationForNotifications { [unowned self] (_, error) in
-                    if let error = error {
-                        self.errorRecorder.record(error)
-                    }
-                }
-            }
-        }
-    }
+extension AppDelegate {
 
     static func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
         if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {

@@ -1,9 +1,14 @@
+import AuthenticationServices
+import GoogleSignIn
 import Foundation
 import UIKit
-import GoogleSignIn
 
 class MyTBASignInViewController: UIViewController {
 
+    private let signInWithGoogleCallback: () -> ()
+    private let signInWithAppleCallback: () -> ()
+
+    @IBOutlet var rootStackView: UIStackView!
     @IBOutlet var starImageView: UIImageView! {
         didSet {
             starImageView.tintColor = UIColor.myTBAStarColor
@@ -11,14 +16,20 @@ class MyTBASignInViewController: UIViewController {
     }
     @IBOutlet var favoriteImageView: UIImageView!
     @IBOutlet var subscriptionImageView: UIImageView!
-    @IBOutlet var signInButton: UIButton!
+    @IBOutlet var providersStackView: UIStackView!
 
-    init() {
+    var signInWithGoogleButton = GIDSignInButton()
+    var signInWithAppleButton = ASAuthorizationAppleIDButton(type: .signIn, style: .whiteOutline)
+
+    init(signInWithGoogleCallback: @escaping () -> (), signInWithAppleCallback: @escaping () -> ()) {
+        self.signInWithGoogleCallback = signInWithGoogleCallback
+        self.signInWithAppleCallback = signInWithAppleCallback
+
         super.init(nibName: String(describing: type(of: self)), bundle: Bundle.main)
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - View Lifecycle
@@ -44,36 +55,29 @@ class MyTBASignInViewController: UIViewController {
         })
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        updateInterface(previousTraitCollection: previousTraitCollection)
-    }
-
     // MARK: - Interface Methods
 
     private func styleInterface() {
         view.backgroundColor = UIColor.systemGroupedBackground
-        signInButton.setTitleColor(UIColor.googleSignInTextColor, for: .normal)
 
-        updateInterface(previousTraitCollection: nil)
-    }
+        signInWithGoogleButton.colorScheme = .light
+        signInWithGoogleButton.style = .wide
+        // signInWithGoogleButton.setTitleColor(UIColor.googleSignInTextColor, for: .normal)
+        providersStackView.addArrangedSubview(signInWithGoogleButton)
 
-    private func updateInterface(previousTraitCollection: UITraitCollection?) {
-        if let previousTraitCollection = previousTraitCollection, previousTraitCollection.userInterfaceStyle != traitCollection.userInterfaceStyle {
-            // There's some bug (or - possibly misconfigured on my part) with stretching + the trait collection changing.
-            // As a workaround, we need to manually reset all the background images for the sign in button
-            signInButton.setBackgroundImage(UIImage(named: "btn_google_signin_normal"), for: .normal)
-            signInButton.setBackgroundImage(UIImage(named: "btn_google_signin_pressed"), for: .selected)
-            signInButton.setBackgroundImage(UIImage(named: "btn_google_signin_focus"), for: .focused)
-            signInButton.setBackgroundImage(UIImage(named: "btn_google_signin_disabled"), for: .disabled)
-        }
+        providersStackView.addArrangedSubview(signInWithAppleButton)
+        signInWithAppleButton.autoMatch(.width, to: .width, of: signInWithGoogleButton)
+        signInWithAppleButton.autoMatch(.height, to: .height, of: signInWithGoogleButton)
     }
 
     // MARK: - IBActions
 
-    @IBAction private func signIn() {
-        GIDSignIn.sharedInstance().signIn()
+    private func signInWithGoogle() {
+        signInWithGoogleCallback()
+    }
+
+    private func signInWithApple() {
+        signInWithAppleCallback()
     }
 
 }

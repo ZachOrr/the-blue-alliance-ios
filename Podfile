@@ -32,7 +32,7 @@ target 'The Blue Alliance' do
   pod 'TBAUtils', :path => 'Frameworks/TBAUtils', :testspecs => ['Tests']
 
   # myTBA
-  pod 'GoogleSignIn', '~> 5'
+  pod 'GoogleSignIn'
 
   target 'tba-unit-tests' do
     inherit! :search_paths

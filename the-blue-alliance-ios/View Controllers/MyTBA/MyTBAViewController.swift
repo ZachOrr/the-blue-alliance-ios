@@ -17,7 +17,11 @@ class MyTBAViewController: ContainerViewController {
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
-    private(set) var signInViewController: MyTBASignInViewController = MyTBASignInViewController()
+    private(set) var signInViewController: MyTBASignInViewController = MyTBASignInViewController(signInWithGoogleCallback: {
+        // Pass
+    }, signInWithAppleCallback: {
+        // Pass
+    })
     private(set) var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
     private(set) var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
 
@@ -59,8 +63,6 @@ class MyTBAViewController: ContainerViewController {
 
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
-
-        GIDSignIn.sharedInstance()?.presentingViewController = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -131,7 +133,7 @@ class MyTBAViewController: ContainerViewController {
     }
 
     private func logoutSuccessful() {
-        GIDSignIn.sharedInstance().signOut()
+        GIDSignIn.sharedInstance.signOut()
         try! Auth.auth().signOut()
 
         // Cancel any ongoing requests

@@ -111,8 +111,8 @@ PODS:
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleSignIn (5.0.2):
-    - AppAuth (~> 1.2)
+  - GoogleSignIn (6.1.0):
+    - AppAuth (~> 1.4)
     - GTMAppAuth (~> 1.0)
     - GTMSessionFetcher/Core (~> 1.1)
   - GoogleUtilities/AppDelegateSwizzler (7.7.0):
@@ -211,7 +211,7 @@ DEPENDENCIES:
   - Firebase/Crashlytics
   - Firebase/Messaging
   - Firebase/RemoteConfig
-  - GoogleSignIn (~> 5)
+  - GoogleSignIn
   - MyTBAKit (from `Frameworks/MyTBAKit`)
   - MyTBAKit/Tests (from `Frameworks/MyTBAKit`)
   - MyTBAKitTesting (from `Frameworks/MyTBAKit`)
@@ -302,7 +302,7 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfig: a5d9188d8f57f602636f111eca6460ebe32b9b71
   GoogleAppMeasurement: 71156240babd3cc6ced03e0d54816f01a880c730
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
-  GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
+  GoogleSignIn: c90b5bec45e780f54c6a8e1e3c182a86e3dda69d
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   GTMAppAuth: 987526d41b07efb1bedda5e936fe0cb718a03113
   GTMSessionFetcher: 4577a4cc914a5a07c40a8a0ad0acc22080418c2d
@@ -325,6 +325,6 @@ SPEC CHECKSUMS:
   TBAUtils: 33dee003122f653472fa5fe579731d1634f84f9a
   youtube-ios-player-helper: e9b97535e816db3152179d84d999bc1807ecd689
 
-PODFILE CHECKSUM: dba9aa13191759113eb5e28ce69f31005dacaf51
+PODFILE CHECKSUM: 4ada3be82dac26d5745b096e8dbd44956dae8d31
 
 COCOAPODS: 1.11.3
