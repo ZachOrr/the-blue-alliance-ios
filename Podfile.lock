@@ -1,9 +1,9 @@
 PODS:
-  - AppAuth (1.5.0):
-    - AppAuth/Core (= 1.5.0)
-    - AppAuth/ExternalUserAgent (= 1.5.0)
-  - AppAuth/Core (1.5.0)
-  - AppAuth/ExternalUserAgent (1.5.0):
+  - AppAuth (1.6.0):
+    - AppAuth/Core (= 1.6.0)
+    - AppAuth/ExternalUserAgent (= 1.6.0)
+  - AppAuth/Core (1.6.0)
+  - AppAuth/ExternalUserAgent (1.6.0):
     - AppAuth/Core
   - BFRImageViewer (1.3.1):
     - PINRemoteImage/iOS (~> 3.0.0)
@@ -111,10 +111,10 @@ PODS:
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleSignIn (6.1.0):
-    - AppAuth (~> 1.4)
-    - GTMAppAuth (~> 1.0)
-    - GTMSessionFetcher/Core (~> 1.1)
+  - GoogleSignIn (6.2.4):
+    - AppAuth (~> 1.5)
+    - GTMAppAuth (~> 1.3)
+    - GTMSessionFetcher/Core (< 3.0, >= 1.1)
   - GoogleUtilities/AppDelegateSwizzler (7.7.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -134,9 +134,9 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.7.0):
     - GoogleUtilities/Logger
-  - GTMAppAuth (1.2.3):
-    - AppAuth/Core (~> 1.4)
-    - GTMSessionFetcher/Core (~> 1.5)
+  - GTMAppAuth (1.3.1):
+    - AppAuth/Core (~> 1.6)
+    - GTMSessionFetcher/Core (< 3.0, >= 1.5)
   - GTMSessionFetcher/Core (1.7.1)
   - MyTBAKit (1.0.0-LOCAL):
     - TBAOperation
@@ -211,7 +211,7 @@ DEPENDENCIES:
   - Firebase/Crashlytics
   - Firebase/Messaging
   - Firebase/RemoteConfig
-  - GoogleSignIn
+  - GoogleSignIn (~> 6)
   - MyTBAKit (from `Frameworks/MyTBAKit`)
   - MyTBAKit/Tests (from `Frameworks/MyTBAKit`)
   - MyTBAKitTesting (from `Frameworks/MyTBAKit`)
@@ -288,7 +288,7 @@ EXTERNAL SOURCES:
     :path: Frameworks/TBAUtils
 
 SPEC CHECKSUMS:
-  AppAuth: 80317d99ac7ff2801a2f18ff86b48cd315ed465d
+  AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
   BFRImageViewer: 77d39b6db6e0ad76adfbfd832d25bf4c261932bb
   Firebase: 7e8fe528c161b9271d365217a74c16aaf834578e
   FirebaseABTesting: aaa0e096c9fc9972ce6806d596e8fcc077d4371f
@@ -302,9 +302,9 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfig: a5d9188d8f57f602636f111eca6460ebe32b9b71
   GoogleAppMeasurement: 71156240babd3cc6ced03e0d54816f01a880c730
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
-  GoogleSignIn: c90b5bec45e780f54c6a8e1e3c182a86e3dda69d
+  GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
-  GTMAppAuth: 987526d41b07efb1bedda5e936fe0cb718a03113
+  GTMAppAuth: 0ff230db599948a9ad7470ca667337803b3fc4dd
   GTMSessionFetcher: 4577a4cc914a5a07c40a8a0ad0acc22080418c2d
   MyTBAKit: 249f38826c65b73e8dff31b098ca279e46cb7204
   MyTBAKitTesting: b42f306b329a65bb475c279c20a0a23e70e93b51
@@ -325,6 +325,6 @@ SPEC CHECKSUMS:
   TBAUtils: 33dee003122f653472fa5fe579731d1634f84f9a
   youtube-ios-player-helper: e9b97535e816db3152179d84d999bc1807ecd689
 
-PODFILE CHECKSUM: 4ada3be82dac26d5745b096e8dbd44956dae8d31
+PODFILE CHECKSUM: 164e021eb22186999f10cd7abca59ddf2cd3ca23
 
 COCOAPODS: 1.11.3
