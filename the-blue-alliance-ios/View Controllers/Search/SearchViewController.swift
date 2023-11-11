@@ -69,7 +69,7 @@ class SearchViewController: TBATableViewController {
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
-    private var dataSource: TableViewDataSource<SearchSection, CSSearchableItem>!
+    private var tableViewDataSource: TableViewDataSource<SearchSection, CSSearchableItem>!
 
     init(searchService: SearchService, dependencies: Dependencies) {
         self.searchService = searchService
@@ -89,8 +89,8 @@ class SearchViewController: TBATableViewController {
         tableView.registerReusableCell(EventTableViewCell.self)
         tableView.registerReusableCell(TeamTableViewCell.self)
 
+        tableView.dataSource = tableViewDataSource
         setupDataSource()
-        tableView.dataSource = dataSource
 
         enableRefreshing()
     }
@@ -115,7 +115,7 @@ class SearchViewController: TBATableViewController {
     // MARK: Private Methods
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<SearchSection, CSSearchableItem>(tableView: tableView, cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
+        let dataSource = UITableViewDiffableDataSource<SearchSection, CSSearchableItem>(tableView: tableView, cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
             let contentType = item.attributeSet.contentType
             if contentType == Event.entityName {
                 let name = item.attributeSet.displayName ?? item.attributeSet.alternateNames?.first ?? "---"
@@ -129,8 +129,9 @@ class SearchViewController: TBATableViewController {
             }
             return UITableViewCell()
         })
-        dataSource.delegate = self
-        dataSource.statefulDelegate = self
+        tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        tableViewDataSource.delegate = self
+        tableViewDataSource.statefulDelegate = self
     }
 
     private func search() {
@@ -212,7 +213,7 @@ class SearchViewController: TBATableViewController {
     }
 
     private func updateDataSource() {
-        var snapshot = dataSource.snapshot()
+        var snapshot = self.tableViewDataSource.dataSource.snapshot()
         snapshot.deleteAllItems()
 
         if scope.shouldShowTeams, !teams.isEmpty {
@@ -249,7 +250,7 @@ class SearchViewController: TBATableViewController {
         }
 
         DispatchQueue.main.async {
-            self.dataSource.apply(snapshot, animatingDifferences: false)
+            self.tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
         }
     }
 
@@ -257,11 +258,11 @@ class SearchViewController: TBATableViewController {
         self.teams = Set()
         self.events = Set()
 
-        var snapshot = dataSource.snapshot()
+        var snapshot = self.tableViewDataSource.dataSource.snapshot()
         snapshot.deleteAllItems()
 
         DispatchQueue.main.async {
-            self.dataSource.apply(snapshot, animatingDifferences: false)
+            self.tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
         }
     }
 
@@ -284,7 +285,7 @@ class SearchViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        guard let item = dataSource.itemIdentifier(for: indexPath) else {
+        guard let item = tableViewDataSource.dataSource.itemIdentifier(for: indexPath) else {
             return
         }
 
@@ -307,7 +308,7 @@ class SearchViewController: TBATableViewController {
     // MARK: - TableViewDataSourceDelegate
 
     override func title(forSection section: Int) -> String? {
-        let snapshot = dataSource.snapshot()
+        let snapshot = tableViewDataSource.dataSource.snapshot()
         let section = snapshot.sectionIdentifiers[section]
         return section.rawValue
     }
@@ -358,7 +359,7 @@ extension SearchViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return dataSource.isDataSourceEmpty
+        return tableViewDataSource.isDataSourceEmpty
     }
 
     @objc func refresh() {

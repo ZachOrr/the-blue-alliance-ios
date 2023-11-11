@@ -39,7 +39,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     let myTBA: MyTBA
     weak var delegate: MyTBATableViewControllerDelegate?
 
-    private var dataSource: TableViewDataSource<MyTBASection, NSManagedObject>!
+    private var tableViewDataSource: TableViewDataSource<MyTBASection, NSManagedObject>!
     private var fetchedResultsController: NSFetchedResultsController<T>!
 
     // MARK: Init
@@ -63,8 +63,8 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         tableView.registerReusableCell(TeamTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
 
+        tableView.dataSource = tableViewDataSource
         setupDataSource()
-        tableView.dataSource = dataSource
 
         // Disable subscriptions
         setupFetchedResultsController()
@@ -73,7 +73,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     // MARK: Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<MyTBASection, NSManagedObject>(tableView: tableView, cellProvider: { (tableView, indexPath, obj) -> UITableViewCell? in
+        let dataSource = UITableViewDiffableDataSource<MyTBASection, NSManagedObject>(tableView: tableView, cellProvider: { (tableView, indexPath, obj) -> UITableViewCell? in
             let fallbackCell = UITableViewCell()
             fallbackCell.textLabel?.text = obj.description
 
@@ -90,8 +90,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 return fallbackCell
             }
         })
-        dataSource.delegate = self
-        dataSource.statefulDelegate = self
+        tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        tableViewDataSource.delegate = self
+        tableViewDataSource.statefulDelegate = self
     }
 
     // MARK: NSFetchedResultsController
@@ -151,7 +152,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             s.appendSections([sectionType])
             s.appendItems(items, toSection: sectionType)
         }
-        dataSource.apply(s, animatingDifferences: false)
+        tableViewDataSource.dataSource.apply(s, animatingDifferences: false)
     }
 
     // MARK: Table View Cells
@@ -178,7 +179,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     override func title(forSection sectionIndex: Int) -> String? {
         let indexPath = IndexPath(item: 0, section: sectionIndex)
-        guard let item = dataSource.itemIdentifier(for: indexPath) else {
+        guard let item = tableViewDataSource.dataSource.itemIdentifier(for: indexPath) else {
             return nil
         }
         if item is Event {
@@ -195,7 +196,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let obj = dataSource.itemIdentifier(for: indexPath) else {
+        guard let obj = tableViewDataSource.dataSource.itemIdentifier(for: indexPath) else {
             return
         }
         if let event = obj as? Event {
@@ -266,9 +267,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Event.insert(event, in: context)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
+            }, saved: {
+                tbaKit.storeCacheHeaders(operation)
+                executeUpdate(myTBAModel)
             }, errorRecorder: errorRecorder)
         }
         return operation
@@ -284,9 +285,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Team.insert(team, in: context)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
+            }, saved: {
+                tbaKit.storeCacheHeaders(operation)
+                executeUpdate(myTBAModel)
             }, errorRecorder: errorRecorder)
         }
         return operation
@@ -302,9 +303,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Match.insert(match, in: context)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
+            }, saved: {
+                tbaKit.storeCacheHeaders(operation)
+                executeUpdate(myTBAModel)
             }, errorRecorder: errorRecorder)
         }
         return operation
@@ -342,7 +343,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             return nil
         }
         return BlockOperation {
-            var snapshot = self.dataSource.snapshot()
+            var snapshot = self.tableViewDataSource.dataSource.snapshot()
 
             if !snapshot.sectionIdentifiers.contains(section) {
                 if snapshot.numberOfSections <= model.modelType.rawValue {
@@ -372,7 +373,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             snapshot.deleteItems(items)
             snapshot.appendItems(items, toSection: section)
 
-            self.dataSource.apply(snapshot, animatingDifferences: true)
+            self.tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: true)
         }
     }
 
@@ -393,7 +394,7 @@ extension MyTBATableViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        if myTBA.isAuthenticated, dataSource.isDataSourceEmpty {
+        if myTBA.isAuthenticated, tableViewDataSource.isDataSourceEmpty {
             return true
         }
         return false

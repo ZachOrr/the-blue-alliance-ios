@@ -22,7 +22,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
     private var team: Team
     private let urlOpener: URLOpener
 
-    private var dataSource: TableViewDataSource<TeamInfoSection, TeamInfoItem>!
+    private var tableViewDataSource: TableViewDataSource<TeamInfoSection, TeamInfoItem>!
 
     private var sponsorsExpanded: Bool = false
 
@@ -54,13 +54,10 @@ class TeamInfoViewController: TBATableViewController, Observable {
         tableView.sectionFooterHeight = 0
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
 
+        tableView.dataSource = tableViewDataSource
         setupDataSource()
-        tableView.dataSource = dataSource
 
         updateTeamInfo()
-
-        // TODO: Add support for Pits
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
 
         contextObserver.observeObject(object: team, state: .updated) { [weak self] (_, _) in
             guard let self = self else { return }
@@ -73,7 +70,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
     // MARK: - Private Methods
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<TeamInfoSection, TeamInfoItem>(tableView: tableView, cellProvider: { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+        let dataSource = UITableViewDiffableDataSource<TeamInfoSection, TeamInfoItem>(tableView: tableView, cellProvider: { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
             guard let self = self else { return nil }
             switch item {
             case .location:
@@ -98,10 +95,11 @@ class TeamInfoViewController: TBATableViewController, Observable {
                 return cell
             }
         })
+        tableViewDataSource = TableViewDataSource(dataSource: dataSource)
     }
 
     private func updateTeamInfo() {
-        var snapshot = dataSource.snapshot()
+        var snapshot = tableViewDataSource.dataSource.snapshot()
 
         snapshot.deleteAllItems()
 
@@ -127,13 +125,13 @@ class TeamInfoViewController: TBATableViewController, Observable {
         snapshot.appendSections([.link])
         snapshot.appendItems(linkItems, toSection: .link)
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     private func reloadSponsors() {
-        var snapshot = dataSource.snapshot()
+        var snapshot = tableViewDataSource.dataSource.snapshot()
         snapshot.reloadItems([.sponsors])
-        dataSource.apply(snapshot, animatingDifferences: true)
+        tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     // MARK: - Table View Methods
@@ -178,7 +176,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        guard let item = dataSource.itemIdentifier(for: indexPath) else {
+        guard let item = tableViewDataSource.dataSource.itemIdentifier(for: indexPath) else {
             return
         }
 
@@ -236,8 +234,8 @@ extension TeamInfoViewController: Refreshable {
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Team.insert(team, in: context)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: infoOperation)
+            }, saved: {
+                markTBARefreshSuccessful(tbaKit, operation: infoOperation)
             }, errorRecorder: errorRecorder)
         }
 
@@ -251,8 +249,8 @@ extension TeamInfoViewController: Refreshable {
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
                 team.setYearsParticipated(years)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(yearsOperation)
+            }, saved: {
+                tbaKit.storeCacheHeaders(yearsOperation)
             }, errorRecorder: errorRecorder)
         }
 

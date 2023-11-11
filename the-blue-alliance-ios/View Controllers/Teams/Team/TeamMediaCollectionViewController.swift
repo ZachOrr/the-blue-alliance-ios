@@ -27,7 +27,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     weak var delegate: TeamMediaCollectionViewControllerDelegate?
 
-    private var dataSource: CollectionViewDataSource<String, TeamMedia>!
+    private var collectionViewDataSource: CollectionViewDataSource<String, TeamMedia>!
     var fetchedResultsController: CollectionViewDataSourceFetchedResultsController<TeamMedia>!
 
     // MARK: Init
@@ -53,8 +53,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
         collectionView.registerReusableCell(MediaCollectionViewCell.self)
 
+        collectionView.dataSource = collectionViewDataSource
         setupDataSource()
-        collectionView.dataSource = dataSource
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -132,7 +132,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = CollectionViewDataSource<String, TeamMedia>(collectionView: collectionView) { [weak self ] (collectionView, indexPath, media) -> UICollectionViewCell? in
+        let dataSource = UICollectionViewDiffableDataSource<String, TeamMedia>(collectionView: collectionView) { [weak self ] (collectionView, indexPath, media) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as MediaCollectionViewCell
             if let image = media.image {
                 cell.state = .loaded(image)
@@ -145,15 +145,14 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             }
             return cell
         }
+        self.collectionViewDataSource = CollectionViewDataSource(dataSource: dataSource)
+        self.collectionViewDataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<TeamMedia> = TeamMedia.fetchRequest()
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = CollectionViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-        
-        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
-        dataSource.delegate = self
     }
 
     private func updateDataSource() {
@@ -282,8 +281,8 @@ extension TeamMediaCollectionViewController: Refreshable {
             context.performChangesAndWait({
                 let team = context.object(with: self.team.objectID) as! Team
                 team.insert(media, year: year)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, saved: {
+                markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         let fetchMediaOperation = BlockOperation {
@@ -301,12 +300,10 @@ extension TeamMediaCollectionViewController: Refreshable {
     private func fetchMedia(_ media: TeamMedia, _ dependentOperation: Operation) {
         let refreshOperation = BlockOperation { [weak self] in
             guard let self = self else { return }
-            var snapshot = self.dataSource.snapshot()
             // Reload our cell, so we can get rid of our loading state
-            if let indexPath = self.indexPath(for: media) {
-                snapshot.reloadItems([snapshot.itemIdentifiers[indexPath.row]])
-                self.dataSource.apply(snapshot)
-            }
+            var snapshot = collectionViewDataSource.dataSource.snapshot()
+            snapshot.reloadSections(snapshot.sectionIdentifiers)
+            collectionViewDataSource.dataSource.applySnapshotUsingReloadData(snapshot)
         }
 
         let fetchMediaOperation = FetchMediaOperation(errorRecorder: errorRecorder, media: media, persistentContainer: persistentContainer)

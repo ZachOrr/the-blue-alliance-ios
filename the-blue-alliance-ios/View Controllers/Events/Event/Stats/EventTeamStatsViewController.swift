@@ -26,7 +26,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
     private let event: Event
 
-    private var dataSource: TableViewDataSource<String, EventTeamStat>!
+    private var tableViewDataSource: TableViewDataSource<String, EventTeamStat>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<EventTeamStat>!
 
     var filter: EventTeamStatFilter {
@@ -74,8 +74,8 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
         tableView.registerReusableCell(RankingTableViewCell.self)
 
+        tableView.dataSource = tableViewDataSource
         setupDataSource()
-        tableView.dataSource = dataSource
     }
 
     // MARK: UITableView Delegate
@@ -91,21 +91,20 @@ class EventTeamStatsTableViewController: TBATableViewController {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, EventTeamStat>(tableView: tableView) { (tableView, indexPath, eventTeamStat) -> UITableViewCell? in
+        let dataSource = UITableViewDiffableDataSource<String, EventTeamStat>(tableView: tableView) { (tableView, indexPath, eventTeamStat) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             cell.viewModel = RankingCellViewModel(eventTeamStat: eventTeamStat)
             return cell
         }
-        dataSource.statefulDelegate = self
+        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        self.tableViewDataSource.delegate = self
+        self.tableViewDataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<EventTeamStat> = EventTeamStat.fetchRequest()
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-        
-        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
-        dataSource.delegate = self
     }
 
     private func updateDataSource() {
@@ -172,8 +171,8 @@ extension EventTeamStatsTableViewController: Refreshable {
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(stats)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, saved: {
+                markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

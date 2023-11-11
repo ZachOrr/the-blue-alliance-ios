@@ -14,7 +14,7 @@ class EventRankingsViewController: TBATableViewController {
 
     private let event: Event
 
-    private var dataSource: TableViewDataSource<String, EventRanking>!
+    private var tableViewDataSource: TableViewDataSource<String, EventRanking>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<EventRanking>!
 
     // MARK: - Init
@@ -36,8 +36,8 @@ class EventRankingsViewController: TBATableViewController {
 
         tableView.registerReusableCell(RankingTableViewCell.self)
 
+        tableView.dataSource = tableViewDataSource
         setupDataSource()
-        tableView.dataSource = dataSource
     }
 
     // MARK: UITableView Delegate
@@ -52,12 +52,14 @@ class EventRankingsViewController: TBATableViewController {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<String, EventRanking>(tableView: tableView) { (tableView, indexPath, eventRanking) -> UITableViewCell? in
+        let dataSource = UITableViewDiffableDataSource<String, EventRanking>(tableView: tableView) { (tableView, indexPath, eventRanking) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
             cell.viewModel = RankingCellViewModel(eventRanking: eventRanking)
             return cell
         }
-        dataSource.statefulDelegate = self
+        self.tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        self.tableViewDataSource.delegate = self
+        self.tableViewDataSource.statefulDelegate = self
 
         let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
         fetchRequest.sortDescriptors = [
@@ -67,9 +69,6 @@ class EventRankingsViewController: TBATableViewController {
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
-        
-        // Keep this LOC down here - or else we'll end up crashing with the fetchedResultsController init
-        dataSource.delegate = self
     }
 
 }
@@ -96,7 +95,7 @@ extension EventRankingsViewController: Refreshable {
     @objc func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventRankings(key: event.key) { [self] (result, notModified) in
-            guard case .success((let rankings, let sortOrder, let extraStats)) = result, !notModified else {
+            guard case .success(let rankings, let sortOrder, let extraStats) = result, !notModified else {
                 return
             }
 
@@ -104,8 +103,8 @@ extension EventRankingsViewController: Refreshable {
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(rankings, sortOrderInfo: sortOrder, extraStatsInfo: extraStats)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: operation)
+            }, saved: {
+                markTBARefreshSuccessful(tbaKit, operation: operation)
             }, errorRecorder: errorRecorder)
         }
         addRefreshOperations([operation])

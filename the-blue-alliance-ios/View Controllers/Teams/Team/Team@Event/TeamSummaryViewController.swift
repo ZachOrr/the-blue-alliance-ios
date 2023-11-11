@@ -83,7 +83,7 @@ class TeamSummaryViewController: TBATableViewController {
     private let team: Team
     private let event: Event
 
-    private var dataSource: TableViewDataSource<TeamSummarySection, TeamSummaryItem>!
+    private var tableViewDataSource: TableViewDataSource<TeamSummarySection, TeamSummaryItem>!
 
     private var eventStatus: EventStatus? {
         didSet {
@@ -136,8 +136,8 @@ class TeamSummaryViewController: TBATableViewController {
         tableView.registerReusableCell(InfoTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
 
+        tableView.dataSource = tableViewDataSource
         setupDataSource()
-        tableView.dataSource = dataSource
 
         // Since we leverage didSet, we need to do this *after* initilization
         eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
@@ -151,7 +151,7 @@ class TeamSummaryViewController: TBATableViewController {
     // MARK: - Private Methods
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<TeamSummarySection, TeamSummaryItem>(tableView: tableView, cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
+        let dataSource = UITableViewDiffableDataSource<TeamSummarySection, TeamSummaryItem>(tableView: tableView, cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
             switch item {
             case .teamInfo(let team):
                 return TeamSummaryViewController.tableView(tableView, cellForTeam: team, at: indexPath)
@@ -171,12 +171,13 @@ class TeamSummaryViewController: TBATableViewController {
                 return TeamSummaryViewController.tableView(tableView, cellForMatch: match, team: team, at: indexPath)
             }
         })
-        dataSource.delegate = self
-        dataSource.statefulDelegate = self
+        tableViewDataSource = TableViewDataSource(dataSource: dataSource)
+        tableViewDataSource.delegate = self
+        tableViewDataSource.statefulDelegate = self
     }
 
     private func updateTeamInfo() {
-        var snapshot = dataSource.snapshot()
+        var snapshot = tableViewDataSource.dataSource.snapshot()
 
         let teamInfoSummaryItem = TeamSummaryItem.teamInfo(team: team)
 
@@ -184,11 +185,11 @@ class TeamSummaryViewController: TBATableViewController {
         snapshot.insertSection(.teamInfo, atIndex: TeamSummarySection.teamInfo.rawValue)
         snapshot.appendItems([teamInfoSummaryItem], toSection: .teamInfo)
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     private func updateEventStatusItems() {
-        var snapshot = dataSource.snapshot()
+        var snapshot = tableViewDataSource.dataSource.snapshot()
 
         // MARK: - Summary
 
@@ -280,14 +281,14 @@ class TeamSummaryViewController: TBATableViewController {
             snapshot.appendItems(qualInfoItems, toSection: .qualInfo)
         }
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
 
         executeUpdate(updateNextMatchItem)
         executeUpdate(updateLastMatchItem)
     }
 
     private func updateNextMatchItem() {
-        var snapshot = dataSource.snapshot()
+        var snapshot = tableViewDataSource.dataSource.snapshot()
 
         let nextMatch: Match? = {
             if let nextMatchKey = eventStatus?.nextMatchKey, let match = Match.forKey(nextMatchKey, in: persistentContainer.viewContext) {
@@ -310,11 +311,11 @@ class TeamSummaryViewController: TBATableViewController {
             snapshot.appendItems([nextMatchItem], toSection: .nextMatch)
         }
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     private func updateLastMatchItem() {
-        var snapshot = dataSource.snapshot()
+        var snapshot = tableViewDataSource.dataSource.snapshot()
 
         let lastMatch: Match? = {
             if let lastMatchKey = eventStatus?.lastMatchKey, let match = Match.forKey(lastMatchKey, in: persistentContainer.viewContext) {
@@ -337,13 +338,13 @@ class TeamSummaryViewController: TBATableViewController {
             snapshot.appendItems([lastMatchItem], toSection: .lastMatch)
         }
 
-        dataSource.apply(snapshot, animatingDifferences: false)
+        tableViewDataSource.dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     // MARK: TableViewDataSourceDelegate
 
     override func title(forSection section: Int) -> String? {
-        let snapshot = dataSource.snapshot()
+        let snapshot = tableViewDataSource.dataSource.snapshot()
         let section = snapshot.sectionIdentifiers[section]
         if section == .eventInfo {
             return "Summary"
@@ -434,7 +435,7 @@ class TeamSummaryViewController: TBATableViewController {
     // MARK: - Table View Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let item = dataSource.itemIdentifier(for: indexPath) else {
+        guard let item = tableViewDataSource.dataSource.itemIdentifier(for: indexPath) else {
             return
         }
 
@@ -466,7 +467,7 @@ extension TeamSummaryViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return dataSource.isDataSourceEmpty
+        return tableViewDataSource.isDataSourceEmpty
     }
 
     @objc func refresh() {
@@ -482,8 +483,8 @@ extension TeamSummaryViewController: Refreshable {
                 let context = persistentContainer.newBackgroundContext()
                 context.performChangesAndWait({
                     Event.insert(event, in: context)
-                }, saved: { [unowned self] in
-                    self.markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
+                }, saved: {
+                    markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
                 }, errorRecorder: errorRecorder)
             })
         }
@@ -504,8 +505,8 @@ extension TeamSummaryViewController: Refreshable {
             context.performChangesAndWait({
                 let event = context.object(with: self.event.objectID) as! Event
                 event.insert(status)
-            }, saved: { [unowned self] in
-                self.markTBARefreshSuccessful(tbaKit, operation: teamStatusOperation)
+            }, saved: {
+                markTBARefreshSuccessful(tbaKit, operation: teamStatusOperation)
             }, errorRecorder: errorRecorder)
         }
 
@@ -533,9 +534,9 @@ extension TeamSummaryViewController: Refreshable {
             let context = persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Match.insert(match, in: context)
-            }, saved: { [unowned self] in
-                self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(update)
+            }, saved: {
+                tbaKit.storeCacheHeaders(operation)
+                executeUpdate(update)
             }, errorRecorder: errorRecorder)
         }
         return operation
