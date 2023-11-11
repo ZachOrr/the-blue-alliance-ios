@@ -165,7 +165,6 @@
 		92C1F2E02169A3B800BD8445 /* MockNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */; };
 		92C1F2E42169AA7200BD8445 /* TeamsContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2E32169AA7200BD8445 /* TeamsContainerViewControllerTests.swift */; };
 		92C1F2E62169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2E52169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift */; };
-		92C4EBEC269B54CA008263E1 /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */; };
 		92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */; };
 		92C8CE4221AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4121AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift */; };
 		92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4321ACB03300683558 /* Subscribable.swift */; };
@@ -561,7 +560,6 @@
 		92004C6221C21BC600A858C8 /* App Icons */ = {
 			isa = PBXGroup;
 			children = (
-				926CF96227B80A8B00D4C56C /* 2022RapidReact */,
 				92004C6721C21C8B00A858C8 /* 2019DeepSpace */,
 				929B91F423D4EB210029257E /* 2020InfiniteRecharge */,
 			);
@@ -571,8 +569,8 @@
 		92004C6721C21C8B00A858C8 /* 2019DeepSpace */ = {
 			isa = PBXGroup;
 			children = (
-				92004C6321C21C7F00A858C8 /* 2019DeepSpace@2x.png */,
-				92004C6421C21C7F00A858C8 /* 2019DeepSpace@3x.png */,
+				92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */,
+				92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */,
 			);
 			path = 2019DeepSpace;
 			sourceTree = "<group>";
@@ -1512,10 +1510,8 @@
 			files = (
 				924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */,
 				145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */,
-				92004C6621C21C7F00A858C8 /* 2019DeepSpace@3x.png in Resources */,
+				92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */,
 				92C8CE5021ADCC5F00683558 /* MyTBASignInViewController.xib in Resources */,
-				926CF96627B80ADB00D4C56C /* 2022RapidReact@2x.png in Resources */,
-				926CF96527B80ADB00D4C56C /* 2022RapidReact@3x.png in Resources */,
 				92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */,
 				9274E14921B1AAD300F5D5D0 /* NotificationStatusTableViewCell.xib in Resources */,
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
@@ -1527,7 +1523,7 @@
 				92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */,
 				929B91F823D4EC030029257E /* 2020InfiniteRecharge@3x.png in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
-				92004C6521C21C7F00A858C8 /* 2019DeepSpace@2x.png in Resources */,
+				92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */,
 				92B3874221CAF7190041A049 /* IconTableViewCell.xib in Resources */,
 				92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */,
 				92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */,
