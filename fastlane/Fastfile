@@ -177,7 +177,6 @@ platform :ios do
       code_signing_identity: "iPhone Distribution"
     )
     gym(buildlog_path: "logs")
-    # upload_symbols_to_crashlytics(dsym_path: "The Blue Alliance.app.dSYM.zip", gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist")
   end
 
   ## End Shipping Lanes for Release Lanes ##
@@ -209,13 +208,6 @@ platform :ios do
     # Bump version accordingly
     increment_version_number(bump_type: version_type)
     increment_build_number(build_number: 1)
-  end
-
-  lane :refresh_dsyms do
-    setup_api
-    download_dsyms(app_identifier: "com.the-blue-alliance.tba", min_version: "3.0.0")
-    upload_symbols_to_crashlytics(gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist")
-    clean_build_artifacts           # Delete the local dSYM files
   end
 
   ## End Utility Lanes ##
