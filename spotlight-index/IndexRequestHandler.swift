@@ -17,7 +17,7 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
     lazy var indexDelegate: TBACoreDataCoreSpotlightDelegate = {
         let description = persistentContainer.persistentStoreDescriptions.first!
         return TBACoreDataCoreSpotlightDelegate(forStoreWith: description,
-                                                model: persistentContainer.managedObjectModel)
+                                                coordinator: persistentContainer.persistentStoreCoordinator)
     }()
 
     override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexAllSearchableItemsWithAcknowledgementHandler acknowledgementHandler: @escaping () -> Void) {
