@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "TBAAPI2",
+    name: "TBAAPI",
     platforms: [.iOS(.v18)],
     products: [
         .library(
