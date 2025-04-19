@@ -7,6 +7,7 @@
 
 import Foundation
 
+/*
 public struct APIEventRanking: Decodable {
     // TODO: This should be non-null - needs a fix upstream
     public var rankings: [APIEventRankingRanking]?
@@ -46,3 +47,4 @@ public struct APIEventRankingStat: Decodable {
     public var name: String
     public var precision: Int
 }
+*/

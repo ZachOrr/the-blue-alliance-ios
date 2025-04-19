@@ -7,6 +7,7 @@
 
 import Foundation
 
+/*
 public struct APIEventTeamStatus: Decodable {
     public var qual: APIEventTeamStatusQual?
     public var alliance: APIEventTeamStatusAlliance?
@@ -58,3 +59,4 @@ public struct APIEventTeamStatusAlliance: Decodable {
         case backup
     }
 }
+*/

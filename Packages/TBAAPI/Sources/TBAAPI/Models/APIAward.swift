@@ -7,6 +7,7 @@
 
 import Foundation
 
+/*
 public struct APIAward: Decodable {
     public var name: String
     public var awardType: Int
@@ -34,3 +35,4 @@ public struct APIAwardRecipient: Decodable {
         case awardee
     }
 }
+*/

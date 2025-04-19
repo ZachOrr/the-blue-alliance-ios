@@ -9,6 +9,7 @@ import GoogleSignIn
 import MyTBAKit
 import Photos
 import Search
+import TBAAPI
 import TBAData
 import TBAKit
 import TBAUtils
@@ -59,6 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private lazy var dependencies = Dependencies(errorRecorder: errorRecorder,
                                                  persistentContainer: persistentContainer,
                                                  tbaKit: tbaKit,
+                                                 api: api,
                                                  userDefaults: userDefaults)
     private let errorRecorder = TBAErrorRecorder()
     lazy var indexDelegate: TBACoreDataCoreSpotlightDelegate = {
@@ -87,6 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let photoLibrary = PHPhotoLibrary.shared()
     lazy var remoteConfig: RemoteConfig = RemoteConfig.remoteConfig()
     var tbaKit: TBAKit!
+    var api: TBAAPI!
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
 
@@ -118,10 +121,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                              userDefaults: userDefaults)
     }()
     lazy var statusService: StatusService = {
-        return StatusService(errorRecorder: errorRecorder,
-                             persistentContainer: persistentContainer,
-                             retryService: RetryService(),
-                             tbaKit: tbaKit)
+        do {
+            return try StatusService(api: api,
+                                     errorRecorder: errorRecorder,
+                                     retryService: RetryService())
+        } catch {
+            
+        }
     }()
 
     // A completion block for registering for remote notifications
@@ -154,10 +160,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let secrets = Secrets()
         tbaKit = TBAKit(apiKey: secrets.tbaAPIKey, userDefaults: userDefaults)
+        api = TBAAPI(apiKey: secrets.tbaAPIKey)
 
         // Listen for changes to FMS availability
-        registerForFMSStatusChanges()
-        registerForStatusChanges()
+        // registerForFMSStatusChanges()
+        // registerForStatusChanges()
 
         // Assign our Push Service as a delegate to all push-related classes
         setupPushServiceDelegates()
@@ -195,8 +202,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.statusService.registerRetryable(initiallyRetry: true)
 
                     // Check our minimum app version
-                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: self.statusService.status.minAppVersion) {
-                        self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion)
+                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: self.statusService.status.ios.minAppVersion) {
+                        self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.ios.latestAppVersion)
                         return
                     }
 
@@ -403,6 +410,7 @@ extension AppDelegate {
 
 }
 
+/*
 extension AppDelegate: StatusSubscribable {
 
     func statusChanged(status: Status) {
@@ -429,11 +437,12 @@ extension AppDelegate: FMSStatusSubscribable {
     }
 
 }
+*/
 
 // Make Crashlytics conform to ErrorRecorder for TBAData
 // extension Crashlytics: ErrorRecorder {}
 // Make Messaging conform to FCMTokenProvider for MyTBAKit
-extension Messaging: FCMTokenProvider {}
+extension Messaging: @retroactive FCMTokenProvider {}
 
 private class TBAErrorRecorder: ErrorRecorder {
 

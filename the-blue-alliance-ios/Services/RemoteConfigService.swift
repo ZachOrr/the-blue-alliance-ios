@@ -25,8 +25,6 @@ class RemoteConfigService {
         configSettings.minimumFetchInterval = 0
         remoteConfig.configSettings = configSettings
         #endif
-
-        remoteConfig.setDefaults(fromPlist: "RemoteConfigDefaults")
     }
 
     internal func fetchRemoteConfig(completion: ((_ error: Error?) -> Void)? = nil) {

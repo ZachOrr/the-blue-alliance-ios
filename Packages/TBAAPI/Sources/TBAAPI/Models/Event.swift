@@ -8,6 +8,81 @@
 import Foundation
 import Algorithms
 
+public struct Event: Decodable {
+    public var key: EventKey
+    public var name: String
+    public var eventCode: String
+    public var eventTypeInt: Int
+    public var eventType: EventType {
+        EventType(rawValue: eventTypeInt) ?? .unlabeled
+    }
+    public var eventTypeString: String
+    public var district: District?
+    public var city: String?
+    public var stateProv: String?
+    public var country: String?
+    public var startDate: Date
+    public var endDate: Date
+    public var year: Year
+    public var shortName: String?
+    public var week: Int?
+    public var address: String?
+    public var postalCode: String?
+    public var gmapsPlaceID: String?
+    public var gmapsURL: String?
+    public var lat: Double?
+    public var lng: Double?
+    public var locationName: String?
+    public var timezone: String?
+    public var website: String?
+    public var firstEventID: String?
+    public var firstEventCode: String?
+    public var webcasts: [Webcast]?
+    public var divisionKeys: [EventKey]
+    public var parentEventKey: EventKey?
+    public var playoffType: PlayoffType? {
+        guard let playoffTypeInt else {
+            return nil
+        }
+        return PlayoffType(rawValue: playoffTypeInt) ?? .custom
+    }
+    public var playoffTypeInt: Int?
+    public var playoffTypeString: String?
+
+    enum CodingKeys: String, CodingKey {
+        case key
+        case name
+        case eventCode = "event_code"
+        case eventTypeInt = "event_type"
+        case district
+        case city
+        case stateProv = "state_prov"
+        case country
+        case startDate = "start_date"
+        case endDate = "end_date"
+        case year
+        case shortName = "short_name"
+        case eventTypeString = "event_type_string"
+        case week
+        case address
+        case postalCode = "postal_code"
+        case gmapsPlaceID = "gmaps_place_id"
+        case gmapsURL = "gmaps_url"
+        case lat
+        case lng
+        case locationName = "location_name"
+        case timezone
+        case website
+        case firstEventID = "first_event_id"
+        case firstEventCode = "first_event_code"
+        case webcasts
+        case divisionKeys = "division_keys"
+        case parentEventKey = "parent_event_key"
+        case playoffTypeInt = "playoff_type"
+        case playoffTypeString = "playoff_type_string"
+    }
+}
+
 public enum EventType: Int, CaseIterable, Hashable {
     case regional = 0
     case district = 1
@@ -98,6 +173,7 @@ public enum PlayoffType: Int, Sendable {
  Preseasons, Offseasons by month, CMP events by CMP, and otherwise events of the
  same type together.
  */
+/*
 public enum EventWeek: Hashable {
     case eventType(EventType, String) // event_type, event_type_string
     // Note: Represented as a Double because 2016 has a Week 0.5 event
@@ -142,7 +218,8 @@ public enum EventWeek: Hashable {
         return "Week \(week)"
     }
 }
-
+*/
+/*
 extension Array where Element == Event {
     private var sortedCMPKeys: [EventKey] {
         return self.filter(\.isCMPFinals).sorted(using: KeyPathComparator(\.startDate)).map(\.key)
@@ -172,84 +249,8 @@ extension Array where Element == Event {
         }
     }
 }
-
-public struct Event: Decodable {
-    public var key: EventKey
-    public var name: String
-    public var eventCode: String
-    public var eventTypeInt: Int
-    public var eventType: EventType {
-        EventType(rawValue: eventTypeInt) ?? .unlabeled
-    }
-    public var eventTypeString: String
-    public var district: District?
-    public var city: String?
-    public var stateProv: String?
-    public var country: String?
-    public var startDate: Date
-    public var endDate: Date
-    public var year: Year
-    public var shortName: String?
-    public var week: Int?
-    public var address: String?
-    public var postalCode: String?
-    public var gmapsPlaceID: String?
-    public var gmapsURL: String?
-    public var lat: Double?
-    public var lng: Double?
-    public var locationName: String?
-    public var timezone: String?
-    public var website: String?
-    public var firstEventID: String?
-    public var firstEventCode: String?
-    public var webcasts: [Webcast]?
-    public var divisionKeys: [EventKey]
-    public var parentEventKey: EventKey?
-    public var playoffType: PlayoffType? {
-        guard let playoffTypeInt else {
-            return nil
-        }
-        return PlayoffType(rawValue: playoffTypeInt) ?? .custom
-    }
-    public var playoffTypeInt: Int?
-    public var playoffTypeString: String?
-
-    enum CodingKeys: String, CodingKey {
-        case key
-        case name
-        case eventCode = "event_code"
-        case eventTypeInt = "event_type"
-        case district
-        case city
-        case stateProv = "state_prov"
-        case country
-        case startDate = "start_date"
-        case endDate = "end_date"
-        case year
-        case shortName = "short_name"
-        case eventTypeString = "event_type_string"
-        case week
-        case address
-        case postalCode = "postal_code"
-        case gmapsPlaceID = "gmaps_place_id"
-        case gmapsURL = "gmaps_url"
-        case lat
-        case lng
-        case locationName = "location_name"
-        case timezone
-        case website
-        case firstEventID = "first_event_id"
-        case firstEventCode = "first_event_code"
-        case webcasts
-        case divisionKeys = "division_keys"
-        case parentEventKey = "parent_event_key"
-        case playoffTypeInt = "playoff_type"
-        case playoffTypeString = "playoff_type_string"
-    }
-}
-
-extension Event: Equatable, Hashable {}
-
+*/
+/*
 extension Event {
 
     public var eventWeek: EventWeek {
@@ -389,7 +390,8 @@ extension Event {
         return Date().isBetween(date: startDate, andDate: endDate.endOfDay())
     }
 }
-
+*/
+/*
 extension EventType: Comparable {
     public static func < (lhs: EventType, rhs: EventType) -> Bool {
         // Float preseasons to the top
@@ -418,7 +420,8 @@ extension EventType: Comparable {
         return adjustedLHSValue < adjustedRHSValue
     }
 }
-
+*/
+/*
 extension EventWeek: Comparable {
     public static func <(lhs: EventWeek, rhs: EventWeek) -> Bool {
         switch lhs {
@@ -481,3 +484,4 @@ extension EventWeek: Comparable {
         }
     }
 }
+*/

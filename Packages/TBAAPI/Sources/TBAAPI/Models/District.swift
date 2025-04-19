@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct District: Decodable {
+public struct District: Decodable, Sendable {
     public var abbreviation: String
     public var name: String
     public var key: String
@@ -21,6 +21,7 @@ public struct District: Decodable {
     }
 }
 
+/*
 extension District: Equatable, Hashable {}
 
 public struct DistrictRanking: Decodable {
@@ -38,3 +39,4 @@ public struct DistrictRanking: Decodable {
         case eventPoints = "event_points"
     }
 }
+*/

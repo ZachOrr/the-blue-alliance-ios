@@ -7,6 +7,7 @@
 
 import Foundation
 
+/*
 public struct APIEventStats: Decodable {
     public var ccwms: [String: Double]
     public var dprs: [String: Double]
@@ -18,3 +19,4 @@ public struct APIEventStats: Decodable {
         case oprs
     }
 }
+*/

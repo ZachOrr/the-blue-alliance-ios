@@ -7,6 +7,7 @@
 
 import Foundation
 
+/*
 public struct APIMedia: Decodable {
     public var type: String
     public var foreignKey: String
@@ -35,3 +36,4 @@ public struct APIMedia: Decodable {
         viewURL = try values.decodeIfPresent(String.self, forKey: .viewURL)
     }
 }
+*/

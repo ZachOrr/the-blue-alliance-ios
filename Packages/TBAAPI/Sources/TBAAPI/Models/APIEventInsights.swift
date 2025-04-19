@@ -7,6 +7,7 @@
 
 import Foundation
 
+/*
 public struct APIEventInsights: Decodable {
     public var qual: [String: Any]?
     public var playoff: [String: Any]?
@@ -22,3 +23,4 @@ public struct APIEventInsights: Decodable {
         playoff = try values.decodeIfPresent([String: Any].self, forKey: .playoff)
     }
 }
+*/

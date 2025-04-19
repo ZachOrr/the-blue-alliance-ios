@@ -5,6 +5,7 @@
 //  Created by Zachary Orr on 6/11/21.
 //
 
+/*
 import Foundation
 
 public struct APIAlliance: Decodable {
@@ -31,7 +32,6 @@ public struct APIAllianceStatus: Decodable {
     }
 }
 
-
 public struct APIAllianceBackup: Decodable {
     public var teamKeyIn: String
     public var teamKeyOut: String
@@ -41,3 +41,4 @@ public struct APIAllianceBackup: Decodable {
         case teamKeyOut = "out"
     }
 }
+*/

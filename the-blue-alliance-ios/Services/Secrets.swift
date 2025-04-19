@@ -3,7 +3,6 @@ import Foundation
 // From https://medium.com/@jules2689/secrets-management-in-ios-applications-52795c254ec1
 
 class Secrets {
-
     private var secrets: [String: Any?]? = nil
 
     private struct SecretKeys {
@@ -22,5 +21,4 @@ class Secrets {
             self.secrets = NSDictionary(contentsOfFile: path) as? Dictionary<String, AnyObject>
         }
     }
-
 }

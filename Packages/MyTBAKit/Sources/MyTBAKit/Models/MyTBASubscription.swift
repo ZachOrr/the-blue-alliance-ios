@@ -56,7 +56,7 @@ struct MyTBASubscriptionsResponse: MyTBAResponse, Codable {
     var subscriptions: [MyTBASubscription]?
 }
 
-public struct MyTBASubscription: MyTBAModel, Equatable, Codable {
+public struct MyTBASubscription: @preconcurrency MyTBAModel, Equatable, Codable {
 
     public init(modelKey: String, modelType: MyTBAModelType, notifications: [NotificationType]) {
         self.modelKey = modelKey
@@ -72,7 +72,7 @@ public struct MyTBASubscription: MyTBAModel, Equatable, Codable {
     public var modelType: MyTBAModelType
     public var notifications: [NotificationType]
 
-    public static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation = MyTBA.fetchSubscriptions
+    @MainActor public static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation = MyTBA.fetchSubscriptions
 }
 
 extension MyTBA {

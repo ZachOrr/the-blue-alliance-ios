@@ -1,6 +1,7 @@
 import Testing
 @testable import TBAAPI
 
+/*
 struct EventTests {
     @Test func doNothing() {
 
@@ -17,3 +18,4 @@ struct EventTests {
         }
     }
 }
+*/

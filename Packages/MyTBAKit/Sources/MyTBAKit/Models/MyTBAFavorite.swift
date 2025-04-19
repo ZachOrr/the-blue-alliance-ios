@@ -8,7 +8,7 @@ struct MyTBAFavoritesResponse: MyTBAResponse, Codable {
     var favorites: [MyTBAFavorite]?
 }
 
-public struct MyTBAFavorite: MyTBAModel, Equatable, Codable {
+public struct MyTBAFavorite: @preconcurrency MyTBAModel, Equatable, Codable {
 
     public init(modelKey: String, modelType: MyTBAModelType) {
         self.modelKey = modelKey
@@ -22,7 +22,7 @@ public struct MyTBAFavorite: MyTBAModel, Equatable, Codable {
     public var modelKey: String
     public var modelType: MyTBAModelType
 
-    public static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation = MyTBA.fetchFavorites
+    @MainActor public static let fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation = MyTBA.fetchFavorites
 }
 
 extension MyTBA {

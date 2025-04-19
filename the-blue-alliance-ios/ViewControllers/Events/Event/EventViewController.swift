@@ -6,7 +6,7 @@ import TBAData
 import TBAKit
 import UIKit
 
-class EventViewController: MyTBAContainerViewController, EventStatusSubscribable {
+class EventViewController: MyTBAContainerViewController { // EventStatusSubscribable
 
     private(set) var event: Event
     private let pasteboard: UIPasteboard?
@@ -67,10 +67,12 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
 
+        /*
         if isEventDown(eventKey: event.key) {
             showOfflineEventMessage(shouldShow: true, animated: false)
         }
         registerForEventStatusChanges(eventKey: event.key)
+        */
 
         contextObserver.observeObject(object: event, state: .updated) { [weak self] (event, _) in
             DispatchQueue.main.async { [weak self] in

@@ -8,7 +8,6 @@
 import Foundation
 
 public struct Status: Decodable {
-    public var android: AppInfo
     public var ios: AppInfo
     public var currentSeason: Int
     public var downEvents: [String]
@@ -16,12 +15,19 @@ public struct Status: Decodable {
     public var maxSeason: Int
 
     enum CodingKeys: String, CodingKey {
-        case android
         case ios
         case currentSeason = "current_season"
         case downEvents = "down_events"
         case datafeedDown = "is_datafeed_down"
         case maxSeason = "max_season"
+    }
+
+    public init(ios: AppInfo, currentSeason: Int, downEvents: [String], datafeedDown: Bool, maxSeason: Int) {
+        self.ios = ios
+        self.currentSeason = currentSeason
+        self.downEvents = downEvents
+        self.datafeedDown = datafeedDown
+        self.maxSeason = maxSeason
     }
 }
 
@@ -32,5 +38,15 @@ public struct AppInfo: Decodable {
     enum CodingKeys: String, CodingKey {
         case latestAppVersion = "latest_app_version"
         case minAppVersion = "min_app_version"
+    }
+
+    public init(latestAppVersion: Int, minAppVersion: Int) {
+        self.latestAppVersion = latestAppVersion
+        self.minAppVersion = minAppVersion
+    }
+
+    public init() {
+        self.latestAppVersion = -1
+        self.minAppVersion = -1
     }
 }

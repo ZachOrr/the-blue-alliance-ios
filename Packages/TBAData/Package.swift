@@ -1,4 +1,4 @@
-// swift-tools-version:5.7.1
+// swift-tools-version:6.0.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -29,7 +29,6 @@ let package = Package(
             dependencies: ["MyTBAKit", "Search", "TBAKit", "TBAUtils"],
             resources: [
                 .copy("Resources/TBA.xcdatamodeld"),
-                .copy("Resources/StatusDefaults.plist"),
             ]),
         .testTarget(
             name: "TBADataTests",

@@ -86,27 +86,23 @@ extension Refreshable where Self: TBACollectionViewController {
 
 extension Stateful where Self: TBACollectionViewController {
 
-    func addNoDataView(_ noDataView: UIView) {
-        DispatchQueue.main.async {
-            self.collectionView.backgroundView = noDataView
-        }
+    @MainActor func addNoDataView(_ noDataView: UIView) {
+        self.collectionView.backgroundView = noDataView
     }
 
-    func removeNoDataView(_ view: UIView) {
-        DispatchQueue.main.async {
-            self.collectionView.backgroundView = nil
-        }
+    @MainActor func removeNoDataView(_ view: UIView) {
+        self.collectionView.backgroundView = nil
     }
 
 }
 
 extension Refreshable where Self: TBACollectionViewController & Stateful {
 
-    func hideNoData() {
+    @MainActor func hideNoData() {
         removeNoDataView()
     }
 
-    func noDataReload() {
+    @MainActor func noDataReload() {
         if isDataSourceEmpty {
             showNoDataView()
         } else {

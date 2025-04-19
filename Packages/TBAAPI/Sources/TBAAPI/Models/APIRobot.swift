@@ -7,6 +7,7 @@
 
 import Foundation
 
+/*
 public struct APIRobot: Decodable {
     public var key: String
     public var name: String
@@ -20,3 +21,4 @@ public struct APIRobot: Decodable {
         case year
     }
 }
+*/
