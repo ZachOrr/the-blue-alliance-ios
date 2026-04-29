@@ -38,6 +38,8 @@
 		5EC0D41A2C26041700000006 /* EventsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041700000005 /* EventsListViewController.swift */; };
 		5EC0D41A2C26041A00000006 /* TeamsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041A00000005 /* TeamsListViewController.swift */; };
 		5EC0D41A2C26041A00000008 /* TeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26041A00000007 /* TeamsViewController.swift */; };
+		5EC0D41A2C26042300000002 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042300000001 /* NotificationService.swift */; };
+		5EC0D41A2C26042300000006 /* TBANotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5EC0D41A2C26042300000005 /* TBANotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		920240072AEB6AAD0003D118 /* PureLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 920240062AEB6AAD0003D118 /* PureLayout */; };
 		9202400D2AEB6ADC0003D118 /* MyTBAKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9202400C2AEB6ADC0003D118 /* MyTBAKit */; };
 		921843032DB42424003B4F9E /* TBAAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 921843022DB42424003B4F9E /* TBAAPI */; };
@@ -373,6 +375,10 @@
 		AA00000000000000000AA00A /* AllianceBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllianceBadgeView.swift; sourceTree = "<group>"; };
 		BA0000000000000000000001 /* EventSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSection.swift; sourceTree = "<group>"; };
 		D105BC4623E5BF1E00378CB5 /* MatchBreakdownConfigurator2020.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchBreakdownConfigurator2020.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26042300000001 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		5EC0D41A2C26042300000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5EC0D41A2C26042300000004 /* TBANotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TBANotificationService.entitlements; sourceTree = "<group>"; };
+		5EC0D41A2C26042300000005 /* TBANotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TBANotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -383,9 +389,37 @@
 			remoteGlobalIDString = 92942D911E2154DA008E79CA;
 			remoteInfo = "The Blue Alliance";
 		};
+		5EC0D41A2C26042600000002 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92942D8A1E2154DA008E79CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5EC0D41A2C26042600000001;
+			remoteInfo = TBANotificationService;
+		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		5EC0D41A2C26042400000004 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				5EC0D41A2C26042300000006 /* TBANotificationService.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		5EC0D41A2C26042400000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		83CE06C95649B81A0355276A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -541,6 +575,7 @@
 			children = (
 				92A7B62E26D01B9E00EECCC9 /* Packages */,
 				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
+				5EC0D41A2C26042500000001 /* TBANotificationService */,
 				CE8E6930F354EB795163DD95 /* TBAUnitTests */,
 				92942D931E2154DA008E79CA /* Products */,
 			);
@@ -550,9 +585,20 @@
 			isa = PBXGroup;
 			children = (
 				92942D921E2154DA008E79CA /* The Blue Alliance.app */,
+				5EC0D41A2C26042300000005 /* TBANotificationService.appex */,
 				0A1BA028E14B10A8D954C54B /* TBAUnitTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		5EC0D41A2C26042500000001 /* TBANotificationService */ = {
+			isa = PBXGroup;
+			children = (
+				5EC0D41A2C26042300000001 /* NotificationService.swift */,
+				5EC0D41A2C26042300000003 /* Info.plist */,
+				5EC0D41A2C26042300000004 /* TBANotificationService.entitlements */,
+			);
+			path = TBANotificationService;
 			sourceTree = "<group>";
 		};
 		CE8E6930F354EB795163DD95 /* TBAUnitTests */ = {
@@ -1004,6 +1050,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5EC0D41A2C26042600000001 /* TBANotificationService */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5EC0D41A2C26042700000003 /* Build configuration list for PBXNativeTarget "TBANotificationService" */;
+			buildPhases = (
+				5EC0D41A2C26042400000001 /* Sources */,
+				5EC0D41A2C26042400000002 /* Frameworks */,
+				5EC0D41A2C26042400000003 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TBANotificationService;
+			productName = TBANotificationService;
+			productReference = 5EC0D41A2C26042300000005 /* TBANotificationService.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		6859D167B239EF78DC94AEB7 /* TBAUnitTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 53B8734CCD7D40A1D459286D /* Build configuration list for PBXNativeTarget "TBAUnitTests" */;
@@ -1030,11 +1093,13 @@
 				92FC9BA32F95EF7B00771E04 /* Lint Swift (swift-format) */,
 				92942D8F1E2154DA008E79CA /* Frameworks */,
 				92942D901E2154DA008E79CA /* Resources */,
+				5EC0D41A2C26042400000004 /* Embed Foundation Extensions */,
 				924E826C208FE7D20053247C /* Run FirebaseCrashlytics */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				5EC0D41A2C26042600000003 /* PBXTargetDependency */,
 			);
 			name = "The Blue Alliance";
 			packageProductDependencies = (
@@ -1066,6 +1131,9 @@
 				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = "The Blue Alliance";
 				TargetAttributes = {
+					5EC0D41A2C26042600000001 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					6859D167B239EF78DC94AEB7 = {
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = 92942D911E2154DA008E79CA;
@@ -1109,12 +1177,20 @@
 			projectRoot = "";
 			targets = (
 				92942D911E2154DA008E79CA /* The Blue Alliance */,
+				5EC0D41A2C26042600000001 /* TBANotificationService */,
 				6859D167B239EF78DC94AEB7 /* TBAUnitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5EC0D41A2C26042400000003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DE4A3E94AF8E3DD69FD832AD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1193,6 +1269,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5EC0D41A2C26042400000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EC0D41A2C26042300000002 /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3295B785F5B079BED4ADD156 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1368,6 +1452,11 @@
 			target = 92942D911E2154DA008E79CA /* The Blue Alliance */;
 			targetProxy = 2F0C89F9ACB8C058CF077586 /* PBXContainerItemProxy */;
 		};
+		5EC0D41A2C26042600000003 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5EC0D41A2C26042600000001 /* TBANotificationService */;
+			targetProxy = 5EC0D41A2C26042600000002 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -1383,6 +1472,63 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		5EC0D41A2C26042700000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_ENTITLEMENTS = TBANotificationService/TBANotificationService.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TBANotificationService/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba.NotificationService";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5EC0D41A2C26042700000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_ENTITLEMENTS = TBANotificationService/TBANotificationService.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TBANotificationService/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba.NotificationService";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		1712CE89ADC35B42F3049586 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1591,6 +1737,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5EC0D41A2C26042700000003 /* Build configuration list for PBXNativeTarget "TBANotificationService" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EC0D41A2C26042700000001 /* Debug */,
+				5EC0D41A2C26042700000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		53B8734CCD7D40A1D459286D /* Build configuration list for PBXNativeTarget "TBAUnitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
