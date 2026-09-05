@@ -8,7 +8,12 @@ protocol MatchesViewControllerDelegate: AnyObject {
     func matchSelected(_ match: Match)
 }
 
-class MatchesViewController: TBATableViewController, Refreshable, Stateful {
+private enum MatchListItem: Hashable {
+    case header(MatchSection)
+    case match(Match)
+}
+
+class MatchesViewController: TBACollectionViewController, Refreshable, Stateful {
 
     weak var delegate: MatchesViewControllerDelegate?
     var query: MatchQueryOptions = MatchQueryOptions.defaultQuery()
@@ -16,7 +21,55 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     private var state: EventState
     private let teamKey: String?
 
-    private var dataSource: TableViewDataSource<MatchSection, Match>!
+    private var dataSource: CollectionViewDataSource<MatchSection, MatchListItem>!
+
+    private lazy var matchCellRegistration =
+        UICollectionView.CellRegistration<MatchCollectionViewCell, Match> {
+            [weak self] cell, _, match in
+            guard let self else { return }
+
+            var baseTeamKeys: Set<String> = Set()
+            if let teamKey = self.teamKey {
+                baseTeamKeys.insert(teamKey)
+            }
+            if self.query.filter.favorites {
+                baseTeamKeys.formUnion(self.favoriteTeamKeys)
+            }
+            if let event = self.state.event {
+                cell.viewModel = MatchViewModel(
+                    match: match,
+                    event: event,
+                    allianceLookup: self.allianceLookup,
+                    baseTeamKeys: Array(baseTeamKeys)
+                )
+            } else {
+                cell.viewModel = MatchViewModel(
+                    withoutEventContextFor: match,
+                    baseTeamKeys: Array(baseTeamKeys)
+                )
+            }
+            cell.accessibilityIdentifier = "match.\(match.key)"
+        }
+
+    private lazy var headerCellRegistration =
+        UICollectionView.CellRegistration<UICollectionViewListCell, MatchSection> {
+            cell,
+            _,
+            section in
+            var content = UIListContentConfiguration.plainHeader()
+            content.text = section.title
+            content.textProperties.color = .white
+            content.textProperties.font = UIFont.preferredFont(forTextStyle: .subheadline)
+            content.textProperties.transform = .none
+            cell.contentConfiguration = content
+
+            var background = UIBackgroundConfiguration.listPlainCell()
+            background.backgroundColor = UIColor.tableViewHeaderColor
+            cell.backgroundConfiguration = background
+
+            cell.tintColor = .white
+            cell.accessories = [.outlineDisclosure(options: .init(style: .header))]
+        }
 
     private var allMatches: [Match] = []
     private var favoriteTeamKeys: [String] = []
@@ -50,7 +103,18 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
         self.state = state
         self.teamKey = teamKey
 
-        super.init(dependencies: dependencies)
+        var config = UICollectionLayoutListConfiguration(appearance: .plain)
+        config.headerMode = .firstItemInSection
+        let layout = UICollectionViewCompositionalLayout { _, environment in
+            let section = NSCollectionLayoutSection.list(
+                using: config,
+                layoutEnvironment: environment
+            )
+            section.contentInsets = .zero
+            return section
+        }
+
+        super.init(collectionViewLayout: layout, dependencies: dependencies)
     }
 
     private var favoritesStore: FavoritesStore { myTBAStores.favorites }
@@ -64,9 +128,9 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerReusableCell(MatchTableViewCell.self)
+        collectionView.contentInsetAdjustmentBehavior = .never
+
         setupDataSource()
-        tableView.dataSource = dataSource
 
         updateInterface()
     }
@@ -79,39 +143,28 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
         }
     }
 
-    // MARK: Table View Data Source
+    // MARK: Collection View Data Source
 
     private func setupDataSource() {
-        dataSource = TableViewDataSource<MatchSection, Match>(tableView: tableView) {
-            [weak self] tableView, indexPath, match in
-            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
-
-            var baseTeamKeys: Set<String> = Set()
-            if let teamKey = self?.teamKey {
-                baseTeamKeys.insert(teamKey)
-            }
-            if let query = self?.query, query.filter.favorites,
-                let favoriteTeamKeys = self?.favoriteTeamKeys
-            {
-                baseTeamKeys.formUnion(favoriteTeamKeys)
-            }
-            if let event = self?.state.event {
-                cell.viewModel = MatchViewModel(
-                    match: match,
-                    event: event,
-                    allianceLookup: self?.allianceLookup,
-                    baseTeamKeys: Array(baseTeamKeys)
+        dataSource = CollectionViewDataSource<MatchSection, MatchListItem>(
+            collectionView: collectionView
+        ) { [matchCellRegistration, headerCellRegistration] collectionView, indexPath, item in
+            switch item {
+            case .header(let section):
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: headerCellRegistration,
+                    for: indexPath,
+                    item: section
                 )
-            } else {
-                cell.viewModel = MatchViewModel(
-                    withoutEventContextFor: match,
-                    baseTeamKeys: Array(baseTeamKeys)
+            case .match(let match):
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: matchCellRegistration,
+                    for: indexPath,
+                    item: match
                 )
             }
-            cell.accessibilityIdentifier = "match.\(match.key)"
-            return cell
         }
-        dataSource.statefulDelegate = self
+        dataSource.delegate = self
     }
 
     private func applyMatches(_ matches: [Match]) {
@@ -121,7 +174,6 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
         )
         let sorted = filtered.sorted(ascending: !query.sort.reverse)
 
-        var snapshot = NSDiffableDataSourceSnapshot<MatchSection, Match>()
         var grouped: [MatchSection: [Match]] = [:]
         let playoffType = state.event?.playoffTypeEnum
         for match in sorted {
@@ -129,24 +181,68 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
             grouped[section, default: []].append(match)
         }
         let sortedSections = grouped.keys.sorted(by: query.sort.reverse ? (>) : (<))
-        for section in sortedSections {
-            snapshot.appendSections([section])
-            snapshot.appendItems(grouped[section] ?? [], toSection: section)
+
+        // Capture each section's current expansion state BEFORE any apply()
+        // calls, so we can faithfully restore it after the top-level snapshot
+        // (which may add/remove/reorder sections) lands.
+        var expansionByHeader: [MatchListItem: Bool] = [:]
+        for section in dataSource.snapshot().sectionIdentifiers {
+            let header = MatchListItem.header(section)
+            let current = dataSource.snapshot(for: section)
+            if current.contains(header) {
+                expansionByHeader[header] = current.isExpanded(header)
+            }
         }
-        dataSource.applySnapshotUsingReloadData(snapshot)
+
+        // Apply the top-level snapshot first so section ordering matches
+        // sortedSections (handles new sections appearing mid-event, reverse-
+        // sort flips, and removed-by-filter sections in a single shot).
+        // Sections newly added here come back as empty section snapshots; the
+        // per-section loop below rebuilds them with the captured expansion
+        // state restored.
+        var topSnapshot = NSDiffableDataSourceSnapshot<MatchSection, MatchListItem>()
+        topSnapshot.appendSections(sortedSections)
+        dataSource.apply(topSnapshot, animatingDifferences: false)
+
+        for section in sortedSections {
+            let header = MatchListItem.header(section)
+            let items = (grouped[section] ?? []).map { MatchListItem.match($0) }
+            // Default new sections to expanded; honor the user's prior choice
+            // on sections we've seen before.
+            let wasExpanded = expansionByHeader[header] ?? true
+
+            var sectionSnapshot = NSDiffableDataSourceSectionSnapshot<MatchListItem>()
+            sectionSnapshot.append([header])
+            sectionSnapshot.append(items, to: header)
+            if wasExpanded {
+                sectionSnapshot.expand([header])
+            }
+            dataSource.apply(sectionSnapshot, to: section, animatingDifferences: false)
+        }
+
+        // Force cell-provider re-run for every visible match even when item
+        // hashes are unchanged — the cell rendering depends on external state
+        // (query.filter.favorites, favoriteTeamKeys, state.event,
+        // allianceLookup) that isn't part of the Match hash. Reconfigure via
+        // the collection view (not a flat top-level apply) so the section
+        // snapshots' outline hierarchy stays intact. Off-screen cells will
+        // pick up the new state on their next dequeue.
+        let visibleMatchPaths = collectionView.indexPathsForVisibleItems.filter {
+            if case .match = dataSource.itemIdentifier(for: $0) { return true }
+            return false
+        }
+        collectionView.reconfigureItems(at: visibleMatchPaths)
     }
 
-    // MARK: UITableView Delegate
+    // MARK: UICollectionView Delegate
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let match = dataSource.itemIdentifier(for: indexPath) else { return }
+    override func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        guard case .match(let match) = dataSource.itemIdentifier(for: indexPath) else { return }
         delegate?.matchSelected(match)
-    }
-
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int)
-        -> CGFloat
-    {
-        return 30.0
     }
 
     // MARK: - Public Methods
@@ -203,10 +299,6 @@ class MatchesViewController: TBATableViewController, Refreshable, Stateful {
             return "No matches matching filter options"
         }
     }
-}
-
-extension MatchesViewController {
-    // Placeholder so `MatchesViewControllerQueryable`'s `showFilter()` still compiles.
 }
 
 private extension Array where Element == Match {
